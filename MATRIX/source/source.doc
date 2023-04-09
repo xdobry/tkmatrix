@@ -1,0 +1,76 @@
+Das ist Eine Dokumentation zur Quellecode von Matrix
+
+	1.1 Wie ist es geschrieben
+	1.2 Welche Dateien dazu kommen und wie man es compiliert
+	1.3 Klassen beschreibung
+	1.4 Bugs
+	1.5 Autor
+
+1.1 Wie ist es geschrieben
+
+Es ist in C++ geschrieben. Ich habe es so weit wie möglich
+klassenorientiert geschrieben. Die Klassen sind sehr allgemein geschrieben
+und können ohne Umständen auch von anderen Programmen benutzt werden.
+Ich habe es auch versucht so zu machen das man ohne große Probleme das
+Programm leicht ausbauen kann.
+
+1.2 Welche Dateien dazu kommen und wie man es compiliert
+
+	Amiga:
+		matrixfull.c
+		matrix_c.c
+		matrix_class.c
+		reel_c.c
+		reel_class.c
+		sets_c.c
+		sets_class.c
+Bei Kompilieren erstmal 	
+		reel_c.c
+		sets_c.c
+		matrix_c.c (Braucht Object dateien aus 	reel_c.c,sets_c.c)
+zu Objectdateien machen und nacher matrixfull.c mit dennen linken.
+
+1.3 Klassen beschreibung
+a)	reel_c.c ;genaue Beschreibung von Funktionen in reel_class.c
+	diese Klasse vewaltet alle operationnen auf Brüchen
+	es ist z.B. Möglich
+	reel a(1,2),b(1,3);	// a=1/2 b=1/3
+	a=a+b;
+	cout<<a;
+	cin>>a; //  (Vorsicht sehe Bugs)
+	Operationen wie +,*,/,<,<=,
+b) sets_c.c Ähnlich wie Sets bei Pascal oder Modula2
+	sets a(10); 10 ist die Länge von 0..9
+	sets a;		definiert als 0..31 (int länge)
+		es wird vorrausgesetzt das Integer Länge 4 Byte ist
+c) matrix_c.c Alle Operationnen und Algorithmen auf Matrizen
+	
+1.4 Bugs
+-	in reel_c
+	int a;
+	bei cin<<a konnte ich nicht negative integer Zahlen einlesen
+	darum a ist von Typ double
+	außerdem muß die Eingabe mit leer Zeiche enden
+	was schwierigkeiten bie cin bereitet
+	am besten nach Eingabe 1/3 eine zusätzliche leertaste vor RETURN
+	eintippen	
+-	matrixfull.c
+	Mein Copiler kennt nicht setw(x) Element von stream erkennen, mit
+	anderen Compiler sollte das gehen
+-	matrix_c.c
+	Der Kompiler wollte nicht = bei classe matrix überladen
+	 matrix & matrix::operator = (matrix & z);
+	ich habe es durch
+	void matrix::load(matrix &z); 
+	ersetzt.
+	Verwendung von = bei matrix objecten ist nicht gestatet
+-	matrix_c.c
+		prot<<"text";
+		führte auf Grund internen Fehler von Compiler zum Absturzt
+		ich habe das durch
+		fputs("text",prot);
+		ersetzen müssen
+
+1.5 Autor
+	Artur Trzewik wi-inf studen UGH ESSEN
+	Email: atrzewik@informatik.uni-essen.de

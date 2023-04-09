@@ -1,0 +1,259 @@
+Das ist eine Dokumentation zu program MatrixFull 1.01 07.07.1996
+
+
+	1.1	Was macht das Programm
+	1.2 Nutzung und Distribution
+	1.3 Leitmotiv (Wie man macht's)
+	1.4 Beschreibung von Funktionnen
+	1.5 Ein paar Deklarationnen zum Matrixaussehen
+	1.6 Einstieg und Tips
+	1.7 Geschichte, Quellecode, wie geht's weiter
+
+
+
+1.1 Was macht das Programm
+
+MatrixFull ist ein Programm, das diverse operationen auf Matrizen
+ausführen kann. Hierzu gehören Gaussalgorithmus, Jordanalgorithmus,
+Ausrechnen von Bild und Kern einer Matrix, Inverse, Nährungsverfahren, und
+ganze Reihe von Algorithmen zur optimierung von Ungleichungsystemen. Wenn du
+jetzt nicht weiß worum es geht, dann laß es lieber.
+	Matrizen gehören zu linearer Algebra, und sind der Stoff, womit die
+Proffessoren die armen Erstsemester quellen (z.B. Wirtschaftinformatiker).
+Benutzte Algorithmen und Definitionen entsprechen vollig der Vorlesung
+von Wintersemmester '95 UGH Essen Lineare Algebra für
+Wirtschaftsinformatiker. Weil es eine ganze Reihe von Notierungen gibt
+bezüglich Optiemierungverfahren, werden sie ganau beschrieben in 1.5
+	Vorsicht: Das ist kein MS Programm für Dumies. Es ist nicht so rubust
+um jede idiotische Eingbe zu bearbeiten. Also Bitte nicht mit unsinnigen
+Werten fütern und was gescheitetes zu erwarten.
+	Es war auf allen Aufgaben aus der Vorlesung getestet un funktionierte
+einwandfrei.
+
+1.2 Nutzung und Distribution
+
+Das Programm wurde von Artur Trzewik am Anfang '96 geschrieben. Es entstand
+aus Frust über endlose Pivotieren bei Klausulvorbereitung.
+
+Es ist ein PUBLIC DOMAIN. Jeder kann es frei benutzen. 
+
+Die Orginalversion sollte neben dem Programm das Verzeichniss source/ und
+beispiele/ beinhalten.
+
+Noch weitere Fragen: E-mail: atrzewik@informatik.uni_essen.de
+
+
+1.3 Leitmotiv
+
+Alle Berechnungen werden auf Bruchzahlen durchgeführ, ohne Ganzteil
+
+z.B. 2/3 für zweidrittel, 12/1
+
+Brüche werden automatisch gekürtzt. 
+Maximum:  Maxint/Maxint  Maxint=2^32-1 (Bei 32 Bit Integer)
+
+Es gibt leider keine Overflow überprüfung, das Programm kann in diesem fall 
+einfach abbrechen.
+
+Programm funktioniert in CLI-Fenster alle Eingaben gehen durch die Tastatur.
+Die Matrix muß früher mit Hilfe eines ASC-Eidtor erstellt werden, man kann 
+auch zur Probe Beispieldateien benutzen (z.B: data_gauss), Bei UNIX und
+anderen Multitasking systemen kann man einfach im Hintergrund Editor laufen
+lassen und Matrizen erstellen ohne das Programm beenden zu müssen.
+
+Wichtig Aussehen der Matrix das geladen werden kann:
+m=hoehe
+n=breite
+Allgemein:
+m n
+a11		a12		..		a1n
+a21		a22		..		a2n
+..		..		..		..
+am1		am2		..		amn
+Beispiel
+4	5
+1		1/2		0		4/1		-1/8
+1		0		-3		0		45/2
+0		3		5		2/4		4/8
+2		3/2		-1/3	2		200
+
+Bitte in der ersten Zeile Höhe und Breite nicht vergessen (keine Bruch
+zahlen, Klar)
+
+In Programm existieren intern zwei Matrizen. Eine, ausgang Matrix die
+die mit funktion "Matrix Laden" geladen werden kann. Sie wird nicht
+verändert. Alle Ergebnisse werden in die Matrix Ergebniss geladen.
+Man kann sie speichern und ansehen.
+
+Was ist Protokoll ?
+Die meisten interesiert nicht das Ergebniss aber der Weg wie es zu ihm
+kommt. Dazu dient Protokoll, er bezeichnet alle Zwischenschritte vom
+Ausgangmatrix zum Ergebniss. Man kann es entweder auf den Bildschrim leiten
+was nicht so ratsam ist, weil man die Ausgabe nicht stoppen kann. Am besten
+leitet man sie zu einer Datei, wo man sie dann ruhig mit einem Editor
+betrachten kann oder sofort zu Druckerport Dateiname "prt:" leitet.
+Vorsicht bevor man Protokoll mit Hilfe eines im Hintergrung laufenden Editor
+ansehen kann, muß man "Protokoll schließen" benutzen.
+
+1.4 Beschreibung von Funktionnen
+
+	1 Matrix Laden              11 Kern von Matrix
+	2 Matrix Sichern            12 Bild von Matrix
+	3 Matrix Ausgeben           13 Inverse von Matrix
+	4 Ergebnis Sichern          14 Nährungslösung
+	5 Ergebnis Ausgeben         15 Pivotiere
+	6 Protokol Öffnen           16 Eckenfindung
+	7 Protokol Schließen        17 Eckenaustausch
+	8 Gauß-algorithmus          18 Optiemiere
+	9 Gauß-Jordan-algorithmus   19 Matrix = Ergebnis
+	10 Lösung Ausrechnen        20 Programm beenden
+
+1 Matrixladen: Lädt die Matrix, man wird angeforder die Dateiname anzugeben
+	zu Ausehen der Matrix Format bitte 1.3 Lesen oder Beispiel matrizen
+	ansehen
+2 MatrixSichern: Klar
+3 MatrixAusgeben: Gibt die Matrix auf denn Bildschrimm aus.
+4 Ergebniss Sichern: Ergebniss Matrix entsteht wenn man Auf ausgang Matrix 
+  irgend ein Algorithmus anwendet. Rest Klar
+5 Ergebniss Ausgeben: Klar
+6 Protokoll öffnen: (Zu Protokoll 1.3 lesen) Es gibt 3 Möglichkeiten
+   1 Kein Protokoll
+   2 Protokol auf den Bildschirm
+   3 Protokoll zu einer Datei
+  Vorausgestellt kein Protokoll
+7 Protokoll schließen: allter Protokoll wird geschloßen. Programm übergeht
+  zu Status "kein Protokoll". Wenn der Protokoll zu einer Datei geleietet  
+  wurde. Kann man durch diese Funktion sich die möglichkeit beschaffen
+  auf den Protokoll zugreifen oder verschidne Dateien für verschiedne
+  Protokollen schaffen.
+8 Gauss Algorithmus:allter Gauß. Ergebniss landet in Matrix Ergebniss. Wenn
+  "kein Protokoll" findet auf den Bildschirm keine Reaktion. Um sich das
+  Ergebniss ansehen zu können, "Ergebniss ausgeben" benutzen.
+9 GaussJordan: Klar
+10 Lösung ausrechnen: Mach dem GaussJorden wird die Lösung in Form einer
+	Matrix dargestelt
+	x=a0+x1*a1+x2*a2+x3*a3		wo x1,x2,x3 gehört zu R
+	hier eine m*4 Matrix
+	a0-eine Lösung
+	a1,a2,a3-Lösung der Homogenen Matrix oder Kern von a
+	wo:
+		a11		a12		..		a1n =	b1
+		a21		a22		..		a2n	=	b2
+		..		..		..		..	=	..
+		am1		am2		..		amn	=	bm
+	Die Lösung Matrix hat hier die Form n*dim(Kern a)
+11 Rechnet Kern von Matrix: Es wird eine Null Spalte zu matrix addiert und
+	Lösung ausgerechnet. Komponente a0 (s.10) wird abgeschnitten.
+13 Bild von Matrix: Rechnet Bild von Matrix: Basis des Vektorraumes
+   aufgespannten auf Spaltenvektoren von Matrix
+14 Inverse von Matrix: Es kann nur die Inverse von n*n Matrizen
+  ausgerechnet werden. Matrize muß zusäthlich inventierbar sein
+	dim(Matrize)=n
+14 Nährungslösung: Nährungs Lösung nach dem Verfahren (At*A)*x=At*b
+	wo At- Transponierte von A
+15 Pivotieren an der Stelle (m,n) man wird aufgeforder zeile und spalte
+  einzugeben.
+16 Eckenfindung. Eckenfindungalgorithmus:
+   Zu Aussehen der Matrix sehe 1.5
+17 Eckenaustausch: Klar sehe 1.5
+18 Optimierungsverfahren: Kern des Programms. Komplete Optimierungs
+  Verfahren: In Schritten
+		1 Suche eine Lösung
+			1a Wenn (0..0) keine Lösung (nicht alle b<0)
+			1b Bilde Ausgangmatrix zur Lösungsuche
+			1c Eckenfindung evnt. Eckenaustausch
+			1d Von der Ausgangmatrix diese Zeilen auswählen wo in Endmatrix
+			   Einheitszeilen vorkommen, Bilde diese Matrix
+			1e Suche Lösung von dieser Matrix.
+			   Es ist eine Lösung des Ungleichungssystems.
+		2  Bilde Ausgangmatrix
+		3  Eckenfindung evnt. Eckenaustausch
+		4  Von der Ausgangmatrix diese Zeilen auswählen wo in Endmatrix
+		   Einheitszeilen vorkommen, Bilde diese Matrix
+		5  Suche Lösung von dieser Matrix.
+			Es ist eine optimale Lösung des Ungleichungssystems.
+19 Matrix=Ergebniss: Ergebniss nach Matrix kopieren. Man kann so
+	auf ergebniss wetere Algorithmen anwenden. Z.b. Nach Eckenfindung
+	Eckenaustausch
+20 Beenden: Klar
+
+1.5 Ein paar Deklarationnen zum Matrixaussehen
+	Augangsmatrix für Optimirungsverfahren
+		a11		a12		..		a1n >=	b1
+		a21		a22		..		a2n	>=	b2
+		..		..		..		..	>=	..
+		am1		am2		..		amn	>=	bm
+		g1		g2		gi		gn		g0
+
+		a*x>=b    a-Matrix, x-Vektor, b-Vektor
+		und die Fungtion g(x)=g0+g1*x1+g2*x2+..+gn*xn zu maximieren
+	Ausgangsmatrix für Eckensuche und Eckenaustausch
+		k=a(u)-b		u=eine Lösung
+		a11		a12		..		a1n |	k1
+		a21		a22		..		a2n	|	k2
+		..		..		..		..	|	..
+		am1		am2		..		amn	|	km
+		----------------------------+-----
+		g1		g2		gi		gn	|	G		G-Gewinn
+		
+		ki>=0
+		
+	Ausgangsmatrix für Suche eine Lösung
+		k^=A^(u^)-b		u^=max(bi)	A^=A+(-1 Spalte)
+		a11		a12		..		a1n 	-1	|	k^1
+		a21		a22		..		a2n		-1	|	k^2
+		..		..		..		..		-1	|	..
+		am1		am2		..		amn		-1	|	k^m
+		------------------------------------+-----
+		0		0		0		0		1	|	-u^
+		
+		k^i>=0
+
+1.6 Einstieg und Tips
+
+Beispiele für die Nutzung
+a) Lösung der Matrix
+	1: "1 Matrix Laden" dateiname: "beispiele/data_gauss"
+	2: "6 Protokoll öffnen":
+			"1 Ausgabe auf den Bildschirm"
+	3	"10 Lösung Ausrechnen"
+	4   evnt "4 Ergebniss Sichern" dateinname: Nach Belieben
+	5 	evnt "5 Ergrbniss Ausgeben"
+	6	"20 Programm beenden"
+b) Optimeirungverfahren
+	1: "1 Matrix Laden" dateiname: "beispiele/data_optimiere"
+	2: "6 Protokoll öffnen":
+			"2 Ausgabe zu einer Datei"
+				dateiname eingeben z.B: TEMP:ausgabe
+	3	"18 Optimiere"
+	4 	"5 Ergrbniss Ausgeben"
+	5   evnt "4 Ergebniss Sichern" dateinname: Nach Belieben
+	6	"20 Programm beenden"
+	hier kann man den Protokoll mit der Hilfe
+	edit TEMP:ausgabe sich ansehen
+
+TIPS: Benutzung des Programms setzt voraus das man sich schon mit dem Stoff
+auskennt, also erstmal pauken dann benutzen. Es ist als eine Hilfe zur
+Kontrolierung und schnellen Berechnung von Matrizen gedacht, wenn man die
+Algorithmen schon kennt und ihre Benutzung für zu Zeitraubend hält. Wozu hat
+man denn ein Komputer.
+
+1.7 Geschichte, Quellecode, wie geht's weiter
+
+Programm wurde auf AMIGA 500 (!) 1MB 8MHz (kein HD) geschrieben und getestet.
+Ich habe nur standar IN/OUT Funktionnen aus C++ Biblothek benutzt.
+Das Programm ist damit nicht komfortabel aber das Quellecode kann auf jedes
+System, was C++ hat, portiert werden. (Was auf Amiga läuft, läuft überall)
+Auch auf eine MatrixEdit funktion habe ich verzichtet, was man doch sehr
+schnell auf einer Multitasking Machine nachholen kann. Man benutzt in
+Hintergrund einfach einem normalen ASC Editor mit zwischenladen.
+Die meiste Arbeit habe ich in die Implementierung von Algorithmen gesteckt.
+Ich habe speziel Quellcode für diejenige eingebunden , den vieleicht die
+benutzerfreundliche Oberfläche fehlt und sie die selber schreiben wollen.
+Ich habe nichts dagegen, wenn es daraus nicht ein komerzieles Programm wird.
+Jeder kann es grundsätzlich etwas an Quellecode basteln wenn er bei weiterer
+Distribution wenigstens den Ursprungsquellecode einbindet und jede Veränderung
+markiert und beschreibt. Ich bin auch interesiert weiter am Programm zu
+arbeiten, wenn jeman Interesse hat, bitte melden:
+
+E-mail:	atrzewik@informatik.uni_essen.de
