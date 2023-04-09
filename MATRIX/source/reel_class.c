@@ -1,4 +1,7 @@
-#include <iostream.h>
+#include <iostream>
+
+using namespace std;
+
 #ifndef reel_class
 #define reel_class
 class reel {
@@ -6,20 +9,20 @@ class reel {
 public:
 	reel();
 	reel(int,int=1);
-	void print ();
+	void print () const;
 	void skroc ();
-    reel inv(); // gibt die Inverse zurück 1/x
-	reel betrag(); // gibt den Betrag von reel
-	int operator [] (int);  // gibt für 0 zaehler und für 1 nenner zurück
-	friend reel operator + (reel &,reel &);
-	friend reel operator - (reel &,reel &);
-	friend reel operator * (reel &,reel &);
-	friend reel operator / (reel &,reel &);
-	friend int operator > (reel &,reel &);
-	friend int operator >= (reel &,reel &);
-	friend int operator == (reel &,reel &);
-	friend reel operator - (reel &);
-	friend ostream & operator << (ostream &,reel &);
+	reel abs() const; // gibt den Betrag von reel
+    reel inv() const; // gibt die Inverse zurÃ¼ck 1/x
+	int operator [] (int);  // gibt fÃ¼r 0 zaehler und fÃ¼r 1 nenner zurÃ¼ck
+	friend reel operator + (const reel &,const reel &);
+	friend reel operator - (const reel &,const reel &);
+	friend reel operator * (const reel &,const reel &);
+	friend reel operator / (const reel &,const reel &);
+	friend int operator > (const reel &,const reel &);
+	friend int operator >= (const reel &,const reel &);
+	friend int operator == (const reel &,const reel &);
+	friend reel operator - (const reel &);
+	friend ostream & operator << (ostream &,const reel &);
 	friend istream & operator >> (istream &,reel &);
 };
 #endif

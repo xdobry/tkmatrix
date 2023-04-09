@@ -1,26 +1,9 @@
-#include <iostream.h>
-class reel {
-	int l,m;
-public:
-	reel();
-	reel(int,int=1);
-	void print ();
-	void skroc ();
-    reel inv(); // gibt die Inverse zurück 1/x
-	reel abs(); // gibt den Betrag von reel
-	int operator [] (int); //gibt für 0 zaehler und für 1 nenner zurück
-	friend reel operator + (reel &,reel &);
-	friend reel operator - (reel &,reel &);
-	friend reel operator * (reel &,reel &);
-	friend reel operator / (reel &,reel &);
-	friend int operator > (reel &,reel &);
-	friend int operator >= (reel &,reel &);
-	friend int operator == (reel &,reel &);
-	friend reel operator - (reel &);
-	friend ostream & operator << (ostream &,reel &);
-	friend istream & operator >> (istream &,reel &); // wymaga poprawy
-};
-int abs(int); // prototyp aus c library 
+#include <iostream>
+#include <cmath>
+#include "reel_class.c"
+
+using namespace std;
+
 int ggt(int a,int b) {
 	a=abs(a);
 	b=abs(b);
@@ -36,16 +19,16 @@ void reel::skroc () {
 	m=m/a;
 	if (m<0) { l=-l; m=-m; }
 }
-reel reel::inv() {
+reel reel::inv() const {
 	reel w;
 	w.l=m;
 	w.m=l;
 	return w;
 }
-reel reel::abs() {
+reel reel::abs() const {
 	reel w;
-	w.l=abs(l);
-	w.m=abs(m);
+	w.l=std::abs(l);
+	w.m=std::abs(m);
 	return w;
 }
 int sign(int a) {
@@ -57,28 +40,28 @@ reel::reel() {
 }
 reel::reel(int a,int b) {
 	l=a*sign(b);
-	m=(b==0 ? 1: abs(b));
+	m=(b==0 ? 1: std::abs(b));
 }
 int reel::operator [] (int x) {
 	if (x==0) return l;
 	else return m;
 } 
-reel operator + (reel &x, reel &y) {
+reel operator + (const reel &x, const reel &y) {
 	reel w;
 	int a=ggt(x.m,y.m);
 	a=x.m/a*y.m;		// wspolny mianownik
 	w.l=x.l*(a/x.m)+y.l*(a/y.m);
 	w.m=a;
 	w.skroc();
-	return w
+	return w;
 }
-reel operator - (reel &x) {
+reel operator - (const reel &x) {
 	reel w;
 	w.l=-x.l;
 	w.m=x.m;
 	return w;
 }
-reel operator - (reel &x,reel &y) {
+reel operator - (const reel &x,const reel &y) {
 	reel w;
 	int a=ggt(x.m,y.m);
 	a=x.m/a*y.m;		// wspolny mianownik
@@ -87,7 +70,7 @@ reel operator - (reel &x,reel &y) {
 	w.skroc();
 	return w;
 }
-reel operator * (reel & x,reel & y) {
+reel operator * (const reel & x,const reel & y) {
 	reel w1,w2;
 	w1.l=x.l;	w1.m=y.m;	w1.skroc();
 	w2.l=y.l;	w2.m=x.m;	w2.skroc();
@@ -95,7 +78,7 @@ reel operator * (reel & x,reel & y) {
 	w1.m=w1.m*w2.m;
 	return w1;
 }
-reel operator / (reel & x,reel & y) {
+reel operator / (const reel & x,const reel & y) {
 	reel w1,w2;
 	w1.l=x.l;	w1.m=y.l;	w1.skroc();
 	w2.l=y.m;	w2.m=x.m;	w2.skroc();
@@ -104,25 +87,25 @@ reel operator / (reel & x,reel & y) {
 	if (w1.m<0) { w1.l=-w1.l; w1.m=-w1.m; }
 	return w1;
 }
-int operator > (reel & x,reel & y) {
-	reel	w;
+int operator > (const reel & x,const reel & y) {
+	reel w;
 	w=x-y;
 	if (w.l>0) return 1;
 	else return 0;
 }
-int operator >= (reel & x,reel & y) {
-	reel	w;
+int operator >= (const reel & x,const reel & y) {
+	reel w;
 	w=x-y;
 	if (w.l>=0) return 1;
 	else return 0;
 }
-int operator == (reel & x,reel & y) {
+int operator == (const reel & x,const reel & y) {
 	reel w;
 	w=x-y;
 	if (w.l==0) return 1;
 	else return 0;
 }
-ostream & operator << (ostream & wy,reel & x) {
+ostream & operator << (ostream & wy,const reel & x) {
 	wy << x.l;
 	if (x.l!=0 && x.m!=1) wy<< "/" << x.m;
 	return wy;
@@ -138,7 +121,7 @@ istream & operator >> (istream & we,reel & a) {
 	a.skroc();
 	return we;
 }
-void reel::print () {
+void reel::print () const {
 	cout << l;
 	if (l!=0 && m!=1) cout <<"/"<< m;
 }

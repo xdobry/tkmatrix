@@ -1,11 +1,14 @@
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
+#include <fstream>
+
+using namespace std;
 
 #include "reel_class.c"
 #include "sets_class.c"
 #include "matrix_class.c"
 
-extern FILE *prot;
+extern ofstream prot;
 // Filestuktur, wenn !=0 dann wird es zu den jedes schritt von Algorithmen
 // geschrieben in Form von Protokol
 
@@ -13,9 +16,8 @@ matrix::matrix (int h,int b)
 {
 	hoehe=h; breite=b;
 	adrmatrix = new reel [h*b];
-	int i;
 }
-matrix::matrix(matrix & m)
+matrix::matrix(const matrix & m)
 {
 	hoehe=m.hoehe;
 	breite=m.breite;
@@ -24,7 +26,7 @@ matrix::matrix(matrix & m)
 	for(i=0;i<hoehe*breite;i++) adrmatrix[i]=m.adrmatrix[i];
 }
 // matrix & matrix::operator = (matrix & z) {
-void matrix::load(matrix &z) {
+void matrix::load(const matrix &z) {
 	if (this!=&z) {
 		delete adrmatrix;
 		hoehe=z.hoehe;
@@ -67,9 +69,9 @@ void matrix::tausche(int a,int b) {
 	}
 }
 void matrix::m_gauss(int i) {
-	int x,y; // x - spalten y - zeilen Zähler
-	reel *adr,*adr2; // nur für Beschleunigung
-					 // und für Zeiger Spezielisten
+	int x,y; // x - spalten y - zeilen ZÃ¶hler
+	reel *adr,*adr2; // nur fÃ¼r Beschleunigung
+					 // und fÃ¼r Zeiger Spezielisten
 	reel a,b;
 	x=nichtnull(i,i);
 	if (x>=0) { tausche(x,i);
@@ -84,7 +86,7 @@ void matrix::m_gauss(int i) {
 			if ((*adr2)[0]) {
 				a=*adr2;
 				*adr2++=0;	// ersten Antrag anmerken und sofort auf null setzen
-							// addition ab nächster spalte
+							// addition ab nÃ¶chster spalte
 				adr=adrmatrix+breite*i+(i+1);
 				for (x=i+1;x<breite;x++) {
 					b=a*(*adr);
@@ -98,7 +100,7 @@ void matrix::m_gauss(int i) {
 void matrix::gauss() {
 	int i;
 	if (prot) {
-		fputs("gauss von",prot);
+		prot<<"gauss von\n";
 		prot<<*this;
 	}
 	for (i=0;i<breite && i<hoehe ;i++) { 
@@ -114,19 +116,19 @@ void matrix::gauss_jordan() {
 	reel a,b;
 	reel *adr,*adr2;
 	if (prot) {
-		fputs("gauss von",prot);
+		prot<<"gauss von";
 		prot<<*this;
 	}
 	for (i=0;i<breite && i<hoehe ;i++) {
 		m_gauss(i);
 		if (adrmatrix[i*breite+i][0]) {
-		// dieses Teil ist mit der aus m_gauss sehr ähnlich
+		// dieses Teil ist mit der aus m_gauss sehr Ã¶hnlich
 			for (j=0;j<i;j++) {
 				adr2=adrmatrix+breite*j+i;
 				if ((*adr2)[0]) {
 					a=*adr2;
 					*adr2++=0;	// ersten Antrag anmerken und sofort auf null setzen
-								// addition ab nächster spalte
+								// addition ab nÃ¶chster spalte
 					adr=adrmatrix+breite*i+(i+1);
 					for (k=i+1;k<breite;k++) {
 						b=a*(*adr);
@@ -142,7 +144,7 @@ void matrix::gauss_jordan() {
 		}
 	}
 }
-sets matrix::sprungstellen() {
+const sets matrix::sprungstellen() {
 	int x,y,last;
 	sets s(breite);
 	last=breite-1;
@@ -155,7 +157,7 @@ sets matrix::sprungstellen() {
 	if (y!=-1) s.clear();
 	return s;
 }
-int matrix::sstellencount(sets & a) {
+int matrix::sstellencount(const sets & a) {
 	return a.howmany();
 }
 int matrix::sstellencount() {
@@ -185,7 +187,7 @@ matrix matrix::loesung() {
 		}
 	}
 	if (prot) {
-		fputs("Lösung",prot);
+		prot<<"LÃ¶sung\n";
 		prot<<l;
 	}
 	return l;
@@ -216,7 +218,7 @@ matrix matrix::inverse () {
 		for (x=0;x<breite;x++)
 			i(y,x)=s(y,x+breite);
 	if (prot) {
-		fputs("Inverse",prot);
+		prot<<"Inverse\n";
 		prot<<i;
 	}
 return i;
@@ -234,14 +236,14 @@ matrix matrix::bild() {
 			l.adrmatrix[y*l.breite+x]=adrmatrix[y*breite+spalte];
 	}
 	if (prot) {
-		fputs("Bild von Matrix",prot);
+		prot<<"Bild von Matrix";
 		prot<<l;
 	}
 return b;
 }
 matrix matrix::kern() {
 	int x,y;
-	// Bilde eine matrix mit zusätzlicher Nullspalte
+	// Bilde eine matrix mit zusÃ¶tzlicher Nullspalte
 	matrix b(hoehe,breite+1);
 	for (y=0;y<hoehe;y++)
 		for(x=0;x<breite;x++)
@@ -250,7 +252,7 @@ matrix matrix::kern() {
 	b.load(b.loesung());
 	if (b.breite==1) {
 		if (prot) {
-			fputs("Kern von Matrix",prot);
+			prot<<"Kern von Matrix\n";
 			prot<<b;
 		}
 		return b;
@@ -260,7 +262,7 @@ matrix matrix::kern() {
 		for(x=0;x<l.breite;x++)
 			l.adrmatrix[y*l.breite+x]=b.adrmatrix[y*b.breite+x+1];
 	if (prot) {
-		fputs("Kern von Matrix",prot);
+		prot<<"Kern von Matrix\n";
 		prot<<l;
 	}
 return l;
@@ -272,7 +274,7 @@ void matrix::pivotiere (int zeile,int spalte) {
 												// keine Pivotierung
 		reel *adr,*adr2;
 		int  x,y;
-		if (!(a[0]==1 && a[1]==1)) {// Wenn 1 dann Teilung unnötig 
+		if (!(a[0]==1 && a[1]==1)) {// Wenn 1 dann Teilung unnÃ¶tig 
 			adr=adrmatrix+spalte;
 			for (y=0;y<hoehe;y++) {
 				*adr=*adr/a;
@@ -305,10 +307,10 @@ int matrix::maxkriterium(sets &mark) {
 					// ob null spalte
 				if (y<hoehe) {
 					erg=x;
-					hoechst=adr[x].betrag();
+					hoechst=adr[x].abs();
 				}
 			} else {
-				a=adr[x].betrag();
+				a=adr[x].abs();
 				if (a>hoechst) {
 					erg=x;
 					hoechst=a;
@@ -347,10 +349,10 @@ int matrix::quotkriterium(int spalte) {
 		if ((reel)0>a) {
 			if (erg<0) {
 				erg=y;
-				a=(adrmatrix[breite*y+spalte].betrag());
-				min=adrmatrix[breite*y+breite-1]/a
+				a=(adrmatrix[breite*y+spalte].abs());
+				min=adrmatrix[breite*y+breite-1]/a;
 			} else {
-				a=(adrmatrix[breite*y+spalte].betrag());
+				a=(adrmatrix[breite*y+spalte].abs());
 				a=adrmatrix[breite*y+breite-1]/a;
 				if (min>a) {
 					erg=y;
@@ -362,10 +364,10 @@ int matrix::quotkriterium(int spalte) {
 return erg;
 }
 int matrix::eckenfindung() {
-	int x,s,z; 
+	int s,z; 
 	sets mark(breite-1);
 	if (prot) {
-		fputs("Eckenfindung von",prot);
+		prot<<"Eckenfindung von\n";
 		prot<<*this;
 	}
 	while (1) {
@@ -387,7 +389,7 @@ int matrix::eckenaustausch() {
 		for (z=0;(z<breite-1 && (reel)0>=adrmatrix[breite*(hoehe-1)+z]);z++);
 		if (z==breite-1) return 0;
 		if (prot && !ind) {
-			fputs("Eckenaustausch",prot);
+			prot<<"Eckenaustausch\n";
 			ind=1;
 		}
 		s=max2kriterium();
@@ -404,8 +406,10 @@ return 3;
 }
 int matrix::sucheecke() {
 	if(!eckenfindung()) {
-		cout<<"Es gibt keine optimale Lösung\n";
-		if (prot) fputs("Es gibt keine optimale Lösung",prot);
+		cout<<"Es gibt keine optimale LÃ¶sung\n";
+		if (prot) {
+			prot<<"Es gibt keine optimale LÃ¶sung";
+		}
 		return 0;
 	}
 	if(!eckenaustausch()) return 1;
@@ -438,13 +442,13 @@ matrix matrix::rechneloesung (sets &mark) {
 }
 matrix matrix::sucheloesung() {
 	int x,y;
-	// ob nullvektor die Lösung ist
-	cout<<"Ich suche eine Lösung\n";
+	// ob nullvektor die LÃ¶sung ist
+	cout<<"Ich suche eine LÃ¶sung\n";
 	for (y=0;y<hoehe-1 && 0>=adrmatrix[y*breite+breite-1];y++);
 	if (y==hoehe-1) { matrix l(breite-1,1); return l; }
 	matrix b(hoehe,breite+1);
 	reel a=adrmatrix[breite-1]; // auf erstes be setzen 
-	// kopiern zu B_dach matrix und suche größtes b gleichzeitig
+	// kopiern zu B_dach matrix und suche grÃ¶Ã¶tes b gleichzeitig
 	for (y=0;y<hoehe-1;y++) {
 		if (adrmatrix[y*breite+breite-1]>a) a=adrmatrix[y*breite+breite-1];
 		for (x=0;x<breite-1;x++)
@@ -464,14 +468,14 @@ matrix matrix::sucheloesung() {
 	b.adrmatrix[x]=-a;
 	b.adrmatrix[x-1]=1;
 	if (prot) {
-		fputs("Ausgangsmatrix zur Suche nach einer Lösung",prot);
+		prot<<"Ausgangsmatrix zur Suche nach einer LÃ¶sung\n";
 	}
 	if (!b.sucheecke()) {
 		a=b.adrmatrix[x];
 		if (a>=0) {
-			// Kommt nur vor bei den Ungleichungen ohne Beschränkung
-			// Suche lösung wenn der Gewinn >=0
-			// Lösung von Ursprung b_dach ohne gewinnzeile
+			// Kommt nur vor bei den Ungleichungen ohne BeschrÃ¤nkung
+			// Suche lÃ¶sung wenn der Gewinn >=0
+			// LÃ¶sung von Ursprung b_dach ohne gewinnzeile
 			// Letzte Splate=Gewinn+(letzte splate)Ursprung B_dach+Letztes B_Dach
 			reel hr;
 			matrix bhilf(hoehe-1,breite+1);
@@ -482,10 +486,11 @@ matrix matrix::sucheloesung() {
 				hr=0;
 				x++; // x auf letzte spalte setzen
 				hr=a+b.adrmatrix[y*b.breite+x];
-				hr=hr+adrmatrix[y*breite+x-1]; // matrix um eine spalte kürzer
+				hr=hr+adrmatrix[y*breite+x-1]; // matrix um eine spalte kÃ¼rzer
 				bhilf.adrmatrix[y*bhilf.breite+x]=hr;
 			}
-			if (prot) fputs("Gewinn positiv es gibt also eine Lösung",prot);
+			if (prot) 
+				prot<<"Gewinn positiv es gibt also eine LÃ¶sung\n";
 			bhilf.gauss_jordan();
 			bhilf.load(bhilf.loesung());
 			matrix l(breite-1,1);
@@ -493,8 +498,9 @@ matrix matrix::sucheloesung() {
 				l.adrmatrix[y]=bhilf.adrmatrix[bhilf.breite*y];
 			return l;
 		} else {
-			cout<<"Keine Lösung\n";
-			if (prot) fputs("Keine Lösung",prot);
+			cout<<"Keine LÃ¶sung\n";
+			if (prot) 
+				prot<<"Keine LÃ¶sung\n";
 			matrix l(0,0); return l;
 		}
 	}
@@ -510,7 +516,7 @@ matrix matrix::sucheloesung() {
 }
 matrix matrix::optimiere() {
 	if(prot) {
-		fputs("optimiere",prot);
+		prot<<"optimiere\n";
 		prot<<*this;
 	}
 	matrix l(sucheloesung());
@@ -518,7 +524,7 @@ matrix matrix::optimiere() {
 		matrix l(0,0); return l;
 	}
 	if (prot) {
-		fputs("Eine Lösung",prot);
+		prot<<"Eine LÃ¶sung\n";
 		prot<<l;
 	}
 	matrix b_(*this);
@@ -534,7 +540,7 @@ matrix matrix::optimiere() {
 		b_.adrmatrix[y*breite+breite-1]=a-b;
 	}
 	if (prot) {
-		fputs("Ausgangsmatrix zu Eckensuche",prot);
+		prot<<"Ausgangsmatrix zu Eckensuche\n";
 	}
 	if (!b_.sucheecke()) {
 				matrix l(0,0); return l;
@@ -542,12 +548,15 @@ matrix matrix::optimiere() {
 	sets ls=b_.einheitszeilen();
 	matrix l2(rechneloesung(ls));
 	if (l2.mhoehe()) {
-		cout<<"Lösung gefunden\n";
+		cout<<"LÃ¶sung gefunden\n";
 	}
 	return l2;
 }
 matrix matrix::naehrungsloesung() {
-	if (hoehe<=breite-1) { gauss_jordan(); return (loesung()) };
+	if (hoehe<=breite-1) { 
+		gauss_jordan(); 
+		return loesung();
+	}
 	matrix b(breite-1,breite);
 	int x,y,z;
 	reel a,c;
@@ -568,7 +577,7 @@ matrix matrix::naehrungsloesung() {
 		b.adrmatrix[y*breite+breite-1]=a;
 	}
 	if (prot) {
-		fputs("Ausgangmatrix (At*A)x=At*b",prot);
+		prot<<"Ausgangmatrix (At*A)x=At*b"<<std::endl;
 	}
 	b.gauss_jordan();
 	return (b.loesung());

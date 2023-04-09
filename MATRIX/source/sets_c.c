@@ -8,14 +8,14 @@ sets::sets(int lenght) {
 	adr=new int[lint];
 	for (x=0;x<lint;x++) adr[x]=0;
 }
-sets::sets(sets & z) {
+sets::sets(const sets & z) {
 	pos=z.pos;
 	leng=z.leng;
 	int x,lint=hmint(leng);
 	adr=new int[lint];
 	for(x=0;x<lint;x++) adr[x]=z.adr[x];
 }
-sets & sets::operator = (sets & z) {
+sets & sets::operator = (const sets & z) {
 	if (this!=&z) {
 		delete adr;
 		int x,lint=hmint(z.leng);
@@ -41,11 +41,11 @@ void sets::del(int x) {
 	if (x<leng)
 	adr[x>>5]&=0xFFFFFFFF^(1<<(x&0x1F)); // adr=adr AND ($FFFFFF XOR bit)
 }
-void sets::xor(int x) {
+void sets::s_xor(int x) {
 	if (x<leng)
 	adr[x>>5]^=1<<(x&0x1F); // adr=adr XOR bit
 }
-int sets::exists(int x) {
+int sets::exists(int x) const {
 	return adr[x>>5]&(1<<(x&0x1F));
 }
 void sets::init() {
@@ -64,10 +64,10 @@ int sets::next_full() {
 int sets::all() {
 	return pos>=leng;
 }
-int sets::howmany() {
+int sets::howmany() const {
 	int x,erg=0;
 	for (x=0;x<leng;x++) {
 		if (exists(x)) erg++;
 	}
-return erg;
+    return erg;
 }

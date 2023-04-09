@@ -8,10 +8,10 @@ Das ist Eine Dokumentation zur Quellecode von Matrix
 
 1.1 Wie ist es geschrieben
 
-Es ist in C++ geschrieben. Ich habe es so weit wie möglich
+Es ist in C++ geschrieben. Ich habe es so weit wie mÃ¶glich
 klassenorientiert geschrieben. Die Klassen sind sehr allgemein geschrieben
-und können ohne Umständen auch von anderen Programmen benutzt werden.
-Ich habe es auch versucht so zu machen das man ohne große Probleme das
+und kÃ¶nnen ohne UmstÃ¤nden auch von anderen Programmen benutzt werden.
+Ich habe es auch versucht so zu machen das man ohne groÃŸe Probleme das
 Programm leicht ausbauen kann.
 
 1.2 Welche Dateien dazu kommen und wie man es compiliert
@@ -32,17 +32,17 @@ zu Objectdateien machen und nacher matrixfull.c mit dennen linken.
 
 1.3 Klassen beschreibung
 a)	reel_c.c ;genaue Beschreibung von Funktionen in reel_class.c
-	diese Klasse vewaltet alle operationnen auf Brüchen
-	es ist z.B. Möglich
+	diese Klasse vewaltet alle operationnen auf BrÃ¼chen
+	es ist z.B. MÃ¶glich
 	reel a(1,2),b(1,3);	// a=1/2 b=1/3
 	a=a+b;
 	cout<<a;
 	cin>>a; //  (Vorsicht sehe Bugs)
 	Operationen wie +,*,/,<,<=,
-b) sets_c.c Ähnlich wie Sets bei Pascal oder Modula2
-	sets a(10); 10 ist die Länge von 0..9
-	sets a;		definiert als 0..31 (int länge)
-		es wird vorrausgesetzt das Integer Länge 4 Byte ist
+b) sets_c.c Ã„hnlich wie Sets bei Pascal oder Modula2
+	sets a(10); 10 ist die LÃ¤nge von 0..9
+	sets a;		definiert als 0..31 (int lÃ¤nge)
+		es wird vorrausgesetzt das Integer LÃ¤nge 4 Byte ist
 c) matrix_c.c Alle Operationnen und Algorithmen auf Matrizen
 	
 1.4 Bugs
@@ -50,15 +50,15 @@ c) matrix_c.c Alle Operationnen und Algorithmen auf Matrizen
 	int a;
 	bei cin<<a konnte ich nicht negative integer Zahlen einlesen
 	darum a ist von Typ double
-	außerdem muß die Eingabe mit leer Zeiche enden
+	auÃŸerdem muÃŸ die Eingabe mit leer Zeiche enden
 	was schwierigkeiten bie cin bereitet
-	am besten nach Eingabe 1/3 eine zusätzliche leertaste vor RETURN
+	am besten nach Eingabe 1/3 eine zusÃ¤tzliche leertaste vor RETURN
 	eintippen	
 -	matrixfull.c
 	Mein Copiler kennt nicht setw(x) Element von stream erkennen, mit
 	anderen Compiler sollte das gehen
 -	matrix_c.c
-	Der Kompiler wollte nicht = bei classe matrix überladen
+	Der Kompiler wollte nicht = bei classe matrix Ã¼berladen
 	 matrix & matrix::operator = (matrix & z);
 	ich habe es durch
 	void matrix::load(matrix &z); 
@@ -66,10 +66,10 @@ c) matrix_c.c Alle Operationnen und Algorithmen auf Matrizen
 	Verwendung von = bei matrix objecten ist nicht gestatet
 -	matrix_c.c
 		prot<<"text";
-		führte auf Grund internen Fehler von Compiler zum Absturzt
+		fÃ¼hrte auf Grund internen Fehler von Compiler zum Absturzt
 		ich habe das durch
 		fputs("text",prot);
-		ersetzen müssen
+		ersetzen mÃ¼ssen
 
 1.5 Autor
 	Artur Trzewik wi-inf studen UGH ESSEN
