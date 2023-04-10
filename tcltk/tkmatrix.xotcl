@@ -1,0 +1,3399 @@
+# automatically generated from XOTclIDE
+package provide tkmatrix 0.1
+
+proc about {} {
+    global lan progdir
+    set w .aboutdialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(aboutdialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    catch {focus $oldFocus}    
+    image create photo image2a
+
+    image2a configure -file [file join $progdir images artur.gif]
+
+    frame $w.bot
+    frame $w.buttons -relief raised -bd 1
+    frame $w.top -relief raised -bd 1
+
+    message $w.msg -text "program: tkmatrix\nVersion 0.7 Date 06.2001\nAuthor: Artur Trzewik\nall rights reserved\nemail: mail@xdobry.de\nhomepage: http://www.xdobry.de/tkmatrix" -width 1000
+    label $w.image -image image2a
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+
+    button $w.whatitis -text $lan(whatitis) -command "myinfo whatitis"
+    button $w.development -text $lan(development) -command "myinfo development"
+    button $w.licence -text $lan(licence) -command "myinfo licence"
+    button $w.aboutautor -text $lan(aboutautor) -command "myinfo aboutautor"
+    button $w.important -text $lan(important) -command "myinfo important"
+    button $w.version -text $lan(version) -command "myinfo version"
+    
+
+    grid $w.whatitis $w.development  $w.version -in $w.buttons -sticky ew
+    grid $w.licence $w.aboutautor $w.important -row 1 -in $w.buttons -sticky ew
+    
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    
+    pack $w.image -side left -padx .5c -pady .5c -in $w.top 
+    pack $w.msg -side left -in $w.top
+    pack $w.top -side top -fill both -expand 1
+    pack $w.buttons
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> {set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    catch {image delete image2a}
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+}
+proc matrixhelp {} {
+    global tcl_platform progdir
+    if {$tcl_platform(platform)=="windows"} {
+	winhelp [file join $progdir tkmatrix.hlp]
+    } else {
+	global helpdir lan option errorInfo
+	if {$option(netscape_remote)} {
+	    set ret [catch {exec netscape -remote "openFile ([file join $helpdir $lan(helpfile)])"}]
+	    if {$ret!=0} {
+		if {"no"==[tk_messageBox -title $lan(errormsg) -message $lan(lunch_browser) -icon question -type yesno]} {
+		    return
+		}
+	    } else {
+		return
+	    }
+	}
+	set command [format $option(htmlhelpviewer) [file join $helpdir $lan(helpfile)]]
+	#   puts "com $command helpdir $helpdir"
+	set ret [catch { eval exec $command & }]
+	if {$ret != 0} {
+	    tk_messageBox -title $lan(errormsg) -message "$lan(nohelpviewer) Command:\"$command\" Error:\"$errorInfo\"" -icon error -type ok
+	    return
+	}
+    }
+}
+proc myinfo mes {
+    global lan
+    set infovar info$mes
+    set w .aboutdialog
+    pack forget $w.msg
+    if {[winfo exists $w.imsg]!=1} {
+	frame $w.imsg
+	scrollbar $w.imsg.scroll -orient vertical -command "$w.imsg.infotext yview" 
+	text $w.imsg.infotext -yscrollcommand "$w.imsg.scroll set" -width 30 -height 12 -wrap word
+	pack $w.imsg -side right -in $w.top -expand yes -fill x
+	pack $w.imsg.infotext -side left -expand yes -fill both
+	pack $w.imsg.scroll -side left -fill y
+	$w.imsg.infotext insert 1.0 $lan($infovar)
+    } else {
+	$w.imsg.infotext delete 1.0 end
+	$w.imsg.infotext insert 1.0 $lan($infovar)
+    }
+}
+proc openHTMLBrowser url {
+    # Taken from WIKI Page 557
+    global tcl_platform
+
+    # It *is* generally a mistake to switch on $tcl_platform(os), particularly
+    # in comparison to $tcl_platform(platform).  For now, let's just regard it
+    # as a stylistic variation subject to debate.
+    switch $tcl_platform(os) {
+        Darwin {
+            set command [list open $url]
+        }
+        HP-UX -
+        Linux  -
+        SunOS {
+            foreach executable {firefox mozilla netscape iexplorer opera lynx
+            w3m links galeon konquerer mosaic firefox amaya
+            browsex elinks} {
+                set executable [auto_execok $executable]
+                if [string length $executable] {
+                    # Do you want to mess with -remote?  How about other browsers?
+                    set command [list $executable $url &]
+                    break
+                }
+            }
+        }
+        {Windows 95} -
+        {Windows NT} {
+            set command "[auto_execok start] {} [list $url]"
+        }
+    }
+    if [info exists command] {
+        if [catch {eval exec $command} err] {
+            tk_messageBox -icon error -message "error '$err' with '$command'"
+        }
+    } else {
+        tk_messageBox -icon error -message  "Please ($tcl_platform(os), $tcl_platform(platform)) is not yet ready for browsing."
+    }
+}
+proc wwwlink_autor {} {
+    openHTMLBrowser http://www.xdobry.de/tkmatrix
+}
+
+proc language_dialog {} {
+    global mywait progdir rb_language
+    set w .landialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w "choose language"
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text "choose language" -width 4c
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+    button $w.ok -text ok -command "set mywait ok"
+    button $w.ok2 -text {use also for next sesion} -command "set mywait ok2"
+    
+    foreach lan [glob [file join $progdir *.lan]] {
+	set lname [file tail [file rootname $lan]]
+	radiobutton $w.rb$lname -text $lname -variable rb_language -value $lname
+	pack $w.rb$lname -side top -in $w.top
+    }
+    # preselected language is german
+    set rb_language german
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.ok2 -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    set ret [list $rb_language $mywait]
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+proc new_dialog type {
+    global mywait lan numbertype
+    set w .newdialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(newdialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text $lan(newdialogmes)
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+
+    label $w.height -text $lan(height)
+    entry $w.eheight -width 5
+    if {$type!="einheitsmatrix"} {
+	entry $w.ewidth -width 5
+    }
+    if {$type=="randommatrix"} {
+	label $w.maxnum -text $lan(maxnum)
+	entry $w.emaxnum -width 5
+	$w.emaxnum insert 0 100
+	label $w.maxden -text $lan(maxden)
+	entry $w.emaxden -width 5
+	$w.emaxden insert 0 100
+    }
+    label $w.width -text $lan(width)
+    set numbertype -rational
+    radiobutton $w.rrational -text $lan(rationaltype) -variable numbertype  -value "-rational"	
+    radiobutton $w.rfloat -text $lan(floattype) -variable numbertype  -value "-float"	
+    radiobutton $w.rwidefloat -text $lan(widefloattype) -variable numbertype  -value "-widefloat"
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    
+
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.cancel -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+    
+    grid $w.height -in $w.top -column 0 -row 0 -sticky e
+    grid $w.eheight -in $w.top -column 1 -row 0
+
+    if {$type!="einheitsmatrix"} {
+	grid $w.width -in $w.top -column 0 -row 1 -sticky e
+	grid $w.ewidth -in $w.top -column 1 -row 1
+    }
+    if {$type=="randommatrix"} {
+	grid $w.maxnum -in $w.top -column 0 -row 5 -sticky e
+	grid $w.emaxnum -in $w.top -column 1 -row 5
+	grid $w.maxden -in $w.top -column 0 -row 6 -sticky e
+	grid $w.emaxden -in $w.top -column 1 -row 6
+    }
+    grid $w.rrational -in $w.top -column 0 -row 2 -columnspan 2  -sticky w
+    grid $w.rfloat -in $w.top -column 0 -row 3 -columnspan 2  -sticky w
+    grid $w.rwidefloat -in $w.top -column 0 -row 4 -columnspan 2  -sticky w
+
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    switch $type {
+	nullmatrix {
+	    set ret [list [$w.eheight get] [$w.ewidth get] $numbertype]
+	}
+	einheitsmatrix {
+	    set ret [list [$w.eheight get] [$w.eheight get] $numbertype]
+	}
+	randommatrix {
+	    set ret [list [$w.eheight get] [$w.ewidth get] $numbertype  [$w.emaxnum get] [$w.emaxden get]]
+	}
+    }
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+proc op_dialog {type hoehe breite} {
+    global whandle matrixlist
+    set mlist {}
+    foreach matrix $matrixlist {
+	set matrix [lindex $matrix 0]
+	# puts "matrix is $matrix"
+	global $matrix
+	if {[string compare $type [matrixtcl $matrix info type]]==0} {
+	    set size [matrixtcl $matrix info size]
+	    if {[lindex $size 0]==$hoehe && ([lindex $size 1]==$breite || $breite==-1)} {
+		if {[info exists ${matrix}(filename)]} {
+		    global $matrix
+		    lappend mlist [list $matrix [file tail [set ${matrix}(filename)]]]
+		} else {
+		    lappend mlist [list $matrix $matrix]
+		}
+	    }
+	}
+    }
+    global lan
+    if {[llength $mlist]==0} {
+	tk_messageBox -type ok -title $lan(errormsg)  -message $lan(operror) -icon error
+	return
+    }
+    global mywait
+    set w .opdialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(opdialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text $lan(opdialogmes)
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+
+    listbox $w.matrix -relief raised -borderwidth 2  -yscrollcommand "$w.scroll set"
+    scrollbar $w.scroll -command "$w.matrix yview"
+    foreach a $mlist {
+	# puts "a ist $a"
+	$w.matrix insert end [lindex $a 1]
+    }
+    $w.matrix selection set 0
+    
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    
+
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.cancel -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+
+    pack $w.matrix -in $w.top -side left -expand yes -fill both
+    pack $w.scroll -in $w.top -side right -fill y
+
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    set ret [$w.matrix curselection]
+    set ret [lindex [lindex $mlist $ret] 0]
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+proc paste_dialog {} {
+    global mywait lan corner
+    set w .pastedialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(pastedialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text $lan(pastedialogmes)
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+
+    if {![info exist corner]} {
+	set corner TopLeft
+    }
+    radiobutton $w.topleft -text $lan(topleft) -variable corner  -value TopLeft
+    radiobutton $w.topright -text $lan(topright) -variable corner  -value TopRight
+    radiobutton $w.bottomleft -text $lan(bottomleft) -variable corner  -value BottomLeft
+    radiobutton $w.bottomright -text $lan(bottomright) -variable corner  -value BottomRight
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    
+
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.cancel -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+    
+    grid $w.topleft -in $w.top -column 0 -row 0
+    grid $w.topright -in $w.top -column 1 -row 0
+    grid $w.bottomleft -in $w.top -column 0 -row 1
+    grid $w.bottomright -in $w.top -column 1 -row 1
+
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    set ret [list $corner]
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+proc pivot_dialog {{ycord {}} {xcord {}}} {
+    global mywait lan
+    set w .pivotdialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(pivotdialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text $lan(pivotdialogmes)
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+
+    label $w.height -text $lan(pheight)
+    label $w.width -text $lan(pwidth)
+    entry $w.eheight -width 5
+    entry $w.ewidth -width 5
+    $w.eheight insert 0 $ycord
+    $w.ewidth insert 0 $xcord
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    
+
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.cancel -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+    
+    grid $w.height -in $w.top -column 0 -row 0 -sticky e
+    grid $w.width -in $w.top -column 0 -row 1 -sticky e
+    grid $w.eheight -in $w.top -column 1 -row 0
+    grid $w.ewidth -in $w.top -column 1 -row 1
+
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    set ret [list [$w.eheight get] [$w.ewidth get]]
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+proc resize_dialog matrix {
+    global mywait lan resizetop resizeleft
+    set w .resizedialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(resizedialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    message $w.msg -relief raised -bd 1 -text $lan(resizedialogmes)
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+
+    label $w.height -text $lan(height)
+    label $w.width -text $lan(width)
+#    label $w.maxheight -text [lindex [matrixtcl $matrix info size] 0]
+#    label $w.maxwidth -text [lindex [matrixtcl $matrix info size] 1]
+    entry $w.eheight -width 5
+    $w.eheight insert 0 [lindex [matrixtcl $matrix info size] 0]
+    entry $w.ewidth -width 5
+    $w.ewidth insert 0 [lindex [matrixtcl $matrix info size] 1]
+    checkbutton $w.resizetop -text $lan(resizetop) -variable resizetop
+    checkbutton $w.resizeleft -text $lan(resizeleft) -variable resizeleft
+    button $w.ok -text $lan(dialogok) -command "set mywait ok"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    
+
+
+    grid  $w.ok -in $w.bot -column 0 -row 0 -sticky ew -padx 10  
+    grid  $w.cancel -in $w.bot -column 1 -row 0 -sticky ew -padx 10  
+    
+    grid $w.height -in $w.top -column 0 -row 0 -sticky e
+ #   grid $w.maxheight -in $w.top -column 2 -row 0 -sticky w
+    grid $w.width -in $w.top -column 0 -row 1 -sticky e
+ #   grid $w.maxwidth -in $w.top -column 2 -row 1 -sticky w
+    grid $w.eheight -in $w.top -column 1 -row 0
+    grid $w.ewidth -in $w.top -column 1 -row 1
+    grid $w.resizetop -in $w.top -column 0 -row 2 -columnspan 2
+    grid $w.resizeleft -in $w.top -column 0 -row 3 -columnspan 2
+
+    pack $w.msg -side top -fill both
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+
+    bind $w <Destroy> { set mywait cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    set ret [list [$w.eheight get] [$w.ewidth get] $resizetop $resizeleft]
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    
+    if {$mywait == "cancel"} { 
+	return 
+    } else {
+	return $ret
+    }
+}
+
+proc buttondown_elemunf {win matrix lrow lcol} {
+    global $matrix modi_types
+    set modi [set ${matrix}(modi)]
+    set focus [focus -lastfor $win]
+    if {[regexp {^.*\.elemunf.e([0-9])$} $focus - index]} {
+	if {[lindex [lindex $modi_types $modi] $index]=="index"} {
+	    global lan ${win}_rowcol
+	    if {[set ${win}_rowcol]==$lan(row)} {
+		set rowcol row
+	    } else {
+		set rowcol col
+	    }
+	    ${win}.elemunf.e${index} delete 0 end
+	    ${win}.elemunf.e${index} insert 0 [set l$rowcol]
+	}
+    }
+    if {[lindex [lindex $modi_types $modi] 0]=="indexy"} {
+	    ${win}.elemunf.e0 delete 0 end
+	    ${win}.elemunf.e0 insert 0 $lrow
+	    ${win}.elemunf.e1 delete 0 end
+	    ${win}.elemunf.e1 insert 0 $lcol
+    }
+}
+proc change_modi {win pos} {
+    global lan
+    set labels [lindex $lan(modis_label) $pos]
+    for {set x 0} {$x<3} {incr x} {
+	${win}.l$x configure -text [lindex $labels $x]
+	if {[lindex $labels $x]=="-"} {
+	    ${win}.e$x configure -state disabled
+	} else {
+	    ${win}.e$x configure -state normal
+	}
+    }
+}
+proc editmode_handler win {
+    global ${win}_editmode
+    set matrix [getmatrix $win]
+    global $matrix
+    if {[set ${matrix}(editmode)]==[set ${win}_editmode]} return
+    set ${matrix}(editmode) [set ${win}_editmode]
+    set ${matrix}(oneelemunf) 0
+    if {[set ${matrix}(editmode)]=="edit"} {
+	pack forget ${win}.elemunf
+	pack ${win}.workarea -side top -fill x -after ${win}.toolbar
+    } elseif {[set ${matrix}(editmode)]=="elemunf"} {
+	if {![winfo exist ${win}.elemunf]} {
+	    make_elemunfframe ${win}.elemunf $win
+	    set ${matrix}(modi) 0
+	}
+	pack forget ${win}.workarea
+	pack ${win}.elemunf -side top -fill x -after ${win}.toolbar
+	matrixtcl $matrix deleteprot
+	matrixtcl $matrix addprot editmatrix
+	focus $win.elemunf.e0
+    }
+}
+proc make_elemunfframe {win parent} {
+    frame ${win} -relief raised -bd 2
+    global ${parent}_rowcol ${parent}_modi lan
+    tk_optionMenu ${win}.rowcol ${parent}_rowcol $lan(row) $lan(col)
+    eval tk_optionMenu ${win}.modi ${parent}_modi $lan(edit_modis)
+    label ${win}.l0
+    label ${win}.l1
+    label ${win}.l2
+    entry ${win}.e0
+    entry ${win}.e1
+    entry ${win}.e2
+    change_modi ${win} 0
+    button  ${win}.do -text $lan(do_step) -command "unformungen_handler $parent"
+#    button  ${win}.undo -text $lan(undo) -command "undo_handler $parent"
+    grid ${win}.modi -row 0 -column 0
+    grid ${win}.rowcol -row 0 -column 1
+    grid ${win}.l0 -row 1 -column 0 -sticky e
+    grid ${win}.e0 -row 1 -column 1 -sticky w
+    grid ${win}.l1 -row 2 -column 0 -sticky e
+    grid ${win}.e1 -row 2 -column 1 -sticky w
+    grid ${win}.l2 -row 3 -column 0 -sticky e
+    grid ${win}.e2 -row 3 -column 1 -sticky w
+    grid ${win}.do -row 4 -column 0
+#    grid ${win}.undo -row 4 -column 1
+    grid columnconfigure  ${win} 0 -weight 25
+    grid columnconfigure  ${win} 1 -weight 75
+    if {[trace vinfo ${parent}_modi]==""} {
+	trace variable ${parent}_modi w newmodi_handler
+    }
+}
+proc newmodi_handler {name1 name2 op} {
+    global lan $name1
+    regexp {(.*)_modi} $name1 - win
+    set matrix [getmatrix $win]
+    global $matrix
+    set index [lsearch $lan(edit_modis) [set $name1]]
+    if {[set ${matrix}(modi)]==$index} return
+    # puts "newmodi $name1"
+    if {$index>=0} {
+	change_modi ${win}.elemunf $index
+	set ${matrix}(modi) $index
+    }
+}
+proc refresh_editmatrix win {
+    set matrix [getmatrix $win]
+    set name ${win}.can.matrix
+    global option
+    set size [matrixtcl ${matrix} info size]
+    set typ  [matrixtcl ${matrix} info type]
+    set lrows [lindex $size 0]
+    set lcols [lindex $size 1]
+#    puts "$lrows $lcols"
+    for {set y 0} {$y<$lrows} {incr y} {
+	for {set x 0} {$x<$lcols} {incr x} {
+            if {$typ=="rational" && $option(editonlyfraction)==1} {
+                set elem [matrixtcl ${matrix} getelem $y $x -onlyfraction]
+            } else {
+                set elem [matrixtcl ${matrix} getelem $y $x]
+            }
+	    set${typ}w "${name}.num${y}_${x}" $elem
+	}    
+    }
+    
+}
+proc unformungen_handler win {
+    set matrix [getmatrix $win]
+    global $matrix modi_types modi_funktions lan ${win}_rowcol
+    set findex [set ${matrix}(modi)]
+    set maxcol [matrixtcl $matrix info size]
+    set maxrow [lindex $maxcol 0]
+    set maxcol [lindex $maxcol 1]
+    if {[set ${win}_rowcol]==$lan(row)} {
+	set rowcol row
+    } elseif {[set ${win}_rowcol]==$lan(col)} {
+	set rowcol col
+    } else {
+	return 
+    }
+    for {set x 0} {$x<3} {incr x} {
+	set arg$x [$win.elemunf.e$x get]
+	set mtype [lindex [lindex $modi_types $findex] $x]
+	if {$mtype!="-" && [set arg$x]==""} {
+	    tk_messageBox -type ok -title $lan(errormsg)  -message $lan(no_arrgument) -icon error
+	    return
+	}
+	if {$mtype=="index"} {
+	    if {[set arg$x]<0 || [set arg$x]>=[set max${rowcol}]} {
+		tk_messageBox -type ok -title $lan(errormsg)  -message $lan(outof_range) -icon error
+		return
+	    }
+	} elseif {$mtype=="indexy"} {
+	    if {[set arg$x]<0 || [set arg$x]>=$maxrow} {
+		tk_messageBox -type ok -title $lan(errormsg)  -message $lan(outof_range) -icon error
+		return
+	    }
+	} elseif {$mtype=="indexx"} {
+	    if {[set arg$x]<0 || [set arg$x]>=$maxcol} {
+		tk_messageBox -type ok -title $lan(errormsg)  -message $lan(outof_range) -icon error
+		return
+	    }
+	}
+    }
+    set funktion [lindex $modi_funktions $findex]
+    switch $funktion {  
+	swap {matrixtcl $matrix elemunf swap $rowcol $arg0 $arg1}
+	factormul {
+	    if {[matrixtcl $matrix info type] == "rational"} {
+		regsub -all " " $arg1 "" arg1
+		regsub -all "," $arg1 " " arg1
+		regsub -all "/" $arg1 " " arg1
+		if {[regexp {(^-?[0-9]+)( [0-9]+)*$} $arg1]==0} {
+		    tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornofraction) -icon error
+		    return
+		}
+	    } 
+	    matrixtcl $matrix elemunf factormul $rowcol $arg0 $arg1
+	}
+	factoradd {
+	    if {[matrixtcl $matrix info type] == "rational"} {
+		regsub -all " " $arg2 "" arg2
+		regsub -all "," $arg2 " " arg2
+		regsub -all "/" $arg2 " " arg2
+		if {[regexp {(^-?[0-9]+)( [0-9]+)*$} $arg2]==0} {
+		    tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornofraction) -icon error
+		    return
+		}
+	    } 
+	    matrixtcl $matrix elemunf factoradd $rowcol $arg0 $arg2 $arg1
+	}
+	pivot {matrixtcl $matrix elemunf pivot $rowcol $arg0 $arg1}
+	changestep {matrixtcl $matrix elemunf changestep $arg0 $arg1}
+    }
+    refresh_editmatrix $win
+    if {[set ${matrix}(oneelemunf)]==0} {
+	set ${matrix}(oneelemunf) 1
+	activatemenus $win $matrix
+    }
+}
+
+proc activatemenus {win matrix} {
+    global lan octave
+    if {$octave} {
+	activateoctavemenus $win.mb.button6 $matrix
+    }
+    set solution_menus {
+        {mb.button1 save_solution}
+        {mb.button2 solution2first}
+        {mb.button4 vsolution}
+        {mb.button4 print_solution}
+        {mb.button4 pview_solution}
+    }
+    set protokol_menus {
+        {mb.button1 save_protokol}
+        {mb.button4 vprotokol}
+        {mb.button4 print_protokol}
+        {mb.button4 pview_protokol}
+    }
+    if {[matrixtcl $matrix info issolution]} {
+        set state active
+    } else {
+        set state disabled
+    }
+    foreach item $solution_menus {
+        set mpath [lindex $item 0]
+        set mname $lan([lindex $item 1])
+#        puts "${win}.${mpath} entryconfigure $mname -state $state"
+        ${win}.${mpath} entryconfigure $mname -state $state
+    }
+    if {[matrixtcl $matrix info isprotokol]} {
+        set state active
+    } else {
+        set state disabled
+    }
+    foreach item $protokol_menus {
+        set mpath [lindex $item 0]
+        set mname $lan([lindex $item 1])
+        $win.$mpath entryconfigure $mname -state $state
+    }
+}
+proc addmatrixw matrix {
+    toplevel .${matrix}
+    createmainw .${matrix}
+    putmatrixw .${matrix} $matrix
+    ctraddmatrix $matrix .${matrix} 
+    activatemenus .${matrix} $matrix
+}
+proc alg_handler {root alg} {
+    set matrix [getmatrix $root]
+    global $matrix lan
+    set ${matrix}(lastalgorithmus) $alg
+    catch { matrixtcl $matrix algorithmus $alg } alg_error
+    view_output $root yes
+    ctrupdateitem $matrix
+    activatemenus $root $matrix
+    if {[matrixtcl $matrix info issolution]=="no"} {
+	if {$alg_error!=""} {
+	    tk_messageBox -title $lan(errormsg) -message $lan($alg_error) -icon error -type ok
+	} else {
+	    tk_messageBox -title $lan(errormsg) -message $lan(erroralg) -icon error -type ok
+	}
+    }
+}
+proc copy_handler root {
+    set matrix [getmatrix $root]
+    set typ [matrixtcl $matrix info type]
+    global puffer_$typ
+    set pmatrix [set puffer_$typ]
+    if {$pmatrix != ""} {
+	matrixtcl destroy $pmatrix	
+    }
+    global $matrix
+    #puts "y1=[set ${matrix}(yactpos)] x1=[set ${matrix}(xactpos)] y2=[set ${matrix}(yaltpos)] x2=[set ${matrix}(xaltpos)]"
+    set puffer_$typ [matrixtcl $matrix copy [set ${matrix}(yactpos)]  [set ${matrix}(xactpos)]  [set ${matrix}(yaltpos)]  [set ${matrix}(xaltpos)]
+		    ]
+}
+proc ctraddmatrix {handle {window none}} {
+    global matrixlist controlWindow
+    if {$window!="none"} {
+	lappend matrixlist [list $handle $window]
+    } else {
+	lappend matrixlist [list $handle]
+    }
+    $controlWindow.mlist insert end "dummy"
+    ctrupdateitem $handle
+}
+proc ctrdelmatrix handle {
+    global matrixlist controlWindow
+    set index [lsearch -glob $matrixlist "$handle*"]
+    set matrixlist [lreplace $matrixlist $index $index]
+#    if {[.mlist curselection]==$index} {
+#        .mclose configure -state disabled
+#        .mshow configure -state disabled
+#        .mdeactivate configure -state disabled
+#    }
+    $controlWindow.mlist delete $index
+#    puts "ctrdelete $handle $index matrixlist $matrixlist"
+}
+proc ctrupdateitem handle {
+    global matrixlist controlWindow
+    global $handle
+    set index [lsearch -glob $matrixlist "$handle*"]
+    set wname [lindex [lindex $matrixlist $index] 1]
+    # aktiv oder nicht aktiv
+#    puts "ctr update $handle $index matrixlist $matrixlist"
+    if {$wname==""} {
+        set wname D
+    } else {
+        set wname A
+    }
+    if {[info exists ${handle}(filename)]} {
+        set showname  "\"[file tail [set ${handle}(filename)]]\""
+    } else {
+        set showname $handle
+    }
+    set stat ""
+    set alg ""
+    if {[info exists ${handle}(lastalgorithmus)]} {
+        set alg "- [set ${handle}(lastalgorithmus)]"
+        if {[matrixtcl $handle info issolution]} {
+            set stat S
+        }
+        if {[matrixtcl $handle info isprotokol]} {
+            set stat "${stat}P"
+        } 
+        set alg "$alg (${stat})"
+    } else {
+        set alg ""
+    }
+    set listitem "$wname - $showname ([matrixtcl $handle info type])- [matrixtcl $handle info size] $alg"
+    $controlWindow.mlist delete $index
+    $controlWindow.mlist insert $index $listitem
+}
+proc duplicate_handler root {
+    set matrix [getmatrix $root]
+    set dmatrix [matrixtcl $matrix duplicate]
+    addmatrixw $dmatrix
+}
+proc end_handle root {
+    global lan
+    if {[tk_messageBox -title $lan(enddialogtitle) -message $lan(enddialogmes) -icon question -type okcancel]=="ok"} { exit }
+
+}
+proc getmatrix root {
+    global whandle 
+    set wname [getroot $root]
+    if {[info exists whandle($wname)]} {
+	return $whandle($wname)
+    } else {
+	# puts "no matrix"
+	return
+    }
+}
+proc hdeactivate {win {wname dummy}} {
+    global whandle
+    # Nur beim Schließen des Fenster durch Closebutton
+    # wird Destroy handler ausgeführt
+    if {$wname!="dummy" && ![regexp {^.[a-zA-Z0-9]+$} $wname]} {
+	return
+    }
+    if {![info exists whandle($win)]} {
+        return
+    }
+    set matrix $whandle($win)
+    if {[winfo exists .${matrix}_solution]} {
+        destroy .${matrix}_solution
+    }
+    if {[winfo exists .${matrix}_protokol]} {
+        destroy .${matrix}_protokol
+    }
+    unset whandle($win)
+    catch { 
+        bind $win <Destroy>
+        destroy $win 
+    }
+    # Löschen von globalen Variablen
+    if {[info globals ${win}_modi]=="${win}_modi"} {
+	global ${win}_modi ${win}_rowcol  
+	trace vdelete ${win}_modi w newmodi_handler
+	unset ${win}_modi ${win}_rowcol
+    } 
+    global edit$win emode$win xpos$win ypos$win ${win}_editmode
+    unset ${win}_editmode edit${win} emode$win xpos${win} ypos${win}
+    # Nur handle ohne Windowsname
+    global matrixlist
+    set index [lsearch -glob $matrixlist "$matrix*"]
+    set matrixlist [lreplace $matrixlist $index $index $matrix]
+    ctrupdateitem $matrix
+}
+proc mark_handler {root mtyp} {
+    set matrix [getmatrix $root]
+    set wname [getroot $root]
+    set typ [matrixtcl $matrix info type]
+    global $matrix
+    set yaltpos [set ${matrix}(yaltpos)]
+    set xaltpos [set ${matrix}(xaltpos)]
+    set yactpos [set ${matrix}(yactpos)]
+    set xactpos [set ${matrix}(xactpos)]
+    switch $mtyp {
+	row {
+	    set xactpos 0
+	    set xaltpos [expr [lindex [matrixtcl $matrix info size] 1]-1]
+	}
+	col {
+	    set yactpos 0
+	    set yaltpos [expr [lindex [matrixtcl $matrix info size] 0]-1]
+	}
+	all {
+	    set xactpos 0
+	    set xaltpos [expr [lindex [matrixtcl $matrix info size] 1]-1]
+	    set yactpos 0
+	    set yaltpos [expr [lindex [matrixtcl $matrix info size] 0]-1]
+	}
+    }
+#    set ${matrix}(yactpos) $lactrow
+#    set ${matrix}(xactpos) $lactcol
+    handlebuttondown $root.can.matrix.num${yactpos}_${xactpos} $typ 
+    set ${matrix}(yaltpos) $yaltpos
+    set ${matrix}(xaltpos) $xaltpos
+     markregion_${typ} "$root.can.matrix" $yaltpos $xaltpos $yactpos $xactpos
+}
+proc mclose {} {
+    global matrixlist controlWindow
+    set index [$controlWindow.mlist curselection]  
+    if {$index==""} return
+    set win [lindex [lindex $matrixlist $index] 1]
+    global whandle
+    if {[info exists whandle($win)]} {
+        del_matrixwin $win $win
+    } else {
+        set matrix [lindex [lindex $matrixlist $index] 0]
+        matrixtcl destroy $matrix
+        ctrdelmatrix $matrix
+	global $matrix
+	unset $matrix
+    }
+}
+proc mdeactivate {} {
+    global controlWindow
+    set index [$controlWindow.mlist curselection]
+    global matrixlist
+    if {$index==""} return
+    if {[llength [lindex $matrixlist $index]]==2} {
+        hdeactivate [lindex [lindex $matrixlist $index] 1]
+    }
+}
+proc mshow {} {
+    global controlWindow matrixlist
+    set index [$controlWindow.mlist curselection]  
+    if {$index==""} return
+    if {[llength [lindex $matrixlist $index]]==1} {
+        set newmatrix  [lindex $matrixlist $index]
+        toplevel .${newmatrix}
+        createmainw .${newmatrix}
+        putmatrixw .${newmatrix} $newmatrix
+        set matrixlist [lreplace $matrixlist $index $index [list $newmatrix .${newmatrix}]]
+        ctrupdateitem $newmatrix
+        activatemenus .${newmatrix} $newmatrix
+    } 
+}
+proc mymax {a1 a2} {
+    if {$a1>$a2} {
+	return $a1
+    } else {
+	return $a2
+    }
+}
+proc mymin {a1 a2} {
+    if {$a1<$a2} {
+	return $a1
+    } else {
+	return $a2
+    }
+}
+proc new_matrix {root type} {
+    set erg [new_dialog $type]
+    if {$erg == ""} { return }
+    global whandle
+    set wname [getroot $root]
+    set newmatrix [matrixtcl create [lindex $erg 0] [lindex $erg 1] [lindex $erg 2]]
+
+#    if {[info exists whandle($wname)]} {
+#	toplevel .${newmatrix}
+#	createmainw .${newmatrix}
+#	putmatrixw .${newmatrix} $newmatrix
+#    } else {
+#	putmatrixw {} $newmatrix
+#    }
+    switch $type {
+	einheitsmatrix {
+	    set column [lindex $erg 1]
+	    for {set x 0} {$x<$column} {incr x} {
+		matrixtcl $newmatrix setelem $x $x 1
+	    }    
+	}
+	randommatrix {
+	    set row [lindex $erg 0]
+	    set column [lindex $erg 1]
+	    set maxnum [lindex $erg 3]
+	    set maxden [lindex $erg 4]
+	    set mtyp [lindex $erg 2]
+	    for {set y 0} {$y<$row} {incr y} {
+		for {set x 0} {$x<$column} {incr x} {
+		    if {$mtyp=="-float"} {
+			matrixtcl $newmatrix setelem $y $x [expr rand()]
+		    } else {
+			matrixtcl $newmatrix setelem $y $x  "[expr round(rand()*2*$maxnum)-$maxnum] [expr round(rand()*$maxden+1)]" 
+		    }
+		}    
+	    }
+	}
+    }
+    toplevel .${newmatrix}
+    createmainw .${newmatrix}
+    putmatrixw .${newmatrix} $newmatrix
+    ctraddmatrix $newmatrix .${newmatrix} 
+}
+proc op_handler {root op} {
+    set matrix [getmatrix $root]
+    set type [matrixtcl $matrix info type]
+    set hoehe [lindex [matrixtcl $matrix info size] 0]
+    set breite [lindex [matrixtcl $matrix info size] 1]
+    if {$op == "mul"} {
+	set hoehe $breite
+	set breite -1
+    }
+    set matrix_op [op_dialog $type $hoehe $breite]
+    if {$matrix_op != ""} {
+	matrixtcl $matrix operation $matrix_op $op
+	view_output $root yes
+        global $matrix
+        set ${matrix}(lastalgorithmus) "$op $matrix_op"
+        ctrupdateitem $matrix
+        activatemenus $root $matrix
+    }
+}
+proc open_as_float_handler {root {floattyp {}}} {
+    set matrix [getmatrix $root]
+    if {$floattyp==""} {
+	set dmatrix [matrixtcl $matrix tofloat]
+    } else {
+	set dmatrix [matrixtcl $matrix tofloat $floattyp]
+    }
+    addmatrixw $dmatrix
+}
+proc open_matrix root {
+    set wname [getroot $root]
+    set types {
+	{"Matrix files"		{.mat}	}
+	{"All files"		*}
+    }
+    set file [tk_getOpenFile -filetypes $types -parent $wname]
+    if {$file == ""} { return }
+    global whandle
+    set newmatrix [matrixtcl load $file]
+    global $newmatrix
+    set ${newmatrix}(filename) $file
+#    if {[info exists whandle($wname)]} {
+#	toplevel .${newmatrix}
+#	createmainw .${newmatrix}
+#	putmatrixw .${newmatrix} $newmatrix
+#    } else {
+#	putmatrixw {} $newmatrix
+#    }
+    toplevel .${newmatrix}
+    createmainw .${newmatrix}
+    putmatrixw .${newmatrix} $newmatrix
+    ctraddmatrix $newmatrix .${newmatrix} 
+    activatemenus .${newmatrix} $newmatrix
+}
+proc open_puffer_handler root {
+    set matrix [getmatrix $root]
+    set typ [matrixtcl $matrix info type]
+    global puffer_$typ
+    set pmatrix [set puffer_$typ]
+    if {$pmatrix != ""} {
+	set dmatrix [matrixtcl $pmatrix duplicate]
+	addmatrixw $dmatrix
+    }
+}
+proc paste_handler root {
+    set matrix [getmatrix $root]
+    set wname [getroot $root]
+    set typ [matrixtcl $matrix info type]
+    global puffer_$typ
+    set pmatrix [set puffer_$typ]
+    if {$pmatrix != ""} {
+	set edge [paste_dialog]
+	if {$edge != ""} {
+	    global $matrix
+	    set hoehe [lindex [matrixtcl $matrix info size] 0]
+	    set breite [lindex [matrixtcl $matrix info size] 1]
+	    set phoehe [lindex [matrixtcl $pmatrix info size] 0]
+	    set pbreite [lindex [matrixtcl $pmatrix info size] 1]
+	    set x [set ${matrix}(xactpos)]
+	    set y [set ${matrix}(yactpos)]
+	    switch $edge {    
+		TopLeft {
+		    set xa 0; set ya 0;
+		    set b [mymin [expr $breite-$x] $pbreite]
+		    set h [mymin [expr $hoehe-$y] $phoehe]
+		}
+		TopRight {
+		    set h [mymin [expr $hoehe-$y] $phoehe]
+		    set b [mymin [expr $x+1] $pbreite]
+		    set xa [mymax [expr $pbreite-$x-1] 0]
+		    set ya 0
+		    incr x [expr -($b-1)]
+		}
+		BottomLeft {
+		    set h [mymin [expr $y+1] $phoehe]
+		    set b [mymin [expr $breite-$x] $pbreite]
+		    set xa 0
+		    set ya [mymax [expr $phoehe-$y-1] 0]
+		    incr y [expr -($h-1)]
+		}
+		BottomRight {
+		    set h [mymin [expr $y+1] $phoehe]
+		    set b [mymin [expr $x+1] $pbreite]
+		    set xa [mymax [expr $pbreite-$x-1] 0]
+		    set ya [mymax [expr $phoehe-$y-1] 0]
+		    incr x [expr -($b-1)]
+		    incr y [expr -($h-1)]
+		}
+	    }
+#	    puts "x=$x y=$y b=$b h=$h breite=$breite pbreite=$pbreite hoehe=$hoehe phoehe=$phoehe"
+	    for {set tx 0} {$tx<$b} {incr tx} {
+		for {set ty 0} {$ty<$h} {incr ty} {
+#		    puts "y=[expr $ya+$ty] x= [expr $tx+$xa]"
+		    set rational [matrixtcl $pmatrix getelem [expr $ya+$ty] [expr $tx+$xa]]
+		    set my [expr $ty+$y]
+		    set mx [expr $tx+$x]
+#		    puts "$rational y=$my x=$mx"
+		    matrixtcl $matrix setelem $my $mx $rational
+		    set${typ}w $root.can.matrix.num${my}_${mx} $rational
+		}
+	    }
+	}
+    }
+}
+proc pivot_handler root {
+    set matrix [getmatrix $root]
+    global $matrix
+    set ret [pivot_dialog [set ${matrix}(yactpos)]  [set ${matrix}(xactpos)]] 
+    if {$ret != ""} {
+	catch { 
+	    matrixtcl $matrix algorithmus pivotiere  [lindex $ret 0] [lindex $ret 1]
+	} alg_error
+	view_output $root yes
+        set ${matrix}(lastalgorithmus) "pivot $ret"
+        ctrupdateitem $matrix
+        activatemenus $root $matrix
+	if {[matrixtcl $matrix info issolution]=="no"} {
+	    global lan
+	    if {$alg_error=="outof_range"} {
+		tk_messageBox -title $lan(errormsg) -message $lan($alg_error) -icon error -type ok
+	    } else {
+		tk_messageBox -title $lan(errormsg) -message $alg_error -icon error -type ok
+	    }
+	}
+    }
+}
+proc ppreview_handler root {
+    set matrix [getmatrix $root]
+    printpreviewmatrix $matrix    
+}
+proc print_handler root {
+    set matrix [getmatrix $root]
+    printmatrix $matrix
+}
+proc printview_handler {root was} {
+    set matrix [getmatrix $root]
+    printmatrix $matrix $was
+}
+proc resize_handler root {
+    set matrix [getmatrix $root]
+    set ret [resize_dialog $matrix]
+#    puts $ret
+    if {$ret != ""} {
+	matrixtcl $matrix resize [lindex $ret 0] [lindex $ret 1] [lindex $ret 2] [lindex $ret 3] 
+	putmatrixw $root $matrix
+    }
+    ctrupdateitem $matrix
+}
+proc save_handler root {
+    set matrix [getmatrix $root]
+    global $matrix
+    if {[info exists ${matrix}(filename)]} {
+	matrixtcl $matrix save [set ${matrix}(filename)]
+    } else {
+	saveas_handler $root
+    }
+}
+proc saveas_handler root {
+    set matrix [getmatrix $root]
+    set wname [getroot $root]
+    set types {
+	{"Matrix files"		{.mat}	}
+	{"All files"		*}
+    }
+    set file [tk_getSaveFile -filetypes $types -parent $wname  -initialfile Untitled.mat -defaultextension .mat]
+    if {$file != ""} {
+	matrixtcl $matrix save $file
+	global $matrix
+	set ${matrix}(filename) $file
+        ctrupdateitem $matrix
+    }
+}
+proc smore_handler {root was typ} {
+    set matrix [getmatrix $root]
+    set wname [getroot $root]
+    set ext $typ
+    if {$ext == "latex"} { set ext tex }
+    if {$ext == "ascii"} { set ext txt }
+    lappend types [list "$typ files" $ext] {"All files"		*}
+    set file [tk_getSaveFile -filetypes $types -parent $wname  -initialfile Untitled.$ext -defaultextension .$ext]
+    if {$file != ""} {
+	if {$was == "input"} {
+	    set stuff [matrixtcl $matrix getform $typ]
+	} else {
+	    set stuff [matrixtcl $matrix getform $typ -$was]
+	}
+	set fileh [open $file w]
+	puts -nonewline $fileh $stuff
+	close $fileh
+    }
+}
+proc solution2first_handler root {
+    set matrix [getmatrix $root]
+    set dmatrix [matrixtcl $matrix duplicate -solution]
+    addmatrixw $dmatrix
+}
+proc view_handler {root was} {
+    global lan
+    set matrix [getmatrix $root]
+    if {[matrixtcl $matrix info issolution]=="no" && $was=="solution"} {
+	tk_messageBox -title $lan(errormsg) -message "$lan(nosolution)"  -icon error -type ok
+	return
+    }
+    if {[matrixtcl $matrix info isprotokol]=="no" && $was=="protokol"} {
+	tk_messageBox -title $lan(errormsg) -message "$lan(noprotocol)"  -icon error -type ok
+	return
+    } 
+    if {[winfo exists .${matrix}_$was]} {
+	focus .${matrix}_$was
+    } else {
+	actualise_output $matrix $was
+    }
+}
+proc vprintview_handler {root was} {
+    set matrix [getmatrix $root]
+    printpreviewmatrix $matrix $was
+}
+
+proc can_view {list how args} {
+    foreach canvas $list {
+        eval "$canvas ${how}view $args"
+    }
+}
+proc checkprogdir {} {
+    global progdir helpdir
+    if {$progdir == "dummy" || $helpdir == "dummy" || ![file exists [file join $progdir tkmatrix.xotcl]]} {
+	tk_messageBox -title {installation not proper} -message {for successfull installation you need to edit the "tkmatrix.tcl" file and change variable progdir and helpdir to the dictionary where this program is and where the html help files are. It is necessary for finding program modules.}  -icon error -type ok
+	exit
+    }
+}
+proc controlwindow {{win {}}} {
+    global lan controlWindow
+    set controlWindow $win
+    if {$win==""} {
+        set rwin .
+    } else {
+        set rwin $win
+        toplevel $win
+    }
+    frame $win.listf -bd 2
+    frame $win.mbuttonf -relief raised -bd 2
+    frame $win.marea -relief raised -bd 2
+    
+    menu $win.menu -tearoff 0
+    menu $win.menu.file -tearoff 0
+    $win.menu add cascade -label $lan(file) -menu $win.menu.file  -underline 0
+    $win.menu.file  add command  -label $lan(openmatrix) -command [list open_matrix $rwin]
+    $win.menu.file add command -label $lan(preferences)  -command pref_dialog    
+    menu $win.menu.newmatrix -tearoff 0
+    $win.menu add cascade -label $lan(newmatrix) -menu $win.menu.newmatrix  -underline 0
+    $win.menu.newmatrix add  command -label $lan(nullmatrix)  -command [list new_matrix $rwin nullmatrix]
+    $win.menu.newmatrix add  command -label $lan(einheitsmatrix)  -command "new_matrix $rwin einheitsmatrix"
+    $win.menu.newmatrix add  command -label $lan(randommatrix)  -command "new_matrix $rwin randommatrix"
+
+    menu $win.menu.importm -tearoff 0
+    $win.menu add cascade -label $lan(import) -menu $win.menu.importm  -underline 0
+    $win.menu.importm add command -label octave-text  -command "import_handler $rwin octave_text"
+    $win.menu.importm add command -label octave-binary  -command "import_handler $rwin octave_binary"
+    $win.menu.importm add command -label MathLab  -command "import_handler $rwin mathlab"
+    $win.menu.importm add command -label WiMat  -command "import_handler $rwin wimat"
+
+    menu $win.menu.help -tearoff 0
+    $win.menu add cascade -label $lan(help) -menu $win.menu.help -underline 0
+    $win.menu.help add command -label $lan(help)  -command matrixhelp
+    $win.menu.help add command -label $lan(info)  -command about
+    $win.menu.help add command -label $lan(wwwlink_autor)  -command wwwlink_autor
+
+    button $win.mclose -text $lan(close) -command mclose
+#-state disabled
+    button $win.mdeactivate -text $lan(deactivate)  -command mdeactivate
+#-state disabled
+    button $win.mshow -text $lan(show) -command mshow
+#-state disabled
+    button $win.endprog -text $lan(end) -command [list end_handle $rwin]
+     listbox $win.mlist -yscroll [list $win.scroll set] -setgrid 1 -height 12 -width 45  -exportselection no
+    scrollbar $win.scroll -command [list $win.mlist yview]
+
+    pack $win.mlist -side left -fill both -expand yes -in $win.listf
+    pack $win.scroll -side right -fill y -in $win.listf
+
+    pack $win.mshow -side top -in $win.mbuttonf -fill x -anchor n
+    pack $win.mdeactivate -side top -in $win.mbuttonf -fill x -anchor n
+    pack $win.mclose -side top -in $win.mbuttonf -fill x -anchor n
+
+    pack $win.listf -side left -fill both -expand yes -in $win.marea
+    pack $win.mbuttonf -side right -in $win.marea -anchor n
+
+    pack $win.marea -side top -fill both -expand yes
+    pack $win.endprog -side top -anchor w
+    $rwin configure -menu $win.menu
+    bind $win.mlist <Double-1> mshow
+}
+proc createfloatw {name {num 0} {bind no} {border no} {type float}} {
+    if {$border=="yes"} {
+	label $name -borderwidth 1 -relief groove -text $num
+    } else  {
+	label $name -borderwidth 1 -relief flat -text $num
+    }
+    if {[string compare $bind no]!=0} {
+	bind $name <Button-1> "handlebuttondown %W $type"
+	bind $name <Shift-Button-1> "handlemark %W $type"
+    }
+}
+proc createmainw root {
+    global lan option xpos$root ypos$root emode$root octave
+    menu $root.mb -tearoff 0
+	 menu $root.mb.button1 -tearoff 0
+	 menu $root.mb.button2 -tearoff 0
+	 menu $root.mb.button3 -tearoff 0
+	 menu $root.mb.button4 -tearoff 0
+	 menu $root.mb.help -tearoff 0
+
+ 	 $root.mb add cascade -label $lan(file) -menu $root.mb.button1 -underline 0
+ 	 $root.mb add cascade -label $lan(edit) -menu $root.mb.button2 -underline 0
+ 	 $root.mb add cascade -label $lan(algorithmus) -menu $root.mb.button3 -underline 0
+ 	 $root.mb add cascade -label $lan(view) -menu $root.mb.button4 -underline 0
+ 	 $root.mb add cascade -label $lan(help) -menu $root.mb.help -underline 0
+
+    $root.mb.button1 add cascade -label $lan(new)  -menu $root.mb.button1.newmatrix
+   $root.mb.button1 add command -label $lan(open)  -command "open_matrix {$root}"
+    $root.mb.button1 add command -label $lan(save)  -command "save_handler {$root}"
+   $root.mb.button1 add command -label $lan(save_as)   -command "saveas_handler {$root}"
+   $root.mb.button1 add cascade -label $lan(import)  -menu $root.mb.button1.import
+    $root.mb.button1 add cascade -label $lan(extra_save)  -menu $root.mb.button1.extrasave
+   $root.mb.button1 add separator
+    $root.mb.button1 add command -label $lan(print)  -command "print_handler {$root}"
+   $root.mb.button1 add command -label $lan(printpreview)   -command "ppreview_handler {$root}"
+   $root.mb.button1 add separator
+   $root.mb.button1 add cascade -label $lan(save_solution)  -menu $root.mb.button1.ssolution -state disabled
+   $root.mb.button1 add cascade -label $lan(save_protokol)  -menu $root.mb.button1.sprotokol -state disabled
+   $root.mb.button1 add separator
+   if {$root!=""} {
+       $root.mb.button1 add command -label $lan(close)   -command "del_matrixwin {$root} $root"
+   }
+   $root.mb.button1 add command -label $lan(deactivate)   -command "hdeactivate {$root}"
+   $root.mb.button1 add command -label $lan(end)   -command "end_handle {$root}"
+
+   menu $root.mb.button1.newmatrix -tearoff 0
+   $root.mb.button1.newmatrix add  command -label $lan(nullmatrix)  -command "new_matrix {$root} nullmatrix"
+   $root.mb.button1.newmatrix add  command -label $lan(einheitsmatrix)  -command "new_matrix {$root} einheitsmatrix"
+   $root.mb.button1.newmatrix add  command -label $lan(randommatrix)  -command "new_matrix {$root} randommatrix"
+
+   menu $root.mb.button1.import -tearoff 0
+   $root.mb.button1.import add  command -label octave-text  -command "import_handler {$root} octave_text"
+   $root.mb.button1.import add  command -label octave-binary  -command "import_handler {$root} octave_binary"
+   $root.mb.button1.import add  command -label MathLab  -command "import_handler {$root} mathlab"
+   $root.mb.button1.import add  command -label WiMat  -command "import_handler {$root} wimat"
+
+   menu $root.mb.button1.extrasave -tearoff 0
+   $root.mb.button1.extrasave add  command -label octave-text  -command "export_handler {$root} octave_text"
+   $root.mb.button1.extrasave add  command -label octave-binary  -command "export_handler {$root} octave_binary"
+   $root.mb.button1.extrasave add  command -label MathLab  -command "export_handler {$root} mathlab"
+   $root.mb.button1.extrasave add  command -label WiMat  -command "export_handler {$root} wimat"
+   $root.mb.button1.extrasave add  command -label ascII  -command "smore_handler {$root} input ascii"
+   $root.mb.button1.extrasave add  command -label Html  -command "smore_handler {$root} input html"
+   $root.mb.button1.extrasave add  command -label Latex  -command "smore_handler {$root} input latex"
+
+   menu $root.mb.button1.ssolution -tearoff 0
+   $root.mb.button1.ssolution add  command -label ascII  -command "smore_handler {$root} solution ascii"
+   $root.mb.button1.ssolution add  command -label Html  -command "smore_handler {$root} solution html"
+   $root.mb.button1.ssolution add  command -label Latex  -command "smore_handler {$root} solution latex"
+
+   menu $root.mb.button1.sprotokol -tearoff 0
+   $root.mb.button1.sprotokol add  command -label ascII  -command "smore_handler {$root} protokol ascii"
+   $root.mb.button1.sprotokol add  command -label Html  -command "smore_handler {$root} protokol html"
+   $root.mb.button1.sprotokol add  command -label Latex  -command "smore_handler {$root} protokol latex"
+
+   global ${root}_editmode
+   set ${root}_editmode edit
+   $root.mb.button2 add radiobutton -label $lan(edit_m)   -variable ${root}_editmode -value edit  -command "editmode_handler {$root}"
+   $root.mb.button2 add radiobutton -label $lan(edit_eunf)   -variable ${root}_editmode -value elemunf  -command "editmode_handler {$root}"
+   $root.mb.button2 add separator
+   $root.mb.button2 add command -label $lan(copy)   -command "copy_handler {$root}"
+   $root.mb.button2 add command -label $lan(paste)   -command "paste_handler {$root}"
+   $root.mb.button2 add command -label $lan(resize)  -command "resize_handler {$root}"
+   $root.mb.button2 add separator
+   $root.mb.button2 add cascade -label $lan(mark)  -menu $root.mb.button2.mark 
+   $root.mb.button2 add command -label $lan(duplicate)  -command "duplicate_handler {$root}"
+   $root.mb.button2 add command -label $lan(solution2first)  -command "solution2first_handler {$root}" -state disabled
+   $root.mb.button2 add command -label $lan(open_as_float)  -command "open_as_float_handler {$root}"
+   $root.mb.button2 add command -label $lan(open_as_widefloat)  -command "open_as_float_handler {$root} -widefloat"
+   $root.mb.button2 add command -label $lan(open_puffer)  -command "open_puffer_handler {$root}"
+   $root.mb.button2 add separator
+   $root.mb.button2 add command -label $lan(preferences)  -command "pref_dialog"
+
+   menu $root.mb.button2.mark -tearoff 0
+   $root.mb.button2.mark add  command -label $lan(col)  -command "mark_handler {$root} col"
+   $root.mb.button2.mark add  command -label $lan(row)  -command "mark_handler {$root} row"
+   $root.mb.button2.mark add  command -label $lan(all)  -command "mark_handler {$root} all"
+
+   $root.mb.button3 add command -label $lan(gauss)  -command "alg_handler {$root} gauss"
+   $root.mb.button3 add command -label $lan(gaussjordan)  -command "alg_handler {$root} jordan"
+   $root.mb.button3 add command -label $lan(solution)  -command "alg_handler {$root} loesung"
+   $root.mb.button3 add command -label $lan(determinante)  -command "alg_handler {$root} determinante"
+   $root.mb.button3 add command -label $lan(bild)  -command "alg_handler {$root} bild"
+   $root.mb.button3 add command -label $lan(kern)  -command "alg_handler {$root} kern"
+   $root.mb.button3 add command -label $lan(inverse)  -command "alg_handler {$root} inverse"
+   $root.mb.button3 add command -label $lan(naehrung)  -command "alg_handler {$root} naehrung"
+   $root.mb.button3 add command -label $lan(pivotiere)  -command "pivot_handler {$root}"
+   $root.mb.button3 add command -label $lan(simplex)  -command "alg_handler {$root} simplex"
+   $root.mb.button3 add command -label $lan(eckenfindung)  -command "alg_handler {$root} eckenfindung"
+   $root.mb.button3 add command -label $lan(transponieren)  -command "alg_handler {$root} transponiere"
+   $root.mb.button3 add command -label $lan(chpolynom)  -command "alg_handler {$root} chpolynom"
+   $root.mb.button3 add command -label $lan(matrixspiel)  -command "alg_handler {$root} matrixspiel"
+   $root.mb.button3 add separator
+   $root.mb.button3 add command -label $lan(mmul)  -command "op_handler {$root} mul"
+   $root.mb.button3 add command -label $lan(madd)  -command "op_handler {$root} add"
+   $root.mb.button3 add command -label $lan(msub)  -command "op_handler {$root} sub"
+
+   $root.mb.button4 add command -label $lan(vsolution)  -command "view_handler {$root} solution" -state disabled
+   $root.mb.button4 add command -label $lan(vprotokol)  -command "view_handler {$root} protokol" -state disabled
+   $root.mb.button4 add separator
+   $root.mb.button4 add command -label $lan(print_solution)  -command "printview_handler {$root} solution" -state disabled
+   $root.mb.button4 add command -label $lan(pview_solution)  -command "vprintview_handler {$root} solution" -state disabled
+   $root.mb.button4 add command -label $lan(print_protokol)  -command "printview_handler {$root} protokol" -state disabled
+   $root.mb.button4 add command -label $lan(pview_protokol)  -command "vprintview_handler {$root} protokol" -state disabled
+
+   $root.mb.help add command -label $lan(help)  -command "matrixhelp"
+   $root.mb.help add command -label $lan(info)  -command "about"
+   $root.mb.help add command -label $lan(wwwlink_autor)  -command wwwlink_autor
+
+    if {$octave} {
+   menu $root.mb.button6 -tearoff 0
+   $root.mb add cascade -label $lan(octave) -menu $root.mb.button6
+	makeoctavemenu $root $root.mb.button6
+
+    }
+	$root configure -menu $root.mb
+# Edit Leiste
+    frame $root.workarea -relief raised -bd 2
+    label $root.workarea.yposlabel -textvariable ypos$root
+    label $root.workarea.xposlabel -textvariable xpos$root
+    entry $root.workarea.edit -textvariable edit$root
+    checkbutton $root.workarea.emode -text $lan(overwrite) -variable emode$root -anchor w
+    pack $root.workarea.yposlabel $root.workarea.xposlabel $root.workarea.edit  $root.workarea.emode -side left
+
+
+    frame $root.mframe
+    # -width auf 320 damit alle Menus in einer Reihe erscheinnen 
+    canvas $root.can  -width 360  -height 0  -relief ridge  -highlightthickness 0  -xscrollcommand "scroll_set $root.hscroll"  -yscrollcommand "scroll_set $root.vscroll"  -xscrollincrement 10  -yscrollincrement 10
+    scrollbar $root.vscroll -command "can_view $root.can y"
+    scrollbar $root.hscroll -orient horiz -command "can_view $root.can x"
+
+    grid $root.vscroll -in $root.mframe -row 0 -column 1 -sticky sn
+    grid $root.hscroll -in $root.mframe -row 1 -column 0 -sticky we
+    grid $root.can -in $root.mframe -row 0 -column 0 -sticky nesw
+    grid rowconfigure $root.mframe 0 -weight 1 -minsize 10c
+    grid columnconfigure $root.mframe 0 -weight 1 -minsize 10c
+
+    set ypos x=1
+    set xpos y=2
+
+    if {$option(toolbar)} {
+	maketoolbar $root
+	pack $root.toolbar -side top -anchor e -fill x
+    }
+    pack $root.workarea -side top -fill x
+    pack $root.mframe -side top -expand yes -fill both
+    bind $root.can <Configure> "$root.can config -scrollregion \[$root.can bbox matrix\]"
+    bind $root.workarea.edit <Key-Return> {handlereturn %W}
+    bind $root <Key-f> "cursormove {$root} 1 0"
+    bind $root <Key-b> "cursormove {$root} -1 0"
+    bind $root <Key-n> "cursormove {$root} 0 1"
+    bind $root <Key-p> "cursormove {$root} 0 -1"
+    bind $root <Key-Insert> "$root.workarea.emode flash; $root.workarea.emode invoke"
+    if {$root!=""} {
+	bind $root <Destroy> "hdeactivate {$root} %W"
+    }
+#   bind $root.can <B2-Motion> "$root.can scan dragto %x %y"
+}
+proc creatematrixw {name matrix {bind no}} {
+    global option
+    set size [matrixtcl ${matrix} info size]
+    set typ  [matrixtcl ${matrix} info type]
+    set lrows [lindex $size 0]
+    set lcols [lindex $size 1]
+#    puts "$lrows $lcols"
+    for {set y 0} {$y<$lrows} {incr y} {
+	for {set x 0} {$x<$lcols} {incr x} {
+            if {$typ=="rational" && $option(editonlyfraction)==1} {
+                set elem [matrixtcl ${matrix} getelem $y $x -onlyfraction]
+            } else {
+                set elem [matrixtcl ${matrix} getelem $y $x]
+            }
+	    create${typ}w "${name}.num${y}_${x}" $elem $bind yes
+	    grid "${name}.num${y}_${x}" -row [expr 1+$y] -column [expr 1+$x] -sticky we
+	}
+    }
+    for {set y 0} {$y<$lrows} {incr y} {
+	label ${name}.yl$y -text $y -bg red -bd 1 -relief groove
+	grid "${name}.yl${y}" -column 0 -row [expr 1+$y] -sticky nwse
+    }    
+    for {set x 0} {$x<$lcols} {incr x} {
+	label ${name}.xl$x -text $x -bg red -bd 1 -relief groove 
+	grid "${name}.xl${x}" -row 0 -column [expr 1+$x] -sticky we
+    }    
+}
+proc createrationalw {name {rational 0} {bind no} {border no}} {
+	if {$border=="yes"} {
+	    float $name -text $rational
+	} else {
+	    float $name -text $rational -relief flat
+	}
+	if {[string compare $bind no]!=0} {
+	    bind $name <Button-1> "handlebuttondown %W rational"
+	    bind $name <Shift-Button-1> "handlemark %W rational"
+	}
+    }
+proc createwidefloatw {name {num 0} {bind no} {border no}} {
+    createfloatw $name $num $bind $border widefloat
+}
+proc cursormove {root dx dy} {
+    global whandle
+    set matrix $whandle([getroot $root])
+    global ${matrix}
+    set clickedy [set ${matrix}(yactpos)]
+    set clickedx [set ${matrix}(xactpos)]
+    set mhoehe  [lindex [matrixtcl $matrix info size] 0]
+    set nbreite [lindex [matrixtcl $matrix info size] 1]
+    
+    set x [expr ($clickedx+$dx) % $nbreite]
+    if {$x<0} {   // y verkleinern
+	set ty [expr ($clickedy-(-$x+$nbreite-1)/$nbreite)%$mhoehe]
+        incr x $nbreite
+    } else {
+	set ty [expr ($clickedy+($clickedx+$dx)/$nbreite)%$mhoehe]
+    }
+    set y [expr ($ty+$dy)%$mhoehe]
+    if {$y<0} {
+	set x [expr ($x-(-$clickedy-$dy+$mhoehe())/$mhoehe)%$nbreite]
+	if {$x<0} { incr x $nbreite }
+	incr y $mhoehe
+    } else { 
+	set x [expr ($x+($clickedy+$dy)/$mhoehe)%$nbreite]
+    }
+    handlebuttondown $root.can.matrix.num${y}_${x} [matrixtcl $matrix info type]
+}
+proc del_matrixwin {root win} {
+   #puts "del_amtrxi $root $win"
+    if {$root == ""} { return }
+#    if {[string match *.toolbar* $win]} { return }
+#   When destroyed child widget than ignore
+    if {[string match *.*.* $win]} { return }
+    global whandle
+    set wname [getroot $root]
+    if {[info exists whandle($wname)]} {
+	set matrix $whandle($wname)
+	global $matrix ${wname}_editmode
+	matrixtcl destroy $matrix
+        ctrdelmatrix $matrix
+	if {[winfo exists .${matrix}_solution]} {
+	    destroy .${matrix}_solution
+	}
+	if {[winfo exists .${matrix}_protokol]} {
+	    destroy .${matrix}_protokol
+	}
+	global edit$wname emode$wname xpos$wname ypos$wname
+	unset whandle($wname)
+        bind $wname <Destroy>
+        destroy $wname 
+	# Hier ist nich doe einzige Stelle wo die Variblaen
+	# gelöscht werden sollen. Siehe mcolse und hdeactivate in hmode.tcl
+	unset $matrix ${wname}_editmode  edit${wname} emode$wname xpos${wname} ypos${wname}
+	if {[info globals ${wname}_modi]=="${wname}_modi"} {
+	    global ${wname}_modi ${wname}_rowcol  
+	    trace vdelete ${wname}_modi w newmodi_handler
+	    unset ${wname}_modi ${wname}_rowcol
+	} 
+    }
+}
+proc getroot root {
+    if {[string length $root]==0} {
+	return .
+    } else {
+	return $root
+    }
+}
+proc handlebuttondown {win typ} {
+    global whandle option
+    regexp {(.*)\.can\.matrix\.num([0-9]+)_([0-9]+)} $win dummy root lrow lcol
+    global xpos$root ypos$root edit$root emode$root
+    set matrix $whandle([getroot $root])
+    global ${matrix}
+    
+    if {[set ${matrix}(yaltpos)]!=-1} {
+	unmarkregion_${typ} "$root.can.matrix"  [set ${matrix}(yaltpos)] [set ${matrix}(xaltpos)]  [set ${matrix}(yactpos)] [set  ${matrix}(xactpos)]
+    }
+    markregion_one_${typ} "$root.can.matrix.num${lrow}_${lcol}" $lrow $lcol
+    set ${matrix}(yaltpos) $lrow
+    set ${matrix}(xaltpos) $lcol
+    set ${matrix}(yactpos) $lrow
+    set ${matrix}(xactpos) $lcol
+
+    if {$typ=="rational" && $option(editonlyfraction)==1} {
+	set rational [matrixtcl ${matrix} getelem $lrow $lcol -onlyfraction]
+    } else {
+	set rational [matrixtcl ${matrix} getelem $lrow $lcol]
+    }
+    if {$typ=="rational"} {
+	regsub -all " " $rational , rational
+	regsub -- "-," $rational - rational
+    } 
+    set edit$root $rational
+    if {[set emode$root]} {
+	$root.workarea.edit selection range 0 end
+    }
+    
+    set xpos$root "x=$lcol"
+    set ypos$root "y=$lrow"
+    # Wenn angeschaltete elem. Unformungen dann probiere sinnvoll die
+    # Koordinaten aus aktuell Markirten Position in die Editierfelder zu Übertragen
+    if {[winfo exists $root.elemunf]} {
+	global ${root}_editmode
+	if {[set ${root}_editmode]=="elemunf"} {
+	    buttondown_elemunf $root $matrix $lrow $lcol
+	}
+    }
+}
+proc handlemark {win typ} {
+    global whandle
+    regexp {(.*)\.can\.matrix\.num([0-9]+)_([0-9]+)} $win dummy root lrow lcol
+    if {[string length $root]==0} { 
+	set matrix $whandle(.)
+    } else {
+	set matrix $whandle($root)
+    }
+    global ${matrix}
+    set laltrow [set ${matrix}(yaltpos)]
+    set laltcol [set ${matrix}(xaltpos)]
+    set lactrow [set ${matrix}(yactpos)]
+    set lactcol [set ${matrix}(xactpos)]
+    if {$lactrow != $lrow || $lactcol != $lcol} {
+	unmarkregion_${typ} "$root.can.matrix" $laltrow $laltcol $lactrow $lactcol
+	set ${matrix}(yactpos) $lrow
+	set ${matrix}(xactpos) $lcol
+	markregion_${typ} "$root.can.matrix" $laltrow $laltcol $lrow $lcol
+    }
+}
+proc handlereturn win {
+    global whandle option
+    regexp {(.*)\.workarea} $win dummy root
+    if {[string length $root]==0} { 
+	set matrix $whandle(.)
+    } else {
+	set matrix $whandle($root)
+    }
+    global ${matrix} edit$root
+    set rational [set edit$root]
+    if {[string length $rational]!=0} {
+	set typ [matrixtcl $matrix info type]
+	set ypos1 [set ${matrix}(yactpos)]
+	set xpos1 [set ${matrix}(xactpos)]
+	set ypos2 [set ${matrix}(yaltpos)]
+	set xpos2 [set ${matrix}(xaltpos)]
+	if {$typ == "rational"} {
+	    regsub -all " " $rational "" rational
+	    regsub -all "," $rational " " rational
+	    regsub -all "/" $rational " " rational
+	}
+	if {$typ=="rational" && [regexp {(^-?[0-9]+)( [0-9]+)*$} $rational]==0} {
+	    global lan
+	    tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornofraction) -icon error
+	    return
+	    
+	} 
+        if {$typ=="rational" && $option(editonlyfraction)==1} {
+            set nrational [matrixtcl $matrix setelem $ypos1 $xpos1 $rational  -onlyfraction]
+        } else {
+            set nrational [matrixtcl $matrix setelem $ypos1 $xpos1 $rational]
+        }
+	if {$xpos1!=$xpos2 && $ypos1!=$ypos2} {
+	    if {$ypos1>$ypos2} { set y $ypos1; set ypos1 $ypos2; set ypos2 $y }
+	    if {$xpos1>$xpos2} { set x $xpos1; set xpos1 $xpos2; set xpos2 $x }
+	    for {set y $ypos1} {$y<=$ypos2} {incr y} {
+		for {set x $xpos1} {$x<=$xpos2} {incr x} {
+		    set${typ}w $root.can.matrix.num${y}_${x} $nrational
+		    matrixtcl $matrix setelem $y $x $rational
+		}
+	    }
+	} else {
+	    set${typ}w $root.can.matrix.num${ypos1}_${xpos1} $nrational
+	}
+    }
+    cursormove $root 1 0
+}
+proc markregion_float {win ypos1 xpos1 ypos2 xpos2} {
+    if {$ypos1>$ypos2} { set y $ypos1; set ypos1 $ypos2; set ypos2 $y }
+    if {$xpos1>$xpos2} { set x $xpos1; set xpos1 $xpos2; set xpos2 $x }
+#    puts "$ypos1 $xpos1 $ypos2 $xpos2"
+    for {set y $ypos1} {$y<=$ypos2} {incr y} {
+	for {set x $xpos1} {$x<=$xpos2} {incr x} {
+	    $win.num${y}_${x} config -bg blue
+	}
+    }
+}
+proc markregion_one_float {win ypos xpos} {
+    $win config -bg blue
+}
+proc markregion_one_rational {win ypos xpos} {
+	$win configure -bg blue
+    }
+proc markregion_one_widefloat {win ypos xpos} {
+    markregion_one_float $win $ypos $xpos
+}
+proc markregion_rational {win ypos1 xpos1 ypos2 xpos2} {
+	if {$ypos1>$ypos2} { set y $ypos1; set ypos1 $ypos2; set ypos2 $y }
+	if {$xpos1>$xpos2} { set x $xpos1; set xpos1 $xpos2; set xpos2 $x }
+	#    puts "$ypos1 $xpos1 $ypos2 $xpos2"
+	for {set y $ypos1} {$y<=$ypos2} {incr y} {
+	    for {set x $xpos1} {$x<=$xpos2} {incr x} {
+		set thiswin "$win.num${y}_${x}"
+		$thiswin configure -bg blue
+	    }
+	}
+    }
+proc markregion_widefloat {win ypos1 xpos1 ypos2 xpos2} {
+    markregion_float $win $ypos1 $xpos1 $ypos2 $xpos2
+}
+proc putmatrixw {root matrix} {
+    if {[winfo exists $root.can.matrix]} {
+	$root.can delete matrix
+	destroy $root.can.matrix
+    }
+    if {[matrixtcl $matrix info size] == "0 0"} {
+#	puts "Zero Matrix!"
+	return
+    }
+    frame $root.can.matrix
+    $root.can create window 0 0 -window $root.can.matrix -anchor nw -tag matrix
+    creatematrixw $root.can.matrix ${matrix} yes
+    global whandle
+    set wname [getroot $root]
+    set whandle($wname) $matrix
+    global $matrix
+    set ${matrix}(yaltpos) -1
+    set ${matrix}(xaltpos) -1
+    set ${matrix}(yactpos) -1
+    set ${matrix}(xactpos) -1
+    set ${matrix}(editmode) edit
+    handlebuttondown $root.can.matrix.num0_0 [matrixtcl $matrix info type]
+    if {[info exists ${matrix}(filename)]} {
+	wm title $wname "matrix- [file tail [set ${matrix}(filename)]] [matrixtcl $matrix info size]"
+    } else {
+	wm title $wname "matrix- $matrix [matrixtcl $matrix info size]"
+    }
+}
+proc scroll_set {win min max} {
+ $win set $min $max
+    return
+    if {$min == 0 && $max == 1} {
+        grid forget $win
+    } else {
+        grid $win
+        $win set $min $max
+    }    
+}
+proc setfloatw {name {rational 0}} {
+    $name configure -text $rational
+}
+proc setrationalw {name {rational 0}} {
+	$name configure -text $rational
+    }
+proc setwidefloatw {name {rational 0}} {
+    setfloatw $name $rational
+}
+proc startTkmatrix {tkmatixdir {mainWindow {}} {prefdir {}}} {
+    global progdir DynLinked puffer_rational puffer_float puffer_widefloat helpdir octave tbimageinited modi_types modi_functions background
+    set modi_types {{index index -} {index factor -} {index factor index} {indexy indexx -} {indexy indexx - -}}
+    set modi_funktions {swap factormul factoradd pivot changestep}
+    set tbimageinited 0
+    set octave 0
+    set progdir $tkmatixdir
+    set helpdir $tkmatixdir
+    checkprogdir
+    if {![info exists DynLinked]} {
+        set DynLinked 1
+    }
+    if {$DynLinked} {
+        load [file join $progdir float.so]
+        load [file join $progdir matrixtcl.so]
+    }
+    if {$prefdir eq ""} {
+        set progdir $prefdir
+    }
+    matrixtcl configure -dir $prefdir
+    # Set prefs from prefsfile ".tkmatrix" in home directory or load
+    # defaults values
+    loadpref
+    # Sprach array "lan" setzten
+    # und Sprachdatei Laden
+    checklanguage
+    setprefbinds
+
+    controlwindow $mainWindow
+
+    set puffer_rational ""
+    set puffer_float ""
+    set puffer_widefloat ""
+
+    set background [option get . background Label]
+    if {$background==""} {
+        set background #d9d9d9
+    }
+}
+proc unmarkregion_float {win ypos1 xpos1 ypos2 xpos2} {
+    global background
+    if {$ypos1>$ypos2} { set y $ypos1; set ypos1 $ypos2; set ypos2 $y }
+    if {$xpos1>$xpos2} { set x $xpos1; set xpos1 $xpos2; set xpos2 $x }
+    for {set y $ypos1} {$y<=$ypos2} {incr y} {
+	for {set x $xpos1} {$x<=$xpos2} {incr x} {
+	    $win.num${y}_${x} config -bg $background
+	}
+    }
+}
+proc unmarkregion_rational {win ypos1 xpos1 ypos2 xpos2} {
+	global background
+	if {$ypos1>$ypos2} { set y $ypos1; set ypos1 $ypos2; set ypos2 $y }
+	if {$xpos1>$xpos2} { set x $xpos1; set xpos1 $xpos2; set xpos2 $x }
+	for {set y $ypos1} {$y<=$ypos2} {incr y} {
+	    for {set x $xpos1} {$x<=$xpos2} {incr x} {
+		set thiswin "$win.num${y}_${x}"
+		$thiswin configure -bg $background
+	    }
+	}
+    }
+proc unmarkregion_widefloat {win ypos1 xpos1 ypos2 xpos2} {
+    unmarkregion_float $win $ypos1 $xpos1 $ypos2 $xpos2
+}
+
+proc activateoctavemenus {win matrix} {
+    global octavefunc lan octave_tkmscripts 
+    if {[matrixtcl $matrix info type]=="float"} {
+        set state active
+    } else {
+        set state disabled
+    }
+    foreach item $octavefunc {
+        set mname "[lindex $item 0] [lindex $item 1]"
+        ${win} entryconfigure $mname -state $state
+    }
+    foreach item {octave_script} {
+	set name $lan($item)
+        ${win} entryconfigure $name -state $state
+    }
+    foreach script $octave_tkmscripts {
+	$win entryconfigure [file tail $script] -state $state
+    }
+    
+}
+proc do_octavefunc {root func} {
+    set matrix [getmatrix $root]
+    set oproc [get_octave_proc]
+    if {$oproc==""} { return }
+    set omatrix [matrix2octave $matrix]
+    set dummy [read $oproc]
+    puts $oproc "${func}(${omatrix})"
+    flush $oproc
+    global octave_buf octave_end octave_script
+    set octave_script 0
+    set octave_buf ""
+    fileevent $oproc readable "octave_input \[read $oproc\]"
+#     set line [gets $oproc]
+#     while {[fblocked $oproc]} {
+#         if {$line!=""} {
+# 	    puts $line
+# 	}
+#         set line [gets $oproc]
+#     }
+    octave_window
+    if {$octave_end=="cancel"} return
+#   puts $octave_buf
+    matrixtcl $matrix deleteprot
+    matrixtcl $matrix addprot string "Octave interface function $func"
+    set buf [split $octave_buf "\n"]
+    set ansid [lsearch -glob $buf {*ans*}]
+    # ignore all lines to "ans" line
+    if {$ansid==-1} return
+    if {$ansid!=0} {
+	set buf [lreplace $buf 0 [expr $ansid-1]]
+    }
+    if {[string match {* ans =} [lindex $buf 0] ]} {
+	set buf [lrange $buf 2 [expr [llength $buf]-3]]
+#	puts $buf
+	matrixtcl $matrix addprot matrix $buf
+	matrixtcl $matrix setsolution $buf
+#	puts mark
+	global $matrix
+	set ${matrix}(lastalgorithmus) "octave $func"
+	view_output $root yes
+	ctrupdateitem $matrix
+	activatemenus $root $matrix
+    } elseif {[regexp {.+ans = ([0-9.eE\-]+)} [lindex $buf 0] - buf]} {
+	matrixtcl $matrix addprot matrix  $buf
+	matrixtcl $matrix setsolution  $buf
+	global $matrix
+	set ${matrix}(lastalgorithmus) "octave $func"
+	view_output $root yes
+	ctrupdateitem $matrix
+	activatemenus $root $matrix
+    } else {
+
+    }
+}
+proc do_octavescript {root oscript} {
+    global octave_script
+    set matrix [getmatrix $root]
+    set octave_script 1
+    set fileh [open $oscript r]
+    if {$fileh==""} return
+    set oproc [get_octave_proc]
+#    set oproc stdout
+    if {$oproc==""} { return }
+    set line [gets $fileh]
+    if {$line=="#tkmatrix-begin"} {
+	set line [gets $fileh]
+	while {$line!="#tkmatrix-end" && ![eof $fileh]} {
+	    lappend script [string range $line 1 end]
+	    set line [gets $fileh]
+	}
+	eval [join $script "\n"]
+	global lan octaves_ok
+	set w .octavescript
+	catch {destroy $w}
+	toplevel $w -class Dialog
+	wm title $w $lan(octavedialogtitle)
+	wm iconname $w Dialog
+	wm protocol $w WM_DELETE_WINDOW { }
+
+	if {[info exist message]} {
+	    message $w.msg -relief raised -bd 1 -text $message -width 1000
+	    pack $w.msg -expand yes -fill both -side top
+	} else {
+	    message $w.msg -relief raised -bd 1 -text "tkmatrix octave script $oscript"
+	    pack $w.msg -expand yes -fill both -side top
+	}
+	# make list of all loaded matrix 
+	global matrixlist
+	foreach melem $matrixlist {
+	    set melem [lindex $melem 0]
+	    global $melem
+	    if {[info exists ${melem}(filename)]} {
+		lappend mlist [list $melem [file tail [set ${melem}(filename)]]]
+	    } else {
+		lappend mlist [list $melem $melem]
+	    }
+	}
+    	if {[info exist variables]} {
+	    frame $w.bot	    
+	    foreach vlist $variables {
+		set name [lindex $vlist 0]
+		set type [lindex $vlist 1]
+		set description [lindex $vlist 2]
+		set defaultv [lindex $vlist 3]
+		label $w.bot.$name -text $description
+		switch $type {
+		    integer {
+			global $name
+			set $name $defaultv
+			entry $w.bot.v_$name -textvariable $name
+		    }
+		    string {
+			global $name
+			set $name $defaultv
+			entry $w.bot.v_$name -textvariable $name
+		    }
+		    enum {
+			global $name
+			eval tk_optionMenu $w.bot.v_$name $name $defaultv
+		    }
+		    matrix {
+			frame $w.bot.v_$name
+			listbox $w.bot.v_$name.lb -relief raised -borderwidth 2  -yscrollcommand "$w.bot.v_$name.scroll set"  -exportselection no -height 5
+			scrollbar $w.bot.v_$name.scroll  -command "$w.bot.v_$name.lb yview"
+			foreach a $mlist {
+			    $w.bot.v_$name.lb insert end [lindex $a 1]
+			}
+			$w.bot.v_$name.lb selection set 0
+			pack $w.bot.v_$name.lb -side left  -expand yes -fill both
+			pack $w.bot.v_$name.scroll  -side right -fill y
+		    }
+		}
+		grid $w.bot.$name $w.bot.v_$name -sticky we
+		
+	    }
+	    pack $w.bot -expand yes -fill x -side top
+	} 
+
+	button $w.ok  -text OK -command "set octaves_ok ok"
+
+	pack $w.ok -side left
+
+	bind $w <Destroy> { set octaves_ok cancel}
+
+	# 6. Withdraw the window, then update all the geometry information
+	# so we know how big it wants to be, then center the window in the
+	# display and de-iconify it.
+
+	wm withdraw $w
+	update idletasks
+	set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+	set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+	wm geom $w +$x+$y
+	wm deiconify $w
+
+	# 7. Set a grab and claim the focus too.
+
+	set oldFocus [focus]
+	set oldGrab [grab current $w]
+	if {$oldGrab != ""} {
+	    set grabStatus [grab status $oldGrab]
+	}
+	grab $w
+	focus $w
+	
+
+	# 8. Wait for the user to respond, then restore the focus and
+	# return the index of the selected button.  Restore the focus
+	# before deleting the window, since otherwise the window manager
+	# may take the focus away so we can't redirect it.  Finally,
+	# restore any grab that was in effect.
+
+	tkwait variable octaves_ok
+	if {$octaves_ok=="cancel"} {
+	    return
+	}
+	# set input matrix
+	puts $oproc "in = [matrix2octave $matrix];"
+	# set parameter varaibles to octave proces
+	if {[info exist variables]} {
+	    foreach vlist $variables {
+		set name [lindex $vlist 0]
+		set type [lindex $vlist 1]
+		set desciption [lindex $vlist 2]
+		set defaultv [lindex $vlist 3]
+		switch $type {
+		    integer {
+			puts $oproc "$name = [set $name];"
+			unset $name
+		    }
+		    string {
+			puts $oproc "$name = \"[set $name]\";"
+			unset $name
+		    }
+		    enum {
+			puts $oproc "$name = [set $name];"
+			unset $name
+		    }
+		    matrix {
+			set ret [$w.bot.v_$name.lb curselection]
+			set ret [lindex [lindex $mlist $ret] 0]
+			puts $oproc "$name = [matrix2octave $ret];"
+		    }
+		}
+	    }
+	} 
+    }
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+	
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    puts $oproc "source (\"$oscript\");"
+    flush $oproc
+    global octave_buf octave_end lan
+    set octave_buf ""
+    fileevent $oproc readable "octave_input \[read $oproc\]"
+    matrixtcl $matrix deleteprot
+    octave_window
+    if {$octave_end=="cancel"} return
+    set buf [split $octave_buf "\n"]
+    #
+    # Parse script output
+    #
+    #puts $octave_buf
+    set type ""
+    if {[set index [lsearch -glob $buf "*:error*"]]!=-1} {
+	regexp {.*:error (.*)} [lindex $buf $index] - type
+	tk_messageBox -type ok -title $lan(errormsg)  -message $type -icon error
+	return
+    }
+    while {[set index [lsearch -regexp $buf {:(begin|addprot|setsolution|end).*}]]!=-1} {
+	set hline [lindex $buf $index]
+	set buf [lreplace $buf 0 $index]
+	if {[regexp {:([a-z]+).*} $hline - head]} {
+	    switch $head {
+		addprot {
+		    regexp {.*:addprot ([a-z]+)} $hline - type
+#		    puts "type $type $hline"
+		    if {$type=="string"} {
+#			puts "adding string"
+			regexp {.*:addprot string (.*)} $hline - type
+			matrixtcl $matrix addprot string $type
+		    } else {
+#			puts $buf
+			set index [lsearch -regexp $buf {:.*}]
+			set mat [lrange $buf 0 [expr $index-1]]
+#			puts "adding prot matrix $index $mat"
+			matrixtcl $matrix addprot matrix $mat
+			set buf [lreplace $buf 0 [expr $index-1]]
+		    }
+		}
+		setsolution {
+		    set index [lsearch -regexp $buf {:.*}]
+		    set mat [lrange $buf 0 [expr $index-1]]
+#		    puts "seting solution $mat"
+		    matrixtcl $matrix setsolution $mat
+		    set buf [lreplace $buf 0 [expr $index-1]]
+		}
+	    }
+	}
+    }
+    global $matrix
+    set ${matrix}(lastalgorithmus) "octavescript [file tail $oscript]"
+    view_output $root yes
+    ctrupdateitem $matrix
+    activatemenus $root $matrix
+}
+proc endoctaveproc {} {
+    global octave_proc
+    if {$octave_proc!=""} {
+	close $octave_proc
+	set octave_proc ""
+    }
+}
+proc export_handler {root type} {
+    set matrix [getmatrix $root]
+    set ext "ext"
+    switch $type {
+        octave_text {set ext octt}
+        octave_binary {set ext octb}
+        mathlab {set ext mlab}
+	wimat {set ext wim}
+    }
+    lappend types [list "$type files" .$ext] {"All files"		*}
+    set file [tk_getSaveFile -filetypes $types -parent .  -initialfile Untitled.$ext -defaultextension .$ext]
+    if {$file != ""} {
+	if {$type=="octave_text" || $type=="wimat"} {
+	    set fileh [open $file w]
+	    if {[matrixtcl $matrix info type]=="rational" && $type=="octave_text"} {
+		set matrix [matrixtcl $matrix tofloat]
+		save_$type $fileh $matrix
+		matrixtcl destroy $matrix 
+	    } else {
+		save_$type $fileh $matrix
+	    }
+	    close $fileh
+	} else {
+	    save_$type $file $matrix
+	}
+    }
+}
+proc get_octave_proc {} {
+    global octave_proc
+    if {$octave_proc==""} {
+        if {[catch { set octave_proc [open "|octave -i 2>@stdout" r+] }]} {
+	    global lan
+	    global octave
+	    set octave 0
+	    tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornooctave) -icon error
+ 	    return
+	}
+	# tell octave do not to use pager 
+	# and do not spit matrices in columns
+	puts $octave_proc "page_screen_output = 0;"
+	puts $octave_proc "split_long_rows = 0;"
+	flush $octave_proc
+	set line [gets $octave_proc]
+	while {$line!=""} {
+#	    puts $line
+	    set line [gets $octave_proc]
+	}
+	fconfigure $octave_proc -blocking 0
+    }
+    return $octave_proc
+}
+proc import_handler {win type} {
+    set ext "ext"
+    switch $type {
+        octave_text {set ext octt}
+        octave_binary {set ext octb}
+        mathlab {set ext mlab}
+	wimat {set ext wim}
+    }
+    lappend types [list "$type files" .$ext] {"All files"		*}
+    set file [tk_getOpenFile -filetypes $types -parent .]
+    if {$file != ""} {
+	if {$type=="octave_text" || $type=="wimat"}  {
+	    set fileh [open $file r]
+	    set newmatrix [open_$type $fileh]
+	    close $fileh
+#	    puts "matrix $newmatrix"
+	} else {
+	    set newmatrix [open_$type $file]
+	}
+        if {$newmatrix != ""} {
+            global $newmatrix
+            set ${newmatrix}(filename) $file
+            toplevel .${newmatrix}
+            createmainw .${newmatrix}
+            putmatrixw .${newmatrix} $newmatrix
+            ctraddmatrix $newmatrix .${newmatrix} 
+	    activatemenus .${newmatrix} $newmatrix
+        }
+    }
+}
+proc makeoctavemenu {root win} {
+    global octavefunc lan octave_tkmscripts octave_scriptdir
+    foreach a $octavefunc {
+	set func [lindex $a 0]
+	set name [lindex $a 1]
+	$win add command -label "$func $name"  -command "do_octavefunc {$root} $func"
+    }
+    $win add separator
+    if {![info exists octave_tkmscripts]} {
+	set octave_tkmscripts  [glob -nocomplain [file join $octave_scriptdir *.tkm]]
+    }
+    if {[llength $octave_tkmscripts]>0} {
+	foreach script $octave_tkmscripts {
+	    $win add command -label [file tail $script] -command  "do_octavescript $root $script"
+	}
+	$win add separator
+    }
+    $win add command -label $lan(octave_script) -command "run_oscript {$root}"
+    $win add separator
+    $win add command -label $lan(endoctaveproc)  -command "endoctaveproc"
+}
+proc matrix2octave matrix {
+    set ret "\["
+    set destroy 0
+    set row [lindex [matrixtcl $matrix info size] 0]
+    set column [lindex [matrixtcl $matrix info size] 1]
+    if {[matrixtcl $matrix info type]=="rational"} {
+        set matrix [matrixtcl $matrix tofloat]
+        set destroy 1
+    } 
+    for {set y 0} {$y<$row} {incr y} {
+        for {set x 0} {$x<$column} {incr x} {
+            set ret  "${ret}[matrixtcl $matrix getelem $y $x]"
+            if {$x!=[expr $column-1]} {
+                set ret "${ret},"
+            }
+        }    
+        if {$y!=[expr $row-1]} {
+            set ret "${ret};\n"
+        } else {
+            set ret "${ret}\]"
+        }
+    }
+    if {$destroy} {
+        matrixtcl destroy $matrix 
+    }
+    return $ret
+}
+proc octave_input input {
+    global octave_buf octave_debug octave_script
+    set octave_buf "${octave_buf}${input}"
+    #    puts -nonewline $input
+    if {$octave_debug && [winfo exists .octavedialog.imsg.debug]} {
+	.octavedialog.imsg.debug insert end $input
+    }
+    if {$octave_script} {
+	if { [string match "*:error*" $octave_buf] || 
+	     [string match "*:end*" $octave_buf] } {
+	    global octave_end octave_proc
+	    set octave_end ok
+	    fileevent $octave_proc readable ""
+	}
+    } elseif {([string match "*\n\noctave:*" $octave_buf] || 
+	       [string match "*ans = *\noctave:*" $octave_buf])} {
+	global octave_end octave_proc
+	set octave_end ok
+	fileevent $octave_proc readable ""
+    }
+}
+proc octave_window {} {
+    global lan octave_end octave_debug octave_proc
+    set w .octavedialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(octavedialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+
+    frame $w.bot
+    frame $w.top
+
+    label $w.lstatus -text Status
+    label $w.status -width 20 -text "Retrieving Data" -relief solid
+
+    button $w.cancel  -text $lan(dialogcancel) -command "set octave_end cancel"
+
+    pack $w.lstatus $w.status -in $w.top -side left
+    pack $w.cancel -in $w.bot
+    pack $w.top -side top -anchor w
+    if {$octave_debug} {
+        frame $w.imsg -relief sunken
+        scrollbar $w.imsg.scroll -orient vertical  -command "$w.imsg.debug yview"
+        text $w.imsg.debug -yscrollcommand "$w.imsg.scroll set"  -width 50 -height 12 -wrap word
+        pack $w.imsg.debug -side left -expand yes -fill both
+        pack $w.imsg.scroll -side left -fill y
+	pack $w.imsg -side top -fill both -expand yes
+    }
+    pack $w.bot -side top
+    
+    bind $w <Destroy> { set octave_end cancel}
+
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+
+    # 7. Set a grab and claim the focus too.
+
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable octave_end
+    if {$octave_end=="cancel"} {
+	set dummy [read $octave_proc]
+	fileevent $octave_proc readable {}
+	#puts "end of warten"
+    }
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    #puts "end of ew"
+}
+proc open_mathlab file {
+    return [matrixtcl load $file -mathlabbin]
+}
+proc open_octave_binary file {
+    return [matrixtcl load $file -octavebin]
+}
+proc open_octave_text fileh {
+    set row {}
+    set column {}
+    set type {}
+    set name {}
+    set value {}
+    while 1 {
+        set line [gets $fileh]
+#        puts "line $line"
+        if {$line == ""} break
+        if {![regexp {^# ([a-z]+): (.+)$} $line - name value]} break
+#        puts "regexp $name $value"
+        switch $name {
+            type {set type $value}
+            rows {set row $value}
+            columns {set column $value}
+        }
+    }
+#    puts "$type $row $column"
+    if {$type!="matrix" || $row=="" || $column==""} return
+    set matrix [matrixtcl create $row $column -float]
+    set elements "$line [read $fileh]"
+#    puts $elements
+    for {set y 0} {$y<$row} {incr y} {
+        for {set x 0} {$x<$column} {incr x} {
+            matrixtcl $matrix setelem $y $x [lindex $elements [expr $x+$y*$column]]
+        }    
+    }
+    return $matrix
+}
+proc open_wimat fileh {
+    set row {}
+    set column {}
+    set type {}
+    set name {}
+    set value {}
+    # ignore blank line
+    gets $fileh
+    set line [gets $fileh]
+    # 2nd line must be "m"
+    if {$line!="m"} return
+    set column [gets $fileh]
+    set row [gets $fileh]
+    set elements [read $fileh]
+    if {[regexp {[0-9]+\.[0-9]+} $elements]} {
+	set matrix [matrixtcl create $row $column -float]
+	set type float
+    } else {
+	set matrix [matrixtcl create $row $column]
+	set type rational
+    }
+    for {set y 0} {$y<$row} {incr y} {
+        for {set x 0} {$x<$column} {incr x} {
+	    set elem [lindex $elements [expr $x+$y*$column]]
+	    if {$type=="rational"} {
+		regsub -all "/" $elem " " elem
+	    }
+            matrixtcl $matrix setelem $y $x $elem
+        }    
+    }
+    return $matrix
+}
+proc run_oscript root {
+    set file [tk_getOpenFile -filetypes {{{tk Octave script} {.tkm}}} -parent $root]
+    if {$file == ""} { return }
+    do_octavescript $root $file
+}
+proc save_mathlab {file matrix} {
+    matrixtcl $matrix save $file -mathlabbin
+}
+proc save_octave_binary {file matrix} {
+    matrixtcl $matrix save $file -octavebin
+}
+proc save_octave_text {fileh matrix} {
+    set row [lindex [matrixtcl $matrix info size] 0]
+    set column [lindex [matrixtcl $matrix info size] 1]
+    puts $fileh "# name: tkmatrix"
+    puts $fileh "# type: matrix"
+    puts $fileh "# rows: $row"
+    puts $fileh "# columns: $column"
+    for {set y 0} {$y<$row} {incr y} {
+        for {set x 0} {$x<$column} {incr x} {
+            puts -nonewline $fileh " [matrixtcl $matrix getelem $y $x]"
+        }    
+        puts -nonewline $fileh "\n"
+    }
+}
+proc save_wimat {fileh matrix} {
+    set row [lindex [matrixtcl $matrix info size] 0]
+    set column [lindex [matrixtcl $matrix info size] 1]
+    # set DOS lineend
+    fconfigure $fileh -translation crlf
+    puts $fileh ""
+    puts $fileh "m"
+    puts $fileh "$row"
+    puts $fileh "$column"
+    for {set y 0} {$y<$row} {incr y} {
+	puts -nonewline $fileh "  "
+        for {set x 0} {$x<$column} {incr x} {
+            puts -nonewline $fileh " [matrixtcl $matrix getelem $y $x]"
+        }    
+        puts $fileh ""
+    }
+}
+
+proc changelanguage {name1 name2 op} {
+    global option lan
+    setlanguage $option(language)
+    tk_messageBox -title info -message $lan(newlanguage) -icon info -type ok
+}
+proc checklanguage {} {
+    global option
+    if {$option(language)=="dummy"} {
+	wm withdraw .
+	set ret  [language_dialog]
+	wm deiconify .
+	set option(language) [lindex $ret 0]
+	setlanguage $option(language)
+	if {[lindex $ret 1] == "ok2"} {
+	    savepref
+	}
+    } else {
+	setlanguage $option(language)
+    }
+}
+proc defaultpref {{var option}} {
+    global $var
+    array set $var {
+	language dummy
+	toolbar 1
+	htmlhelpviewer {netscape %s}
+	opensolution 1
+	openprotokol 1
+        noprot 0
+        onlyfraction 1
+        editonlyfraction 1
+	netscape_remote 1
+	widefloat_prec 64
+	widefloat_reformat 1
+	widefloat_maxnum 6
+	widefloat_maxzeros 6
+	widefloat_showprec 0
+    }
+}
+proc loadpref {} {
+    global option tcl_platform
+    defaultpref
+    if {$tcl_platform(platform)=="windows"} {
+    	if {![catch {package require registry}]} {
+      	set reg_path {HKEY_CURRENT_USER\Software\tkmatrix}
+      	if {![catch {set values [registry values $reg_path]}]} {
+         	foreach val $values {
+            	set option($val) [registry get $reg_path $val]
+            }
+         }
+      }
+    } else {
+    	if {[file exists [file join ~  .tkmatrix]]} {
+  			set preffile [open [file join ~ .tkmatrix] r]
+	  		while {[gets $preffile Zeile] >= 0} {
+	    		set option([lindex $Zeile 0]) [lindex $Zeile 1]
+			}
+      }
+	 }
+    matrixtcl configure -noprot $option(noprot)
+    matrixtcl configure -onlyfraction $option(onlyfraction)
+    matrixtcl configure -widefloat_prec $option(widefloat_prec)
+    matrixtcl configure -widefloat_reformat $option(widefloat_reformat)
+    matrixtcl configure -widefloat_maxnum $option(widefloat_maxnum)
+    matrixtcl configure -widefloat_maxzeros $option(widefloat_maxzeros)
+    matrixtcl configure -widefloat_showprec $option(widefloat_showprec)
+}
+proc mycopyarray {from to} {
+    global $from $to
+    set indicator [array startsearch $to]
+    while {[array anymore $to $indicator]} {
+	set elem [array nextelement $to $indicator]
+	if {[set ${to}($elem)]!=[set ${from}($elem)]} {
+	    set ${to}($elem) [set ${from}($elem)]
+	}
+    }
+    
+}
+proc pref_dialog {} {
+    global mywait lan isfloatstate option prefopt progdir
+    set w .prefdialog
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $lan(prefdialogtitle)
+    wm iconname $w Dialog
+    wm protocol $w WM_DELETE_WINDOW { }
+    
+    
+    frame $w.bot
+    frame $w.top -relief raised -bd 1
+    
+    # copy array option to prefopt
+    array set prefopt [array get option]
+    
+    button $w.use -text $lan(use) -command "set mywait use"
+    button $w.usesave  -text $lan(usesave) -command "set mywait usesave"
+    button $w.cancel  -text $lan(dialogcancel) -command "set mywait cancel"
+    button $w.default  -text $lan(default) -command "defaultpref prefopt; set prefopt(language) german"
+    # Frames für Rahmen für Netscape, widefloat , Sprachen  
+    frame $w.border_netscape -relief raised -bd 2
+    frame $w.border_widefloat -relief raised -bd 2
+    frame $w.border_lan -relief raised -bd 2
+
+    label $w.l1 -text $lan(afteralgorithm)
+    checkbutton $w.opensolution -text $lan(opensolution) -variable prefopt(opensolution)
+    checkbutton $w.openprotocol -text $lan(openprotocol) -variable prefopt(openprotokol)
+    checkbutton $w.noprot -text $lan(noprot) -variable prefopt(noprot)
+    checkbutton $w.onlyfraction -text $lan(onlyfraction)  -variable prefopt(onlyfraction)
+    checkbutton $w.editonlyfraction -text $lan(editonlyfraction)  -variable prefopt(editonlyfraction)
+    label $w.browser -text $lan(helpbrowser)
+    entry $w.ebrowser -width 25 -textvariable prefopt(htmlhelpviewer)
+    label $w.text_prec -text $lan(widefloat_prec)
+    entry $w.e_prec -width 10 -textvariable prefopt(widefloat_prec)
+    checkbutton $w.toolbar -text $lan(toolbar) -variable prefopt(toolbar)
+    label $w.lan -text $lan(language)
+    checkbutton $w.netscape_remote -text $lan(netscape_remote) -variable prefopt(netscape_remote)
+    checkbutton $w.wf_reformat -text $lan(widefloat_reformat) -variable prefopt(widefloat_reformat)
+    label $w.label_wfw -text $lan(widefloat_width) 
+    entry $w.wf_formatwidth -width 10 -textvariable prefopt(widefloat_maxnum)
+    label $w.label_wfmz -text $lan(widefloat_maxzeros) 
+    entry $w.wf_maxzeros -width 10 -textvariable prefopt(widefloat_maxzeros)
+    label $w.label_wfsp -text $lan(widefloat_showprec) 
+    entry $w.wf_showprec -width 10 -textvariable prefopt(widefloat_showprec)
+
+    # Pakcen in Rahmen-Frames
+    pack $w.browser $w.ebrowser $w.netscape_remote -in $w.border_netscape  -anchor w
+    pack $w.text_prec $w.e_prec $w.wf_reformat $w.label_wfw $w.wf_formatwidth  $w.label_wfmz $w.wf_maxzeros $w.label_wfsp $w.wf_showprec  -in $w.border_widefloat -anchor w
+    pack $w.lan -in $w.border_lan -anchor w
+
+    pack $w.l1 $w.opensolution $w.openprotocol $w.noprot $w.onlyfraction  $w.editonlyfraction $w.toolbar $w.border_netscape   $w.border_widefloat $w.border_lan  -in $w.top -anchor w -padx 1.5c
+    foreach onelan [glob [file join $progdir *.lan]] {
+	set lname [file tail [file rootname $onelan]]
+	radiobutton $w.rb$lname -text $lname -variable prefopt(language) -value $lname
+	pack $w.rb$lname -side top -in $w.top -anchor w -padx 2c -in $w.border_lan
+    }
+    
+    grid  $w.use -in $w.bot -column 0 -row 0 -sticky ew
+    grid  $w.usesave -in $w.bot -column 1 -row 0 -sticky ew
+    grid  $w.cancel -in $w.bot -column 2 -row 0 -sticky ew
+    grid  $w.default -in $w.bot -column 3 -row 0 -sticky ew
+    
+    pack $w.top -side top -fill both -expand 1
+    pack $w.bot -side bottom -fill both
+    
+    # 5. Create a <Destroy> binding for the window that sets the
+    # button variable to -1;  this is needed in case something happens
+    # that destroys the window, such as its parent window being destroyed.
+    
+    bind $w <Destroy> {puts "gowno"; set mywait cancel}
+    
+    # 6. Withdraw the window, then update all the geometry information
+    # so we know how big it wants to be, then center the window in the
+    # display and de-iconify it.
+    
+    wm withdraw $w
+    update idletasks
+    set x [expr [winfo screenwidth $w]/2 - [winfo reqwidth $w]/2  - [winfo vrootx [winfo parent $w]]]
+    set y [expr [winfo screenheight $w]/2 - [winfo reqheight $w]/2  - [winfo vrooty [winfo parent $w]]]
+    wm geom $w +$x+$y
+    wm deiconify $w
+    
+    # 7. Set a grab and claim the focus too.
+    
+    set oldFocus [focus]
+    set oldGrab [grab current $w]
+    if {$oldGrab != ""} {
+	set grabStatus [grab status $oldGrab]
+    }
+    grab $w
+    focus $w
+    
+    
+    # 8. Wait for the user to respond, then restore the focus and
+    # return the index of the selected button.  Restore the focus
+    # before deleting the window, since otherwise the window manager
+    # may take the focus away so we can't redirect it.  Finally,
+    # restore any grab that was in effect.
+
+    tkwait variable mywait
+    catch {focus $oldFocus}
+    catch {
+	# It's possible that the window has already been destroyed,
+	# hence this "catch".  Delete the Destroy handler so that
+	# tkPriv(button) doesn't get reset by it.
+
+	bind $w <Destroy> {}
+	destroy $w
+    }
+    if {$oldGrab != ""} {
+	if {$grabStatus == "global"} {
+	    grab -global $oldGrab
+	} else {
+	    grab $oldGrab
+	}
+    }
+    switch $mywait {
+	use {
+	    mycopyarray prefopt option
+            matrixtcl configure -noprot $option(noprot)
+            matrixtcl configure -onlyfraction $option(onlyfraction)
+	    matrixtcl configure -widefloat_prec $option(widefloat_prec)
+	    matrixtcl configure -widefloat_reformat $option(widefloat_reformat)
+	    matrixtcl configure -widefloat_maxnum $option(widefloat_maxnum)
+	    matrixtcl configure -widefloat_maxzeros $option(widefloat_maxzeros)
+	    matrixtcl configure -widefloat_showprec $option(widefloat_showprec)
+	}
+	usesave {
+	    mycopyarray prefopt option
+            matrixtcl configure -noprot $option(noprot)
+            matrixtcl configure -onlyfraction $option(onlyfraction)
+	    matrixtcl configure -widefloat_prec $option(widefloat_prec)
+	    matrixtcl configure -widefloat_reformat $option(widefloat_reformat)
+	    matrixtcl configure -widefloat_maxnum $option(widefloat_maxnum)
+	    matrixtcl configure -widefloat_maxzeros $option(widefloat_maxzeros)
+	    matrixtcl configure -widefloat_showprec $option(widefloat_showprec)
+	    savepref
+	}
+    }
+
+}
+proc savepref {} {
+    global option lan errorInfo tcl_platform
+    if {$tcl_platform(platform)=="windows"} {
+    	if {![catch {package require registry}]} {
+      	set reg_path {HKEY_CURRENT_USER\Software\tkmatrix}
+	      set indicator [array startsearch option]
+    		while {[array anymore option $indicator]} {
+				set elem [array nextelement option $indicator]
+  				registry set $reg_path $elem $option($elem)
+    		}
+      }
+    } else {
+     set ret [catch { set preffile [open [file join ~ .tkmatrix ] w] }]
+    if {$ret != 0} {
+	tk_messageBox -title $lan(cspreftitle) -message "$lan(csprefmessage) $errorInfo"  -icon error -type ok
+	return
+    }
+    set indicator [array startsearch option]
+    while {[array anymore option $indicator]} {
+	set elem [array nextelement option $indicator]
+	puts $preffile "$elem [list $option($elem)]"
+    }
+    close $preffile
+    }
+}
+proc setlanguage language {
+    global lan progdir
+    set lanfile [open [file join $progdir ${language}.lan] r]
+    while {[gets $lanfile Zeile] >= 0} {
+	set lan([lindex $Zeile 0]) [lindex $Zeile 1]
+    }
+}
+proc setprefbinds {} {
+    global option
+    trace variable option(language) w changelanguage
+    trace variable option(toolbar) w changetoolbar
+}
+
+proc printmatrix {matrix {was {}}} {
+    if {$was == ""} {
+	set stuff [matrixtcl $matrix getform latex]
+    } else {
+	set stuff [matrixtcl $matrix getform latex -$was]
+    }
+    set fileh [open /tmp/${matrix}.tex w]
+    puts -nonewline $fileh $stuff
+    close $fileh
+    cd /tmp
+    if {[catch {exec latex ${matrix}.tex}]} {
+        global lan
+        tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornolatex) -icon error
+        return
+        
+    }
+    catch {exec dvips ${matrix}.dvi -o ${matrix}.ps}
+    exec lpr ${matrix}.ps
+    eval exec rm [glob -nocomplain ${matrix}.*]
+
+}
+proc printpreviewmatrix {matrix {was {}}} {
+    if {$was == ""} {
+	set stuff [matrixtcl $matrix getform latex]
+    } else {
+	set stuff [matrixtcl $matrix getform latex -$was]
+    }
+    set fileh [open /tmp/${matrix}.tex w]
+    puts -nonewline $fileh $stuff
+    close $fileh
+    cd /tmp
+    if {[catch {exec latex ${matrix}.tex}]} {
+        global lan
+        tk_messageBox -type ok -title $lan(errormsg)  -message $lan(errornolatex) -icon error
+        return
+    }
+    catch {exec dvips ${matrix}.dvi -o ${matrix}.ps}
+    # you can use xdvi, then you don't need to run dvips in previous line
+    exec gv ${matrix}.ps
+    # start ghostview as gv (RedHat comform)
+    eval exec rm [glob -nocomplain ${matrix}.*]
+}
+
+proc changetoolbar {name1 name2 op} {
+    global option whandle
+    if {[info exists whandle]!=1} {
+	if {$option(toolbar)} {
+	    maketoolbar ""
+	    pack .toolbar -side top -anchor e -fill x -after .mb
+	} else {
+	    destroy .toolbar
+	}
+    } else {
+	set indicator [array startsearch whandle]
+	while {[array anymore whandle $indicator]} {
+	    set elem [array nextelement whandle $indicator]
+	    if {$elem=="."} { set elem ""}
+	    if {$option(toolbar)} {
+		maketoolbar $elem
+		pack $elem.toolbar -side top -anchor e -fill x -after $elem.mb
+	    } else {
+		destroy ${elem}.toolbar
+	    }
+	}
+    }
+}
+proc inittoolbarimages {} {
+    global progdir
+    global tbimageinited
+    if {$tbimageinited == 0} {
+	foreach im [glob -nocomplain [file join $progdir images *.gif]] {
+	    image create photo [file tail $im] -file $im
+	}    
+	set tbimageinited 1
+    }
+}
+proc maketoolbar win {
+    global lan
+    inittoolbarimages
+    set w $win.toolbar
+    frame $w -bd 1 -relief ridge
+    set bars {
+	{new nullmatrix mb.button1.newmatrix} {open open mb.button1}
+	{save save mb.button1} {print print mb.button1}
+	{cut copy mb.button2} {paste paste mb.button2}
+	{viewerg vsolution mb.button4} {viewprot vprotokol mb.button4}
+	{info info mb.help}
+    }
+    set colnum 0
+    foreach bar $bars {
+	set name [lindex $bar 0]
+	set mname [lindex $bar 1]
+	set menu [lindex $bar 2]
+	set command [$win.$menu entrycget $lan($mname) -command]
+	button $win.toolbar.$name -image ${name}.gif -command $command  -takefocus 0 -bg #c0c0c0 -highlightbackground #c0c0c0
+	pack $win.toolbar.$name -side left
+	incr colnum
+    }
+}
+
+proc actualise_output {matrix was {check no}} {
+    set w .${matrix}_${was}
+    set stuff [matrixtcl $matrix getform tcl -$was]
+    if {[winfo exists $w]} {
+	$w.can delete form
+	destroy $w.can.form
+    } else {
+	global option
+	if {!$option(open${was}) && $check=="yes"} {
+	    return
+	} else {
+	    createvieww $w $matrix $was
+	}
+    }
+    createform $w.can.form $stuff [matrixtcl $matrix info type]
+    $w.can create window 0 0 -window $w.can.form -anchor nw -tag form
+    #	$w.can config -scrollregion [$w.can bbox form] -width 15c -height 10c
+    bind $w.can <Configure> "$w.can config -scrollregion \[$w.can bbox form\]"
+    # nächste Zeile bringt nichts vielleicht erst abwarten
+    tkwait visibility $w.can.form
+    $w.can config -scrollregion [$w.can bbox form]
+}
+proc createdeterminante {win list typ} {
+    create${typ}w "${win}" [lindex $list 0] no
+}
+proc createeqnarray {win list typ} {
+    set z 0
+    frame $win
+#    puts "eqnarray $list"
+    foreach zeile $list {
+	set i 0
+	frame $win.left${z}
+	frame $win.right${z}
+	foreach elem [lrange $zeile 0 [expr [llength $zeile]-2]] {
+	    if {[llength $elem]==1} {
+		create${typ}w "${win}.left${z}.num${i}" [lindex $elem 0] no
+		pack ${win}.left${z}.num${i} -side left
+	    } else {
+		label ${win}.left${z}.label${i} -text "x[lindex $elem 1]"
+		if {[lindex $elem 0]==""} {
+		    pack ${win}.left${z}.label${i} -side left
+		} else {
+		    create${typ}w "${win}.left${z}.num${i}" [lindex $elem 0] no
+		    pack ${win}.left${z}.num${i} ${win}.left${z}.label${i} -side left
+		}
+	    }
+	    incr i
+	}
+	set elem [lindex $zeile [expr [llength $zeile]-1]]
+	label ${win}.right${z}.label -text =
+	create${typ}w "${win}.right${z}.num${i}" $elem no
+	pack ${win}.right${z}.label ${win}.right${z}.num${i} -side left
+	
+	grid $win.left${z} -column 0 -row $z -sticky e
+	grid $win.right${z} -column 1 -row $z -sticky w
+	incr z
+    }
+}
+proc createform {win list typ} {
+    frame $win
+    set f 0
+    # puts "form >$list< [string length $list]"
+    foreach form $list {
+#	puts "$form -[lindex $form 0]-"
+	set ctyp [lindex $form 0]
+	if {$ctyp!="" && $ctyp!="\}"} {
+	    create$ctyp ${win}.form${f} [lrange $form 1 end] $typ
+	    pack ${win}.form${f} -side top -anchor w
+	    incr f
+	}
+    }
+}
+proc creatematrix {win list typ} {
+    if { $list=="" } { 
+	global lan
+	label $win -text $lan(emptymatrix)
+	return
+    }
+    frame $win
+    set y 0
+#   puts "matrix $list"
+    foreach row $list {
+#	puts "mrow $y $row"
+	set x 0
+	foreach col $row {
+#	   puts "mcol $x $col"
+	   create${typ}w "${win}.num${y}_${x}" $col no yes
+	   grid "${win}.num${y}_${x}" -row $y -column $x -sticky we 
+	   incr x
+	}
+	incr y
+    } 
+}
+proc createpolynom {win list typ} {
+    frame $win
+    set i 0
+#    puts "polynom $list"
+    foreach item $list {
+        if {[llength $item]==2} {
+            create${typ}w "${win}.num${i}" [lindex $item 0] no
+            label ${win}.label${i} -text "x^[lindex $item 1]"
+            pack ${win}.num${i} ${win}.label${i} -side left
+        } else {
+            create${typ}w "${win}.num${i}" $item no
+            pack ${win}.num${i} -side left
+        }
+        incr i
+    }
+}
+proc createscalar {win list typ} {
+    create${typ}w "${win}" [lindex $list 0] no
+}
+proc createsimplex {win list typ} {
+#    puts "simplex $list"
+    frame $win
+    creatematrix $win.mat [lrange $list 0 [expr [llength $list]-2]] $typ
+    frame $win.func
+    set func [lindex $list [expr [llength $list]-1]]
+    set const [lindex $func 0]
+    
+    label ${win}.func.lab -text G(x)=
+    pack ${win}.func.lab -side left
+    if {[llength $const]!=2} {
+        create${typ}w "${win}.func.const" $const no
+        pack ${win}.func.const -side left
+        set func [lrange $func 1 end]
+    }
+    set i 0
+    foreach elem $func {
+	label ${win}.func.label${i} -text "x[lindex $elem 1]"
+	create${typ}w "${win}.func.num${i}" [lindex $elem 0] no
+	pack ${win}.func.num${i} ${win}.func.label${i} -side left
+	incr i
+    }
+    pack $win.mat -side top -anchor w
+    pack $win.func -side top -anchor w
+}
+proc createsolution {win list typ} {
+    frame $win
+    label $win.sol -text X=
+    #puts "createsoltion $win $list"
+    creatematrix $win.mat0 [onecolumnmatrix [lindex $list 0]] $typ
+    set i 1
+    pack $win.sol $win.mat0 -side left
+    foreach morematrix [lrange $list 1 end] {
+	label $win.index${i} -text +x${i}
+	creatematrix $win.mat${i} [onecolumnmatrix $morematrix] $typ
+	pack $win.index${i} $win.mat${i} -side left
+	incr i
+    }
+}
+proc createstring {win list typ} {
+    label $win -text $list
+}
+proc createvieww {w matrix was} {
+    global lan
+    toplevel $w
+    frame $w.mb -relief raised -bd 2
+    menubutton $w.mb.button1 -text $lan(viewmenu) -relief raised -menu $w.mb.button1.m
+    menu $w.mb.button1.m
+    $w.mb.button1.m add command -label $lan(print)  -command "printmatrix $matrix $was"
+    $w.mb.button1.m add command -label $lan(printpreview)  -command "printpreviewmatrix $matrix $was"
+    if {$was=="solution"} {
+        global whandle
+        # is th matrix name the window name too
+        if {[info exist whandle(.$matrix)] & $whandle(.$matrix)=="$matrix"} {
+            $w.mb.button1.m add command -label $lan(editsolution)  -command "solution2first_handler .$matrix"
+        }
+    }
+    $w.mb.button1.m add command -label $lan(closeview)  -command "destroy $w"
+    pack $w.mb.button1 -side left
+
+    frame $w.mframe
+    canvas $w.can  -relief ridge  -xscrollcommand "$w.hscroll set"  -yscrollcommand "$w.vscroll set"  -xscrollincrement 10  -yscrollincrement 10
+    scrollbar $w.vscroll -command "$w.can yview"
+    scrollbar $w.hscroll -orient horiz -command "$w.can xview"
+    
+    grid $w.can -in $w.mframe  -row 0 -column 0 -rowspan 1 -columnspan 1 -sticky news
+    grid $w.vscroll -in $w.mframe  -row 0 -column 1 -rowspan 1 -columnspan 1 -sticky news
+    grid $w.hscroll -in $w.mframe  -row 1 -column 0 -rowspan 1 -columnspan 1 -sticky news
+    grid rowconfig    $w.mframe 0 -weight 1 -minsize 0
+    grid columnconfig $w.mframe 0 -weight 1 -minsize 0
+    pack $w.mb -fill x -side top
+    pack $w.mframe -fill both -expand yes -side top
+    global $matrix
+    if {[info exists ${matrix}(filename)]} {
+	set title [file tail [set ${matrix}(filename)]]
+    } else {
+	set title $matrix
+    }
+    wm title $w "$title $was"
+}
+proc onecolumnmatrix matrix {
+    set ret ""
+    foreach onecell $matrix {
+	lappend ret [list $onecell]
+    }
+    return $ret
+}
+proc view_output {root {check no}} {
+    set matrix [getmatrix $root]
+    set wname [getroot $root]
+    # Zuerst Ergebniss
+    if {[matrixtcl $matrix info issolution]} {
+        actualise_output $matrix solution $check
+    } elseif  {[winfo exists .${matrix}_solution]} {
+        destroy .${matrix}_solution
+     }
+    # Protokol 
+    if {[matrixtcl $matrix info isprotokol]} {
+        actualise_output $matrix protokol $check
+    } elseif {[winfo exists .${matrix}_protokol]} {
+            destroy .${matrix}_protokol
+     }
+}
+

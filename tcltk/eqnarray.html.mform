@@ -1,0 +1,17 @@
+%head
+-<TABLE>
+-<TR>
+%rowhead <TD align="right">
+%bruch1  %s x<SUB>%i</SUB>
+%bruch2  <SUP>%s</SUP>/<SUB>%s</SUB> x<SUB>%i</SUB>
+%bruch3  %s<SUP>%s</SUP>/<SUB>%s</SUB> x<SUB>%i</SUB>
+%double  %+lf x<SUB>%i</SUB>
+%cellseparator   	
+%equal <TD> = </TD> <TD>	
+%rbruch1  %s
+%rbruch2  <SUP>%s</SUP>/<SUB>%s</SUB>
+%rbruch3  %s<SUP>%s</SUP>/<SUB>%s</SUB>
+%rdouble  %lf
+%rowtail <TD><TR>
+%tail
+-</TABLE>

@@ -1,0 +1,13 @@
+%head {solution 
+%arrayhead {
+%bruch1 %s
+%bruch2 {%s %s}
+%bruch3 {%s %s %s}
+%double %lf
+%separator  
+%index
+%arraytail } 
+%tailmore
+-}
+%tail
+-}

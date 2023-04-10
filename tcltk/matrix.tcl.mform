@@ -1,0 +1,27 @@
+%head {matrix 
+%headflex
+%headtail
+%rowhead {
+%bruch1 %s
+%bruch2 {%s %s}
+%bruch3 {%s %s %s}
+%double %lf
+%cellseparator  
+%rowtail }
+-
+%tail
+-}
+-}
+
+
+
+
+
+
+
+
+
+
+
+
+

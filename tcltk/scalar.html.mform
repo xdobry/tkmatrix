@@ -1,0 +1,9 @@
+%bruch1 %s
+-<BR>
+%bruch2 <SUP>%s</SUP>/<SUB>%s</SUB>
+-<BR>
+%bruch3 %s<SUP>%s</SUP>/<SUB>%s</SUB>
+-<BR>
+%double %lf
+-<BR>
+

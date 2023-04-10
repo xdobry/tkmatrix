@@ -1,0 +1,32 @@
+#tkmatrix-begin
+#
+# set message "Computing pnorm of matrix\n1-norm, the largest column sum of A.\n2-Largest singular value of A.\nInf-Infinity norm, the largest row sum of A.\nfro-Frobenius norm of A, `sqrt (sum (diag (A' * A)))'."
+#
+# set variables {{ntype enum p-norm {1 2 'inf' 'fro'}}}
+#
+#tkmatrix-end
+
+# checking is there in matrix
+
+if (!exist("in"))
+	error ("not 'in' matrix defined use tkmatrix for it");
+endif
+
+if (!exist("ntype"))
+	error ("norm is not speciefied");
+endif
+
+m = norm(in,ntype);
+
+puts (":addprot string computing p-norm of matrix\n");
+puts (":addprot matrix\n");
+disp (m);    
+
+# Set output matrix
+
+puts (":setsolution\n");
+disp (m);    
+
+# say tkmatrix script is ready
+
+puts (":end\n");

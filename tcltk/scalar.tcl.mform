@@ -1,0 +1,4 @@
+%bruch1 {scalar %s} 
+%bruch2 {scalar {%s %s}} 
+%bruch3 {scalar {%s %s %s}} 
+%double {scalar %lf} 

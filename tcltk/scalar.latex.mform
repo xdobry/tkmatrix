@@ -1,0 +1,9 @@
+%bruch1 \begin{displaymath} %s \end{displaymath}
+-
+%bruch2 \begin{displaymath} \frac{%s}{%s} \end{displaymath}
+-
+%bruch3 \begin{displaymath} %s \frac{%s}{%s} \end{displaymath}
+-
+%double \begin{displaymath} %lf \end{displaymath}
+-
+

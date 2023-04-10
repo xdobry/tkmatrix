@@ -1,0 +1,51 @@
+#tkmatrix-begin
+#
+# set message {Script to compute financial zerobonsfaktors}
+#
+#tkmatrix-end
+
+# checking is there in matrix
+if (!exist("in"))
+	error ("not 'in' matrix defined use tkmatrix for it");
+endif
+
+# checking of size of input matrix
+[nc, nr] = size (in);
+if (nc != 1) 
+	error (":error matrix must have only one row");
+endif
+m = zeros(nr,nr);
+for i=1:nr
+   m(i,i) = 1 + in(1,i);
+   if (i!=1)						
+       for y=1:i-1
+	  m(y,i)=in(1,i);
+       endfor
+   endif
+endfor
+
+# Generate reports to tkmatrix
+
+puts (":addprot string imput matrix to inverse\n");
+puts (":addprot matrix\n");
+disp (m);
+
+m = inverse(m);
+
+puts (":addprot string after inverse\n");
+puts (":addprot matrix\n");
+disp (m)
+m = sum(m);
+
+puts (":addprot string solution zerobonds\n");
+puts (":addprot matrix\n");
+disp (m);
+
+# Set output matrix
+
+puts (":setsolution\n");
+disp (m);    
+
+# say tkmatrix script is ready
+
+puts (":end\n");

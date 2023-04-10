@@ -1,0 +1,13 @@
+%head 
+-{polynom 
+%bruch1  {{%s} %i}
+%bruch2  {{%s %s} %i}
+%bruch3  {{%s %s %s} %i}
+%double  {{%+lf} %i}
+%obruch1  %s
+%obruch2  {%s %s}
+%obruch3  {%s %s %s}
+%odouble  %+lf
+%tail
+-}
+

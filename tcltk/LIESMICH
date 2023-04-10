@@ -1,0 +1,98 @@
+Dieses Text ist für diejenigen, die Matrix schnell zum Laufen bringen wollen
+
+1. Entpacken und Inhalt
+2. Compilierung Installation und Starten
+3. Dokumentation
+4. Bezugsquelle, Autor und Lizenz
+
+1. Entpacken und Inhalt
+Das haben Sie bereits geschafft noch mal zur Erinnerung
+tar -xvzf tkmatrix-(VERSION).tar.gz
+Es wird das Verzeichnis tkmatrix-0.6.2 mit allen zugehörigen Daten erstellt.
+Inhalt:
+cc-Dateien Quellen für c++
+h-Dateien Header Dateien für c++
+tcl-Dateien tcl/tk Skripten
+makefile - Make Datei
+mform-Dateien Dateien mit Informationen über Formaten ascii, latex, html
+Verzeichnis docus Dokumentation
+
+::Beispiematrizen
+bild.mat
+ecken.mat
+gauss.mat
+inverse.mat
+kern.mat
+naehrung.mat
+optiem1.mat
+optiem2.mat
+matrixspiel.mat
+
+2. Compilierung Installation und Starten
+-Anpassen
+Bei alten Distributionen RedHat<5.1 gibt es Unterschiede bei C++ STL Library
+string::erase heißt da string::remove. Damit string::remove benutzt wird muß 
+man makefile anpassen d.h. eine Zeile Auskommentieren
+
+-Compilierung 
+in das Verzeichnis tkmatrix-0.6.2 Wechseln
+   cd matrix-0.6.2
+Make Aufrufen
+   make
+Das Programm matrix soll so geschaffen werden
+Noch die Objectdateien aufräumen
+   make clean
+
+-Installation
+
+Das Programm kann eigentlich aus dem Verzeichnis schon benutzt werden (Aufruf 
+tkmatrix.tcl oder matrix). Das Programm erwartet wish in /usr/bin/wish.
+
+Wenn man root Rechte besitzt kann man da Programm in /usr/lib Verzeichnis
+intallieren (auch symbolische Links in /usr/bin werden eingerichtet)
+
+    make install
+
+Die Dokumentation in Verzeichnis docus wird nich kopiert. Man kann es per
+Hand z.B in /usr/doc/tkmatrix-0.6.2 unterbringen. Das Arbeitsverzeichnis kann
+dann gelöscht werden.
+
+3 Dokumentation:
+Die volle Dokumentation ist mit sgml-tool erstellt und im Verzeichnis 
+docus als matrix.html zu finden.
+Zu PostScript kann man es konvertieren durch
+sgml2latex -a -g -p matrix.sgml
+Konversion zu html wird keine gute Resultate liefern, weil man so die html
+Seiten bekommt mit Mathe-Tags, die ein normaler html_Browser nicht versteht. 
+Um es richtig zu konvertieren habe ich die Vorlagen von sgml-tools verändert.
+
+Die mathematische Erläuterungen sind besser zugänglich durch
+mathe1.pdf - Acrobat Reader Datei, xpdf zeigt es nicht vollständig also 
+	     bitte den acroread benutzen.
+mathe1.tex - Quelle als Latex Datei
+mathe_en.pdf -  Acrobat Reader Datei auf Englisch
+mathe_es.tex - Quelle zu Englischen Version als Latex Datei
+
+4 Bezugsquelle, Autor und Lizenz
+
+Die neuste Version des Programms ist zu finden unter
+http://www.xdobry.de/tkmatrix
+
+Der Vorläufer dieses Programms matrix3.03 gibt es für Windows und nur 
+für Windows. Diese Version wird jedoc  nicht weiter entwickelt. 
+Tkmatrix kann man aber auch unter MS-Windows compilieren. Ich habe
+dafür Cygnus-Tools benutzt (www.cygnus.com) mit egcs compiler füe Windows.
+Mehr infos in LIESMICH_WIN.txt Datei.
+
+Neben den tar-archiew gibt es tkmatrix als
+RPM und SRPM Dateien für RedHat 6.2 und binaries für MS-Windows
+
+Das Programm wurde von Artur Trzewik entwickelt.
+Es ist eine freie Software unter GPL. 
+Mehr dazu in der eigentlichen Dokumentation.
+
+Kontakt durch Email
+ mail@xdobry.de
+
+
+

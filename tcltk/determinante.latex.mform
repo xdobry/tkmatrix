@@ -1,0 +1,8 @@
+%head \begin{displaymath}\det=(
+%bruch1 %s
+%bruch2 \frac{%s}{%s}
+%bruch3 %s \frac{%s}{%s}
+%double %lf
+%tail
+-)
+-\end{displaymath}

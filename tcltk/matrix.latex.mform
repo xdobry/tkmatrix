@@ -1,0 +1,17 @@
+%head
+-\begin{displaymath}\left(\begin{array}{
+%headflex c
+%headtail 
+-}
+%rowhead 
+%bruch1  %s
+%bruch2  \frac{%s}{%s}
+%bruch3  %s \frac{%s}{%s}
+%double  %lf
+%cellseparator &
+%rowtail
+-\\\
+-
+%tail
+-
+-\end{array}\right)\end{displaymath}

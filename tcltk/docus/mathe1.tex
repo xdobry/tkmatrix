@@ -1,0 +1,1025 @@
+\documentclass[12pt]{article}
+\usepackage{isolatin1}
+\usepackage{a4wide}
+\usepackage{german}
+\usepackage{times,makeidx}
+\usepackage{mathptm}
+%\usepackage{hyperref}
+%\pagestyle{headings}
+%\setlength{\parindent}{0pt}
+
+\usepackage[pdftex]{hyperref}
+
+\begin{document}
+\title{ Lineare Algebra (Mathe I) für Wirtschaftsinformatiker; Zusammenfassung}
+\author{Artur Trzewik {\tt mail@xdobry.de}}
+\date{v1.0, 26.03.1998 korrigiert \today}
+%\raggedright
+\maketitle
+\abstract{{\em Warnung:\/} für die Richtigkeit der Definitionnen kann ich nicht garantieren. 
+Es wurde verfasst als ein Teil der Dokumatation zum Programm "`Matrix"' und veröffentlich in der Hoffnung, daß es auch für andere nützlich sein könnte.
+Das Hauptaugenmerkt wurde auf die klare Beschreibung von Algorithmen gelegt. Es kann zugegeben schwer als eine einzige Lernvorlage dienen, weil es nichts erklärt und keine mathematische Beweise beinhalten.
+}
+\tableofcontents
+
+\newpage
+\addtolength{\parskip}{1.2 ex}
+
+\section{Beschreibung der Algorithmen; Mathe Definitionen}
+
+Das ist eine Zusammenfassung meiner Vorlesungsunterlagen aus Mathe I. Es werden alle Algorithmen grob beschreiben, ohne jegliche Beweise. Es geht vorallem darum zu beschreiben wie die Algorithmen funktionieren und welche mathematische Probleme mam mit ihnen lösen kann. Diese Beschreibung kann aber ein gutes Skript oder ein Mathebuch nicht ersetzen. Die Reihenfolge entspricht eher der Gliederung der Algorithmen als der beim wirklichen Vorlesung.
+
+
+\subsection{Eine Matrix}
+
+{\bf Def:}
+\label{MATRIX}Def.:
+eine $m \times n$ {\em Matrix\/} (m mal n): m-Zeilenzahl; n-Spaltenzahl
+\[
+\begin{array}{ccccc}
+a_{11}  & a_{12}  & a_{13}  & {\ldots}  & a_{1n}  \\ 
+a_{21} & a_{22} & a_{23} & {\ldots}  & a_{2n} \\ 
+: & : & : & : & : \\ 
+a_{m1} & a_{m2} & a_{m2} & {\ldots}  & a_{mn} 
+\end{array}
+\]
+
+\setlength{\parindent}{0pt}
+Alle Matrizen werden hier ohne Klammer geschrieben. Auch Vektoren werden in der html Version ohne den gewöhnten Pfeil geschrieben. (also ``a'' kann auch bedeuten ``a-Vektor''). Es soll es den Kontext ersichtlich sein um welche Bedeutung es sich gerade handelt.
+
+
+\section{Grundliegende Algorithmen}
+
+
+\subsection{Treppenform \label{TREPPENFORM}}
+
+{\bf Def.:} $c=c_{ij}$ ist in Treppenform, falls c die Nullmatrix ist, oder es eine Folge
+\[ 1\leq j_{1} < j_{2} <  {\ldots} < j_{r} \leq l \]
+  
+von r Sprungstellen gibt mit
+
+\begin{enumerate}
+\item unterhalb der r Zeile stehen nur Nullen
+\item An dem Sprungstellen stehen Elemente $c_{ij} \not= 0$
+\item Links von dem Sprungstellen stehen nur Nullen
+\end{enumerate}
+
+{\it Anzahl der Sprungstellen nennt man auch Rang der Matrix\/}
+
+
+
+
+\subsection{Treppennormallform\label{TREPPENNORMALFORM}}
+
+{\bf Def.:} Eine Matrix ist in Treppennormalform $c=(c_{ij})$ wenn sie in Treppenform ist und wenn zusätzlich
+\begin{enumerate}
+\item Alle Sprungstellen $c_{ij}=1$
+\item In jeder Sprungstellen Spalte sind alle Elemente bis auf das Sprungstellen Element gleich Null
+\end{enumerate}
+
+{\em Treppennormalform ist eindeutig \/}
+
+
+
+
+\subsection{Gauss Algorithmus\label{GAUSS}}
+
+Benutzt um Lösung \ref{LOESUNG} des linearen Gleichungsystem \ref{LGS} zu finden.
+k-Spaltenzahl. Bringt die Matrix auf Treppenform \ref{TREPPENFORM}
+\begin{enumerate}
+\item Suche die erste Spalte Matrix c, die nicht nur Nullen erhält. Dies ist die j1-Spalte. Darin sei das Element $c_{ij1}\not= 0$ Dann vertausche die i-te Zeile mit der ersten Zeile.
+\item Für i=2,{\ldots} .,k addiere der i-ten Zeilen das $\frac{-c_{ij1}}{c_{1j1}}$ fache der 1. Zeile.
+\item Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen abschneidet.
+\end{enumerate}
+
+{\tt Bemerkung:} $c_{ij1}$ bedeutet: i.te Zeile j.te Spalte 1. Algorithmus Durchgang
+
+Es gibt viele Möglichkeiten eine Matrix auf Treppenform zu bringen (Treppenform ist nicht eindeutig). Man kann, um sich die Rechnungen zu erleichtern, auch Zeilen wechseln oder Zeilen mit verschiedene Faktoren multiplizieren. Für den Rechner ist das aber keine Erleichterung. Der Algorithmus in dieser Form ändern nicht die Determinante \ref{DETERMINANTE} von Matrix.
+
+
+
+
+\subsection{Gauss-Jordan Algorithmus\label{JORDAN}}
+
+Benutzt um Lösung \ref{LOESUNG} des linearen Gleichungsystem \ref{LGS} zu finden.
+Weiterentwicklung von Gauss Algorithmus \ref{GAUSS}. Bringt die Matrix auf Treppennormallform \ref{TREPPENNORMALFORM}.
+k-Spaltenzahl
+\begin{enumerate}
+\item Suche die erste Spalte Matrix c, die nicht nur Nullen erhält. Dies ist die j1-Spalte. Darin sei das Element $c_{ij}1\not= 0$ Dann vertausche die i-te Zeile mit der ersten Zeile. Dann dividiere die Zeile durch $c_{ij1}$
+\item Für i=2,{\ldots} .,k addiere der i-ten Zeilen das $-c_{ij1}$ fache der 1. Zeile. Mache alle Einträge unterhalb $c_{ij1}$ zu Nullen.
+\item Für alle Zeilen d=1,{\ldots} ,i bilde $1.Zeile=1.Zeile-c_{dj1}*(i-te Zeile)$. Mache alle Einträge oberhalb $c_{ij1}$ zu Nullen.
+\item Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen abschneidet.
+\end{enumerate}
+
+{\bf Bemerkung:} Gauss und Gauss-Jordan-Algorithmus unterscheiden sich im 1. Punkt. Beim GaussJordan wird die Zeile durch Sprungstelleneintrag dieser Zeile geteilt. Dadurch erreicht man, daß Sprungstelleneintrag auf 1 skaliert wird. Das "'vereinfacht"` die Rechnung im Schritt 2.
+
+
+
+
+\section{Lineare Gleichungssysteme \label{LGS}}
+
+
+\subsection{Definition}
+
+
+
+{\bf Def.:} Ein lineares Gleichungssystem mit n Gleichungen hat die Form
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + a_{13}*x_{3} + {\ldots} + a_{1n}*x_{n}  & = & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + a_{23}*x_{3} + {\ldots} + a_{2n}*x_{n}  & = & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + a_{33}*x_{3} + {\ldots} + a_{3n}*x_{n}  & = & b_{3} \\ 
+:  & = & : \\ 
+a_{n1}*x_{1} + a_{n2}*x_{2} + a_{n3}*x_{3} + {\ldots} + a_{nn}*x_{n}  & = & b_{n} 
+\end{array}
+\]
+
+$a_{ij}$ sind die Koeffizienten
+wenn $b_{i} \neq 0$ dann ist das ein homogenes Gleichungssystem, andernfalls inhomogenes
+
+2.Die Matrix der Form
+\[
+\begin{array}{ccccc}
+a_{11} & a_{12} & {\ldots}  & a_{1n} & b_{1} \\ 
+a_{21} & a_{22} & {\ldots}  & a_{2n} & b_{2} \\ 
+: & : & : & : \\ 
+a_{n1} & a_{n2} & a_{n3} & a_{nn} & bn 
+\end{array}
+\]
+
+heißt erweiterte Koeffizientenmatrix (ohne b$_{i}$ einfach Koeffizientenmatrix)
+
+Man kann mit Hilfe der elementaren Umformungen (sie ändern nicht die Lösungsmenge) die Matrix in die Form bringen, in dem die Lösung des Gleichungssystem ersichtlich (leicht zu berechnen) ist. Gauss und Gauss-Jordan Algorithmus benutzen nur solche Umformungen. Zu solchen Umformungen gehören:
+\begin{itemize}
+\item Vertauschen zwei Zeilen
+\item Multiplikation einer Zeile mit Zahl $\neq 0$
+\item Addition eines Vielfachen einer Zeile zu einer anderen Zeile
+\end{itemize}
+
+
+
+
+
+
+
+\subsection{Lösungstypen von linearen Gleichungsystemen (LGS)\label{LOESUNG}}
+
+Es gibt drei möglichen Lösungstypen von Linearen Gleichungssystemen (LGS)
+\begin{enumerate}
+\item LGS hat keine Lösung, dann Ergebnissmatrix ist leer.
+\item LGS hat eine Lösung, wenn Ausgangsmatrix $ m\times n$ dann Ergebnissmatrix (n-1)*1
+\[
+\begin{array}{c}
+x_{1} \\ 
+x_{2} \\ 
+: \\ 
+x_{n-1} 
+\end{array}
+\]
+\item LGS hat mehrere Lösungen dann ist das Ergebnissmatrix ({\tt Bezogen auf Programm Matrix }) (n*k k{$<$} n) zusammengesetzt aus mehreren Spaltenvektoren, wobei das erste eine Lösung des LGS ist und die anderen die Basis des linearen Unterraums für das Lösung des zugehörigen homogenen Gleichungssystems. Jede mögliche Lösung des LGS kann man erreichen aus
+\[\vec{x}=\vec{a}+\vec{u}_{1}*b_{1}+{\ldots} +\vec{u}_{k-1}*b_{k-1} \]
+
+\begin{itemize}
+\item $\vec{x}$ : Vektor für alle Lösungen
+\item $\vec{a}$ : Erstes Spaltenvektor des Ergebnissmatrix (Eine Lösung)
+\item $\vec{u}_{i}$ : Weiter Spaltenvektoren
+\item $b_{i}$ : Freie Variablen
+\end{itemize}
+\end{enumerate}
+
+
+
+
+
+\subsection{Lösung von LGS\label{LOESUNGALG}}
+
+Algorithmus:
+\begin{enumerate}
+\item Bringe die erweiterte Koeffizientenmatrix auf Treppennormal Form mit Hilfe des Gauss-Jordan Algorithmus.
+\item Falls die Letzte Spalte eine Sprungsstelle ist dann keine Lösung. Ende.
+\item Es gibt nur Sprungstellen außer letzten Spalte dann ist die letzte Spalte die einzige Lösung des LGS. Ende.
+\item Es gibt mehrere Lösungen.
+\item Eine Lösung erhält man indem man für alle x für nicht-Sprungstellen Variablen Null einsetzt und für anderen nacheinander die Einträge der letzten Spalte 
+\item Finde die Lösung eines homogenen Gleichungssystems. Es gibt frei wählbare Variablen (Parameter) nämlich, die an dem Nichsprugstellen. Setzt man nacheinander eine dieser frei wählbaren Variablen gleich 1 und die anderen frei wählbaren Variablen gleich 0 und löst auf, so erhält man eine Basis des Lösungsraumes. 
+\end{enumerate}
+
+{\bf Bsp.} (für Schritte 4-6)
+\[
+\begin{array}{cccccc}
+1 & 5 & 0 & 0 & 0 & 2 \\ 
+0 & 0 & 1 & 2 & 0 & 4 \\ 
+0 & 0 & 0 & 0 & 1 & 5 
+\end{array}
+\]
+
+Eine Lösung
+\[      
+x_{1}=2 
+x_{2}=0 
+x_{3}=4 
+x_{4}=0 
+x_{5}=5 \]
+
+als Vektor 
+\[
+\begin{array}{c}
+2 \\ 
+0 \\ 
+4 \\ 
+0 \\ 
+5 
+\end{array}
+\]
+
+Suche Basis des Lösung des homogenen Gleichungssystem (Schritt 6)
+\[
+\begin{array}{cccccc}
+1 & 5 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 1 & 2 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 1 & 0 
+\end{array}
+\]
+
+Setzt man für $x_{2}=1$ und $x_{4}=0$ erhält man
+\[
+\begin{array}{rcl}
+1*x_{1} + 5*1 + 0*x_{3} + 0*x_{3} + 0*x_{4} & = & 0 \\ 
+0*x_{1} + 0*x_{2} + 1*x_{3} + 2*0 + 0*x_{4}  & = & 0 \\ 
+0*x_{1} + 0*x_{2} + 0*x_{3} + 0*x_{3} + 0*x_{4} & = & 0 
+\end{array}
+\]
+
+also    
+\[x_{1}+5=0\]
+ 
+Ein Vektor der Basis
+\[
+\begin{array}{c}
+-5 \\ 
+0 \\ 
+0 \\ 
+0 \\ 
+0 
+\end{array}
+\]
+
+Den zweiten Vektor erhält man wenn man x$_{2}$=0 und x$_{4}$=1 einsetzt 
+also 
+\[x_{2}+2=0\]
+
+\[
+\begin{array}{c}
+0 \\ 
+-2 \\ 
+0 \\ 
+0 \\ 
+0 
+\end{array}
+\]
+
+Die dazugehörige Ergebnissmatrix wäre
+\[
+\begin{array}{ccc}
+2 & -5 & 0 \\ 
+0 & 0 & -2 \\ 
+4 & 0 & 0 \\ 
+0 & 0 & 0 \\ 
+5 & 0 & 0 
+\end{array}
+\]
+
+was bedeutet
+\[
+\begin{array}{rcl}
+x_{1} & = & 2-5*a \\ 
+x_{2} & = & -2*b \\ 
+x_{3} & = & 4 \\ 
+x_{4} & = & 0 \\ 
+x_{5} & = & 5 
+\end{array}
+\]
+
+wobei a,b frei wählbar
+
+
+
+
+\subsection{Lineare Abbildungen und Matrizen\label{ABBILDUNGEN}}
+
+Sei A eine $m \times n$ Matrix, sei definiert die Abbildung $\phi $
+\[ K^{n} \rightarrow K^{m} \]
+
+$K^{n}$- lineares Unterraum von Dimension n
+\[      x \rightarrow A*x = \phi A(x) \]
+
+\[ \vec{x}=ein Vektor (n \times 1) \]
+
+\[      \vec{x}=
+\begin{array}{c}
+x_{1} \\ 
+x_{2} \\ 
+: \\ 
+x_{n}
+\end{array}
+ \]
+
+Die Abbildung $\phi $ ist linear \ref{LINEAR}
+
+{\bf Def.:} Die Menge $\{ \phi A(x) \mid x \in K^{n} \}$ heißt Bild von $\phi $ A. Sie ist Teilmenge von $K^{n}$ und ein linearer Unterraum von $K^{n}$.
+
+Das Finden von Bild von A \ref{BILD}
+
+{\bf Def.:} Die Menge $\{ x \in K^{n} \mid \phi A(x)=0 \}$ heißt Kern von $\phi $ A. Sie ist Teilmenge von $K^{n}$ und ein linearer Unterraum von $K^{n}$. 
+
+Das Finden von Kern von A \ref{KERN}
+
+Satz: Sei 
+\[ \phi A K^{n} \rightarrow K^{m} (A eine m \times n Matrix) \]
+
+(A eine $m \times n$ Matrix)
+
+Dann gilt: $dim Kern \phi A  + dim Bild \phi A = n$
+
+
+
+
+
+
+
+
+\subsection{Errechnen von Bild von Matrix\label{BILD}}
+
+
+
+
+
+Man muß die Basis des auf den Spalten Vektoren aufgespannten linearen Unterraums finden. Am einfachsten geht man vor, wenn man die Matrix auf Treppenform \ref{LGS} bringt und alle Spaltenvektoren aus Ursprungsmatrix zur Lösung nimmt, die Sprungstellen haben.
+z.B.
+\[
+\begin{array}{ccc}
+0 & 1 & 2 \\ 
+1 & 2 & 3 \\ 
+0 & 1 & 2 \\ 
+2 & 3 & 4 \\ 
+0 & 1 & 2 
+\end{array}
+\]
+
+Nach Anwendung von Gauss-Jordan Algorithmus
+\[
+\begin{array}{ccc}
+1 & 0 & 1 \\ 
+0 & 1 & 2 \\ 
+0 & 0 & 0 \\ 
+0 & 0 & 0 \\ 
+0 & 0 & 0 
+\end{array}
+\]
+
+Sprungstellen beim 1. und 2.Spalte kommen zur Lösung
+\[
+\begin{array}{cc}
+0 & 1 \\ 
+1 & 2 \\ 
+0 & 1 \\ 
+2 & 3 \\ 
+0 & 1 
+\end{array}
+\]
+
+Die beiden Vektoren sind linear unabhängig und sind eine Basis des Bildes des Matrix
+
+
+
+
+
+
+\subsection{Errechnen von Kern von Matrix\label{KERN}}
+
+
+
+
+
+Kern $\phi A$ ist die Lösung der Abbildung $\phi A(x)=0$
+
+Der Nullvektor gehört immer zur Lösung
+also z.B. der Kern von
+\[
+\begin{array}{ccc}
+1 & 2 & 3 \\ 
+2 & 1 & 0 \\ 
+2 & 4 & 6 
+\end{array}
+\]
+
+ist die Lösungsmenge von LGS \ref{LGS}
+\[
+\begin{array}{rcl}
+x_{1}+2*x_{2}+3*x_{3} & = & 0 \\ 
+2*x_{1}+1*x_{2} & = & 0 \\ 
+2*x_{1}+4*x_{2}+6*x_{3} & = & 0 
+\end{array}
+\]
+
+Hier in Programm wird zum Matrix eine Nullspalte addiert und durch GaussJordan \ref{JORDAN} Algorithmus die Lösungsmenge \ref{LOESUNG} ausgerechnet. Weil Kern ein lineares Unterraum ist, wird die eine spezielle Lösung (immer Nullvektor) abgeschnitten. Die übrigen Vektoren (wenn vorhanden) bilden die Basis des gesuchten Kerns.
+Hier:
+\[
+\begin{array}{cccc}
+1 & 2 & 3 & 0 \\ 
+2 & 1 & 0 & 0 \\ 
+2 & 4 & 6 & 0 
+\end{array}
+\]
+
+nach Gauss-Jordan
+\[
+\begin{array}{cccc}
+1 & 0 & \frac{1}{3} & 0 \\ 
+0 & 1 & 1\frac{1}{3} & 0 \\ 
+0 & 0 & 0 & 0 
+\end{array}
+\]
+
+eine Lösung ist Nullvektor; Kern ist
+\[
+\begin{array}{c}
+-\frac{1}{3} \\ 
+-1\frac{1}{3} \\ 
+0 
+\end{array}
+\]
+
+der Kern ist nicht eindeutig (Es gibt viele unterschiedliche Kerne von einer Matrix)
+
+
+\subsection{Lösung von (LGS) und lineare Abbildungen\label{LABLOESUNG}}
+
+
+
+Ein LGS kann man als lineare Abbildung betrachten
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + a_{13}*x_{3} + {\ldots} + a_{1n}*x_{n}  & = & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + a_{23}*x_{3} + {\ldots} + a_{2n}*x_{n}  & = & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + a_{33}*x_{3} + {\ldots} + a_{3n}*x_{n}  & = & b_{3} \\ 
+: & = & : \\ 
+a_{n1}*x_{1} + a_{n2}*x_{2} + a_{n3}*x_{3} + {\ldots} + a_{nn}*x_{n}  & = & b_{n} 
+\end{array}
+ \]
+
+als $A*\vec{x}=\vec{b}$
+wo A die Koeffizienten Matrix \ref{LGS}
+
+betrachte A:    $\phi A(x)=A*x : K^{n} \rightarrow K^{m}$ dann $\phi A(x) = b$
+
+Dann gilt:
+\begin{itemize}
+\item  LGS ist genau dann lösbar, wenn b in Bild \ref{BILD} von $\phi A(x)$
+\item  Lösungsmenge=spezielle Lösung+Kern \ref{KERN} $\phi A(x)$ 
+\end{itemize}
+
+
+
+
+
+\section{Weitere Operationen auf Matrizen}
+
+
+\subsection{Matrix-Multiplikation\label{MULTIPLIKATION}}
+
+
+
+
+
+Sei  A eine $m \times n$ Matrix
+
+sei  B eine n*t Matrix
+
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1t} \\ 
+: & : & : \\ 
+b_{n1} & {\ldots}  & a_{nt} 
+\end{array}
+\]
+
+Dann ist C=A*B eine $m \times t$ Matrix mit
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1t} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mt} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{}te Zeile von A; j\_{}te Spalte von B
+\[c_{ij}=a_{i1}*b_{1j}+a_{i2}*b_{2j}+a_{i3}*b_{3j}+{\ldots} +a_{in}b_{nj} \]
+
+
+
+\subsection{Matrix-Addition\label{ADDITION}}
+
+
+
+
+
+Sei  A eine $m \times n$ Matrix
+sei  B eine $m \times n$ Matrix
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1n} \\ 
+: & : & : \\ 
+b_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+\]
+
+Dann ist C=A+B eine $m \times n$ Matrix mit
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1n} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mn} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{}te Zeile von A,B; j\_{}te Spalte von A,B
+\[c_{ij}=a_{ij}+b_{ij}\]
+
+
+
+
+
+\subsection{Matrixsubstraktion\label{SUBSTRAKTION}}
+
+
+
+
+
+Sei  A eine $m \times n$ Matrix
+sei  B eine $m \times n$ Matrix
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1n} \\ 
+: & : & : \\ 
+b_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+\]
+
+Dann ist C=A-B eine $m \times n$ Matrix mit
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1n} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mn} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{}te Zeile von A,B; j\_{}te Spalte von A,B
+\[c_{ij}=a_{ij}-b_{ij}\]
+
+
+
+
+
+\subsection{linearer Unterraum\label{LINEAR}}
+
+{\bf Def.:} linearer Unterraum
+
+Eine Teilmenge U von $K^{n}$ heißt linearer Unterraum wenn gilt,
+\begin{itemize}
+\item  für alle $a \in K$ (a Element von K) und $u \in U$ u Element von U gilt a*u ist ein Element in U
+\item  für alle $u_{1} \in U \wedge u_{2} \in U  \Longrightarrow u_{1}+u_{2} \in U$ 
+;für alle $u_{1}$ Element von U und $u_{2}$ Element von U  $u_{1}+u_{2}$ ist wieder in U
+\end{itemize}
+
+
+
+\subsection{Inverse der Matrix\label{INVERSE}}
+
+
+
+
+
+Es gibt nur eine Inverse von $n \times n$ Matrizen
+$A^{-1}$ ist Eine Inverse von A wenn gilt $A^{-1} * A=I_{n}$
+wobei In ist eine Einheitsmatrix wie folgt
+\[ I_{n}= 
+\begin{array}{cccc}
+1 & 0 & 0 & 0 \\ 
+0 & 1 & 0 & 0 \\ 
+0 & 0 & 1 & 0 \\ 
+0 & 0 & 0 & 1 
+\end{array}
+ \]
+
+für n=4
+
+$I_{n}$ ist ein neutrales Element bezüglich Multiplikation \ref{MULTIPLIKATION}
+Matrix A heißt dann inventierbar
+Man findet eine Inverse, indem man zur gegebenen Matrix eine Einheitsmatrix dazu fügt und anschließend mit Gauss-Jordan \ref{JORDAN} behandelt z.B
+zur Matrix
+\[
+\begin{array}{ccc}
+5 & 10 & 20 \\ 
+1 & 1 & 1 \\ 
+12 & 12 & 20 
+\end{array}
+ \]
+
+eine Einheitsmatrix zufügt
+\[ 
+\begin{array}{cccccc}
+5 & 10 & 20 & 1 & 0 & 0 \\ 
+1 & 1 & 1 & 0 & 1 & 0 \\ 
+12 & 12 & 20 & 0 & 0 & 1
+\end{array}
+ \]
+
+nach Gauss-Jordan
+\[
+\begin{array}{cccccc}
+1 & 0 & 0 & -\frac{1}{5} & -1 & \frac{1}{4} \\ 
+0 & 1 & 0 & \frac{1}{5} & \frac{7}{2} & -\frac{3}{8} \\ 
+0 & 0 & 1 & 0 & -\frac{3}{2} & \frac{1}{8}
+\end{array}
+ \]
+
+Die Inverse ist dann
+\[ 
+\begin{array}{ccc}
+-\frac{1}{5} & -1 & \frac{1}{4} \\ 
+\frac{1}{5} & \frac{7}{2} & -\frac{3}{8} \\ 
+0 & -\frac{3}{2} & \frac{1}{8}
+\end{array}
+ \]
+
+Eine Matrix ist nicht inventierbar wenn nach Gauss-Jordan am Anfang der Matrix keine Einheitsmatrix ersichtlich wird.
+
+
+
+
+\subsection{Determinante der Matrix\label{DETERMINANTE}}
+
+
+
+Die Determinante ist nur auf $n \times n$ Matrizen definiert. Im Programm kann auch eine Determinante aus $n \times (n+1)$ Matrix ausgerechnet werden. Die letzte Spalte wird einfach ignoriert. Es soll noch Leute geben, die mit Hilfe der Determinanten LGS \ref{LGS} lösen. Ohne hier drauf genauer anzugehen muß man sagen Determinanten sind OUT.
+
+Es gibt grundsätzlich zwei Methoden um eine Determinante auszurechnen
+\begin{itemize}
+\item  Rekursiv (In dem Programm nicht implementiert), sie ist wegen exponential wachsenden Aufwand nicht bevorzuziehen.
+\item  Durch Hilfe von Gauss-Algorithmus \ref{GAUSS}. Man benutzt dabei zwei Eigenschaften:
+\begin{itemize}
+\item  Addiert man das x-Fache einer Zeile zu einer anderen Zeile, dann ändert sich die Determinante nicht.
+\item  Vertauscht man zwei Zeilen, dann ändert sich die Determinante um Faktor -1.
+\end{itemize}
+\end{itemize}
+
+Ist die Matrix in Treppenform \ref{LGS} bekommt man die Determinante, indem man alle Diagonalen Einträge (mit Index i,i) miteinander multipliziert und gegeben falls um Faktor aus Punkt b) korrigiert.
+
+
+
+
+
+
+\section{Optimierungsverfahren von linearen Ungleichungssystemen (Simplex)\label{SIMPLEX}}
+
+
+
+
+
+Problem: Suche die beste (optimale) Lösung eines Ungleicheungssystem bezüglich einer zu maximierenden Funktion $G(\vec{x})$. 
+\begin{enumerate}
+\item  Bringe alle Ungleichungen in die Form
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + a_{13}*x_{3} + {\ldots} + a_{1n}*x_{n}  & \geq  & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + a_{23}*x_{3} + {\ldots} + a_{2n}*x_{n}  & \geq  & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + a_{33}*x_{3} + {\ldots} + a_{3n}*x_{n}  & \geq  & b_{3} \\ 
+: & : & : \\ 
+a_{m1}*x_{1} + a_{m2}*x_{2} + a_{m3}*x_{3} + {\ldots} + a_{mn}*x_{n}  & \geq  & b_{m} 
+\end{array}
+\]
+
+evtl. durch Multiplikation mit -1 und Einsetzen von Gleichungen in die Ungleichungen
+\item   sei gegeben eine zu maximierende Funktion G
+\[      G(x_{1}+{\ldots} +x_{n})=G(\vec{x})=g_{0}+g_{1}*x_{1}+g_{2}*x_{2}+{\ldots} +g_{n}*x_{n}=g_{0}+\vec{g}(\vec{x}) \]
+
+(wenn G zu Minimieren ist, dann durch -1 Multiplizieren)
+\item  Die Ausgangsmatrix zum Simplex Algorithmus hat das Aussehen
+\[
+\begin{array}{ccccc|c}
+a_{11} & a_{12} & a_{13} & {\ldots}  & a_{1n} & b_{1} \\ 
+a_{21} & a_{22} & a_{23} & {\ldots}  & a_{2n} & b_{2} \\ 
+: & : & : & : & : & b_{3} \\ 
+a_{m1} & a_{m2} & a_{m2} & {\ldots}  & a_{mn} & b_{m} \\ 
+g_{1} & g_{2} & g_{3} & {\ldots}  & g_{n} & G 
+\end{array}
+\]
+
+Letzte Spalte heißt Gewinnspalte
+Allgemein:
+\[
+\begin{array}{c|c}
+A & b \\ 
+g & G 
+\end{array}
+\]
+
+Bedeutet $A(\vec{x})\geq \vec{b}$ und $G=g_{0}$
+
+
+
+\item   Finde eine Lösung des Ungleichungsystems \ref{EINELOESUNG}
+sei $\vec{u}$ diese Lösung $A*\vec{u} \leq \vec{b}$, dann $k=A\vec{x}-\vec{b}$
+Vektor $\vec{k}$ hat Einträge nur größer oder gleich Null
+Ausgangsmatrix zum Eckenfindungsalgorithmus (m+1)*(n+1)
+\[
+\begin{array}{ccccc|c}
+a_{11} & a_{12} & a_{13} & {\ldots}  & a_{1n} & k1 \\ 
+a_{21} & a_{22} & a_{23} & {\ldots}  & a_{2n} & k2 \\ 
+: & : & : & : & : & k3 \\ 
+a_{m1} & a_{m2} & a_{m2} & {\ldots}  & a_{mn} & km \\ 
+g_{1} & g_{2} & g_{3} & {\ldots}  & g_{n} & G 
+\end{array}
+ \]
+
+\[ G=G(\vec{u})= g_{0}+g_{1}*u_{1}+g_{2}*u_{2}+{\ldots} +g_{n}*u_{n} \]
+\item  Benutze Ekenfindung-Algorithmus \ref{ECKENFINDUNG}
+\item  Wenn der Eckenfindung Algorithmus beim Maximumkriterium (1. Schritt) abbricht dann gilt.
+Wir haben l verschiedene Spalten verarbeitet und daher l verschiedene Zeilen erhalten, die jetzt Standartbasis Vektoren sind $(0,{\ldots} ,1,{\ldots} ,0)$ mit n+1 Koordinaten und mit ``1'' an einer der ersten n-Stellen. Es seien $i_{1},{\ldots} ,i_{l}$ diese Zeilenindizies. Wir setzen zusätzlich voraus, daß die Gewinnzeile g(l) von B(l) nur negative Einträge erhält
+\[ g_{i}(l)\geq 0 \]
+
+Wenn nicht dann fahre fort mit Schritt 8
+Dann gibt es eine optimale Lösung(en) auf $Ax\geq b$ diese erhält man folgendermaßen. Man nehme die Zeile $i_{1} \ldots i_{l}$ von A und b der Ausgangsmatirx und betrachtet
+\[ (\overline{A}) * \vec{x} = (\overline{b}) \]
+
+Dies ist lösbar und jede Lösung \ref{LOESUNG} y davon erfühlt 
+$A*\vec{y}\geq b$ und $G(\vec{y})$ ist ein Maximum von $A*y\geq b$.
+
+\item  Wenn der Eckenfindung-Algorithmus beim Quotientenkriterium endet (2. Schritt) (zwar Spalte keine Zeile), dann ist die Gewinnfunktion G auf der Lösung Menge $A*x\geq b$ nach oben unbeschränkt (kein Maximum)
+\item Benutze Eckenaustausch-Algorithmus.
+Beim ihm gelten die Selbe Regel wie beim Eckenfindung-Algorithmus \ref{ECKENFINDUNG}. Nur die Spalten werden nicht markiert und der Algorithmus endet wenn alle Einträge in der Gewinnzeile $g_{i}$ negativ sind. Es kann passieren, daß dieser Algorithmus nicht endet (nicht terminiert). Ich konnte leider keine Abbruchbedingung in der Literatur finden, obwohl solche existiert. Im Programm endet der Algorithmus nach n Schritten.
+\end{enumerate}
+
+
+
+
+
+\subsection{Pivotieren\label{PIVOTIEREN}}
+
+
+
+Spaltenpivotierung an der Stelle $_{ij}$
+\[
+\begin{array}{ccccc}
+b_{11} & b_{12} & b_{13} & {\ldots}  & b_{1n} \\ 
+b_{21} & b_{22} & b_{23} & {\ldots}  & b_{2n} \\ 
+: & : & : & : & : \\ 
+b_{m1} & b_{m2} & b_{m2} & {\ldots}  & b_{mn} 
+\end{array}
+\]
+
+sei das Element b$_{ij}\not= 0$
+\begin{enumerate}
+\item  Multipliziere die i-te Spalte mit $\frac{1}{b_{ij}}$. Dann steht an der Stelle 1
+\item  Für alle Spalten verschieden von j-ten
+Führe aus
+\[ 
+k-te Spalte = k-te Spalte - b_{ik} * j-te Spalte, \]
+
+dann stehen an allen (i,k)-ten Stellen (mit $k\not= j$) nur Nullen
+\end{enumerate}
+
+
+
+
+
+\subsection{Eckenfindung-Algorithmus\label{ECKENFINDUNG}}
+
+
+
+
+
+Ein Teil von Simplex Algorithmus
+\begin{enumerate}
+\item  Schritt (Maximumkriterium)
+Wähle einen Spaltenindex j mit $1\leq j\leq n$ (letzte Spalte mit b's ausgeschlossen), derart daß die j-te Spalte von $B\not= \vec{0}$ (Nullvektor) ist und, daß $\mid g_{j}\mid $ den größten Wert hat. Markiere diese Spalte.
+Wenn ein solches j nicht existiert dann ende des Algorithmus. (Wenn mehrere j mit dieser Eigenschaft dann kleinste j)
+\item  Schritt (Quotientenkriterium)
+Ist die j-te Spalte von 1.Schritt
+\[
+\begin{array}{c}
+a_{1j} \\ 
+a_{2j} \\ 
+: \\ 
+a_{nj} \\ 
+g_{j} 
+\end{array}
+\]
+
+Dann betrachte die "'relevante Zeilenmenge"` R
+\[ R=\{ i \mid a_{ij} \not= 0 \wedge a_{ij}g_{j}\leq 0 \} \]
+
+Wenn R die leere Menge $R=\emptyset $ ist, dann Ende des Algorithmus
+Wenn R nicht leer ist, dann wähle i Element Reell ($i\in \Re$) aus , so daß
+\[      \frac{k_{i}}{ \mid a_{ij}\mid }  \leq  \frac{k_{l}}{ \mid a_{ij}\mid } \]
+
+für alle l Element R
+
+( Wenn mehrere i dann nimmt das kleinste )
+
+\item  Schritt. Führe für B Spaltenpivotierung \ref{PIVOTIEREN} an der Stelle (i,j)
+Man erhält neue Matrix B2 wobei Zeilenvektor von B2 so aussieht
+0{\ldots} 1{\ldots} 0   
+i-te Zeile 1 in der j-ten Spalte
+
+
+
+\item  Schritt: gehe zum 1. Schritt . Laß allerdings die zuvor markierten Spalten bei der Auswahl von j-Außer Betracht.
+\end{enumerate}
+
+(Der Eckenfindung-Algorithmus endet spätesten nach n Runden)
+
+
+
+
+\subsection{\label{EINELOESUNG}Das Suchen nach einer speziellen Lösung von $Ax\geq b$}
+
+
+
+\begin{enumerate}
+\item  wenn alle $b_{i}\leq 0 (i=1,..,m) $ dann ist $\vec{u}=0$ (Vektor) eine Lösung von $A*x\geq b$ sonst,
+\item  Betrachte die Matrix
+\[\hat{A}=A
+\begin{array}{c}
+-1 \\ 
+-1 \\ 
+: \\ 
+-1 
+\end{array}
+ \]
+$\hat{A}$ ist eine $m \times (n+1)$ Matrix. 
+Man fügt zu Matrix A einfach eine Spalte mit nur  "'-1"`  zu
+\item  füge zu x eine neue Koordinate
+\[\hat{x}=
+\begin{array}{cc}
+x_{1} \\ 
+x_{2} \\ 
+: \\ 
+x_{n} \\ 
+x_{n+1} 
+\end{array}
+\]
+
+Betrachte $\hat{A} * \hat{x} \geq b$
+\item  Sei $w = max ( b_{i} | 1 \leq i \leq m)$
+dann ist
+\[\hat{u}=
+\begin{array}{cc}
+0 \\ 
+0 \\ 
+: \\ 
+-w 
+\end{array}
+\]
+
+eine Lösung von $\hat{A} * \hat{x} \geq b$
+
+\item  Ist
+$\hat{v}=
+\begin{array}{cc}
+v_{1} \\ 
+v_{2} \\ 
+: \\ 
+v_{n+1} 
+\end{array}
+$
+eine Lösung von $\hat{A} * \hat{x} \geq b$ ( Suche nach dieser Lösung mit Eckenfindung evtl. Eckenaustauschalgorithmus \ref{SIMPLEX}) mit $v_{n+1} \geq 0$ dann ist
+$v=
+\begin{array}{cc}
+v_{1} \\ 
+v_{2} \\ 
+: \\ 
+v_{n} 
+\end{array}
+$
+eine Lösung von $A * x \geq b$
+\item  Wenn für alle Lösungen $\hat{v}$ von $\hat{A} * \hat{x} \geq b\hspace{.167em}$ immer gilt $v_{n+1} < 0\hspace{.167em}$ dann hat $A * x \geq b$ keine Lösung
+\end{enumerate}
+
+Anmerkungen: 
+Man kann den Algorithmus verkürzen. Es wird nur eine Lösung von $\hat{A} * \hat{x} \geq b$ nicht unbedingt die optimale Lösung gesucht. Man kann den o.g. Algorithmus abbrechen sobald der Gewinn positiv ist. Es gibt dann eine Lösung des Gleichungssystem
+\begin{eqnarray*}
+A * s = k^{(l)} - k\\
+k = A*u-b
+\end{eqnarray*}
+(k ist der Anfangsvektor) 
+für die gilt
+\[      G(s+u) \geq 0 \]
+
+Jede Lösung von $A*x = k(l) + b + G(l)*Einheitsvektor$ erfühlt $A * v \geq b$
+
+
+
+\section{Andere Verfahren}
+
+\subsection{Nährungslösung\label{NAEHRUNG}}
+
+Sei A eine $m \times n$ Matrix und b Element Rm dann gilt für das Gleichungssystem
+\[  (A^{t} * A) * x = A^{t} * b         \]
+
+$A^{t}$ ist eine Trasponente von A
+
+ist immer lösbar und die Lösungen sind die besten Lösungen von $A * x = b$
+
+"'beste Lösung"` Das heißt wenn u diese Lösung ist dann für alle v
+\[ \mid A*u-b\mid  <  \mid Av - b\mid \]
+
+also ist   $\mid A*u-b\mid $  minimal.
+$\mid a\mid$ ist die Länge von a und ist definiert als
+\[     \mid a\mid = \sqrt[]{a_{1}+a_{2}+{\ldots} +a_{n}} \]
+
+
+
+\subsection{Trasponente\label{TRANSPONENTE}}
+
+Die Transponente von A $m \times n$ Matrix ist eine $A^{t}$ $n \times m$ Matrix, wo die Spalten von $A^{t}$ die Zeilen von A sind.
+
+\subsection{Determinante Rekursiv\label{REKDETERMINANTE}}
+
+Die Determinante läßt sich auch rekursiv berechnen.
+Diese Methode wird auch als Standartmethode betrachtet.
+Im Tkmatrix wird es aber nur verwendet um charakteristisches Polynom zu berechnen.
+Seit Version 0.5 wird es mit Hilfe von einen Backtracking Algorithmus vermieden, daß Determinanten mehrfach von gleichen Matrizen berechnet werden. Das wird aber mit hohen Speicheraufwand bezahlt.
+
+Zuerst Hilfsdefinition:
+
+{\bfseries Def.:} Streichungs Matrix
+Sei A eine [m$\times$ n] Matrix über den Körper K.
+Unter der ij-ten Streichungsmatrix $ A_{ij} $ versteht man die Matrix,
+die man erhält wenn man aus A die i-te Zeile und j-te Spalte streicht.
+
+{\bfseries Def.:} Determinante
+Determinante von A [n$\times$ n] wird folgendermaßen definiert (induktic, Entwicklung nach 1. Spalte):
+\[ det(A)=a_{11} det(A_{11} ) - a_{21} det(A_{21} ) + .. - a_{n1} det(A_{n1} ) \]
+
+{\itshape Vorsicht wechselnde Zeichen + -\/}
+wenn
+A=(a) ([1$\times$ 1] Matrix dann det(A)=a
+
+\subsection{Charakteristisches Polynom\label{CHPOLYNOM}}
+
+Charkteristische Polynom wird gebildet um Eigenwerte (und nacher Eignevektoren) der Matrix zu finden.
+
+{\bfseries Satz}: 
+Nullstellen des charakteristischen Polynom sind Eigenwerte dazugehörigen Matrix
+
+Formal wird charakteristisches Polynom gebildet durch
+\[ det(A-xI) \]
+
+wo I Einheitsmatrix ist. Was zu folge hat, daß man rekursiv Determinante (siehe \ref{REKDETERMINANTE} von der Matrix ausrechnen muß
+\[
+\begin{array}{ccccc}
+a_{11}-x  & a_{12}  & a_{13}  & $\ldots$  & a_{1n}  \\ 
+a_{21} & a_{22}-x  & a_{23} & $\ldots$  & a_{2n} \\ 
+: & : & : & : & : \\ 
+a_{m1} & a_{m2} & a_{m2} & $\ldots$  & a_{mn}-x 
+\end{array}
+\]
+
+Dabei muß man selbstverständlich, die so erhaltene Polynomen hantieren
+
+\subsection{Matrixspiel\label{MATRIXSPIEL}}
+
+Matrixspiele lassen sich mit Hilfe von Simplexverfahren lösen.
+D.h zu jedem Matrixspiel, bei dem kein Sattelpunkt existiert, läßt sich mit Hilfe von Simplexverfahren eine optimale gemischte Strategie finden.
+Auch jedes Optiemirungsproblem hat eine Entsprechung als Matrixspiel (Duealitätsatz).
+Im Program wurde das Verfahren aus dem Buch
+(Georg Schrage, Rüdeger Baumann, "`Strategiespiele; Computerorientierte 
+Einfürung in Algorithmen der Spieltheorie"', 
+R. Oldenbourg Verlag, München Wien 1984) benutzt.
+
+Dazugehörige Simpexverfahren ist unterschiedlich zu dem übrigen im Program benutzten Verfahren.
+Zu den übrigen Erläuterungen verweise ich auf das obige Buch.
+
+Das Programm berechnet den Wert des Spieles und die optimale Strategien für beide Spieler. Ergebnismatrix wird die optimale Strategie des ersten Spielers.
+
+\end{document}

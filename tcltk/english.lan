@@ -1,0 +1,166 @@
+openmatrix {Open Matrix}
+newmatrix {New Matrix}
+nullmatrix {Null matrix}
+einheitsmatrix {Identity matrix}
+randommatrix {Random matrix}
+deactivate Deactivate
+show Show
+mwtitle {Tkmatrix Control Center}
+file File
+new New
+open Open
+save Save
+save_as {Save as}
+import Import
+extra_save Export
+save_solution {Save Solution}
+save_protokol {Save Protocol}
+close Close
+end End
+edit_m Edit
+edit_eunf {Elementary Operations}
+edit Edit
+copy Copy
+paste Paste
+resize Resize
+transponieren Transpose
+mark Mark
+col Column
+row Row
+all All
+duplicate Duplicate
+solution2first {Edit Solution}
+open_as_float {Open as Float Matrix}
+open_as_widefloat {Open as wide float}
+open_puffer {Open Puffer}
+preferences Preferences
+view View
+first {Input Matrix}
+vsolution Solution
+vprotokol Protocol/Records
+print_solution {Print Solution}
+pview_solution {Preview Solution Print}
+print_protokol {Print Protocol}
+pview_protokol {Preview Protocol Print}
+algorithmus Algorithms
+gauss {Gauss Reduction}
+gaussjordan Gauss-Jordan
+solution Solution
+determinante Determinant
+bild Base
+kern Kernel
+inverse Inverse
+naehrung {Best Solution}
+pivotiere Pivot
+simplex Simplex
+eckenfindung Cornersearch
+chpolynom {charakt. Polynom}
+matrixspiel {Matrix play}
+mmul {matrix Multiplication}
+madd {matrix Addition}
+msub {matrix Substraction}
+help Help
+wwwlink_autor {Author Homepage}
+info Info
+viewmenu Actions
+print Print
+printpreview Printpreview
+closeview Close
+overwrite overwrite
+newdialogtitle {build new matrix}
+newdialogmes {give column and row number of matrix and its type}
+width {width (columns number)}
+height {height (rows number)}
+maxnum {Maximal (Numerator)}
+maxden {Maximal (Denumerator)}
+dialogok ok
+dialogcancel cancel
+floattype {float matrix}
+rationaltype {rational matrix}
+widefloattype {wide float matrix}
+opdialogtitle {choose one matrix}
+opdialogmes {there are those suitable matrices for this operation. Chose one and press ok button}
+dialogok ok
+dialogcancel cancel
+operror {there are no suitable matrix for this operation in program}
+errormsg error
+resizedialogtitle {resize matrix}
+resizedialogmes {give new row and column number of matrix and which side of matrix will be change. }
+resizetop {from top of matrix}
+resizeleft {from left side of matrix}
+pastedialogtitle {choose the corner}
+pastedialogmes {which corner of matrix have you chosen?}
+topleft {links top}
+topright {rights top}
+bottomleft {links bottom}
+bottomright {rights bottom}
+pivotdialogtitle {place to pivot}
+pivotdialogmes {give place to pivot}
+pwidth {row 0-m}
+pheight {column 0-n}
+aboutdialogtitle {info about tkmatrix}
+whatitis {purpose of program}
+version version
+development {future developing}
+licence {license and use}
+aboutautor {about author}
+important {errors and bugs}
+enddialogtitle {exit program}
+enddialogmes {Are you sure to exit the program}
+emptymatrix {matrix is empty}
+infowhatitis {tkmatrix is an education mathematical program to manipulate matrices. Matrices are part of linear algebra. It was developed for students to learn algorithms and test own calculation. Therefore tkmatrix can give not even a solution but all algorithm steps as a protocol. It can calculate with floatnumbers and fractions. Solutions and protocols can be exported to ascii, html and latex files. The math-part of tkmatrix is programmed in C++ as tcl-library and graphical interface in Tk/Tcl. The distribution includes the program matrix too. It is pure shellprogram tkmatrix without GUI.}
+infoversion {this is a beta test version of Tk version. The mathematical tail of program is old and tested many times. The errorhandling programming was not finished yet. But Tk has own errormessages and this don't crash the program}
+infodevelopment {This is a freeware or publicware. I need help to improve English version of this program and build English documentation. The old ms-windows version of this program are quite popular among german students. If you good at math and can't see english mistakes any more improve this and send me the source per email i will be using this in next release of tkmatrix. I you have ideas of new math algorithms let me now about this. You are welcome to develop tkmatrix}
+infolicence {tkmatrix is freeware. It was created for education and test purposes. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.}
+infoaboutautor {I study business informatics  on UGH Essen in Germany. I have worked on this program from 4 years with breaks.}
+infoimportant {The tkmatrix is rather new and can have many bugs. Bugsreport send to sw0562@uni-essen.de}
+helpfile tkmatrix_en.html
+cspreftitle Error
+csprefmessage {can't open preferences file .tkmatrix in home directory for saving}
+lunch_browser {Could not X-remote Netscape. Should browser be lunched}
+nohelpviewer {Html browser can't be lunch. Change the preferences for html browser.}
+nowww_winsupport {See interet link:}
+nosolution {There is no solution for this matrix. Use an algorithm first.}
+noprotocol {No protocol for this matrix}
+prefdialogtitle preferences
+afteralgorithm {after one algorithm}
+opensolution {open solution window}
+openprotocol {open protocol window}
+helpbrowser {extern HTML Browser (always with %s)}
+widefloat_prec {Wide float precision (in Bits)}
+widefloat_width {Max number before dot}
+widefloat_reformat {Reformat wide float}
+widefloat_maxzeros {Max Zeros after dot}
+widefloat_showprec {Precision for display}
+netscape_remote {X-remote Netscape first}
+toolbar toolbar
+language language
+use use
+usesave {save & use}
+default {set default}
+newlanguage {English is using now. Old window stay as is}
+errornolatex {for printing and previewing matrices you need latex system}
+errornofraction {fraction format is not valid, write for example 1,2}
+erroralg {Algorithmus have given no solution. Not proper format of matrix or error by computing}
+errornooctave {Octave can not be invoked. Probably not installed on your system}
+octave octave
+endoctaveproc {kill octave proc}
+octavedialogtitle {Octave Interface}
+octave_script {Load Octave Script}
+no_solution_eqn {This equation system has no solution}
+must_be_square {Matrix must be square (nxn)}
+not_invertible {Matrix cant be inverted}
+simplex_no_one_solution {Simplex has no solution}
+simplex_no_optimum {Simplex has no optimum}
+number_overflow {Overflow Error by rational numbers}
+outof_range {Idle index for matrix range. Row or Column Index begin with 0}
+no_arrgument {Expect more parameters for this operation}
+cannot_openfile {Could not open this file as matrix}
+noprot {Build no protocols (reports)}
+onlyfraction {Only fractions by protocols (reports)}
+editonlyfraction {Only fraction by edit}
+editsolution {Edit Solution}
+edit_modis {Swap A*k A(i)+k*A(j) Pivot Pivot2}
+modis_label {{{Index 1} {Index 2} -} {Index Factor -} {{Index 1} {Factor} {Index 2}} {Row Column -} {Row Column -}}
+do_step Compute
+undo Undo

@@ -1,0 +1,13 @@
+%head
+-\begin{displaymath}
+%bruch1 %s x^{%i}
+%bruch2 \frac{%s}{%s} x^{%i}
+%bruch3 %s \frac{%s}{%s} x^{%i}
+%double %+lf x^%i
+%obruch1 %s
+%obruch2 \frac{%s}{%s}
+%obruch3 %s \frac{%s}{%s}
+%odouble %+lf
+%tail
+-
+-\end{displaymath}

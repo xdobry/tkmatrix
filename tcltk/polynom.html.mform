@@ -1,0 +1,12 @@
+%head
+-<BR>
+%bruch1  %s x<SUP>%i</SUP>
+%bruch2  <SUP>%s</SUP>/<SUB>%s</SUB> x<SUP>%i</SUP>
+%bruch3  %s<SUP>%s</SUP>/<SUB>%s</SUB> x<SUP>%i</SUP>
+%double  %+lf x<SUB>%i</SUB>
+%obruch1  %s
+%obruch2  <SUP>%s</SUP>/<SUB>%s</SUB>
+%obruch3  %s<SUP>%s</SUP>/<SUB>%s</SUB>
+%odouble  %+lf
+%tail
+-

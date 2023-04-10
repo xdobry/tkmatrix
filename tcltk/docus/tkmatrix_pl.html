@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//PL">
+<html>
+  <head>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-2">
+     <title>tkmatrix linux program</title>
+  </head>
+
+  <body>
+<h1>Pomoc dla tkmatrix dla systemu linux</h1>
+
+<h2>słowa wstępu</h2>
+
+Ponieważ Linux rozwija się w Polsce całkiem nieżle posanowiłem przetłumaczyć mój program taże na wersję polską.
+Tkmatrix jest programem nie komercyjnym i o małej grupie docelowej.
+Polskę opuściłem już przed 7-dmiu laty po 3-ciej klasie liceum, teraz studiuję informatykę z zarządzaniem na uniwersytecie w Essen.
+Pełna dokumentacja dostępna jest niestety tylko w języku niemieckim.
+Matematyczna strona programu jest wytłumaczona po niemiecku w pliku math1.ps (przeglądaj przy użyciu ghostview) lub skrótowo po angielsku w pliku mathe_en.ps .
+
+<h2>czym jest tkmatrix?</h2>
+
+tkmatrix jest programem matematycznym i edukacyjnym. Służy do manipulacji na macierzach, które o ile wiem są w matematycznym programie w Polsce dopiero na studiach wyższych.
+Program ten napisałem dla studentów którzy chcą nauczć się algorytmów na macierzach albo sprawdzić swoje własne obliczenia.
+Ponieważ program jest przeznaczony do celów edukacyjnych potrafi on podać nie tylko wynik końcowy owych algorytmów ale po koleji wszystkie kroki algorytmu i to w formie plików Latex, html lub ascii.
+Obliczenia są dokonywane albo na ułamkach albo na komputerowych liczbach z przecinkiem (float).
+Program ten oparłem na niemieckich wykładach matematyki i jest on dopasowany metodą znanych w niemieckiej literaturze.
+<p>
+Następujące działania na macierzach zostały umieszczone w programie:
+<ul>
+<li>redukcja gaussa (lub algorytm). doprowadza macierz do formy &quot;schodkowej&quot;
+<li>redukcja gaussa-jordana - doprowadza macierz to formy normalnej
+<li>rozwiązywanie układu równań liniowych pierwszego stopnia
+<li>znajdywanie bazy macierzy
+<li>znajdywanie  &quot;jądra&quot;
+<li>determinanta
+<li>tranponenta
+<li>najlepsze roziązanie - regresia liniowa
+<li>piwotowanie
+<li>metoda simplex - służy do znajdowanie optimum funkcji do maksymowania z uwzględnieniem układu nierówności
+<li>polinom charakterystyczny
+<li>mnożenie, dodawanie, odejmowanie macierzy
+</ul>
+
+<hr>
+<h2>Kilka wskazówek do programu</h2>
+Program po przełączeniu na polską wersje automatycznie zmienia czcionkę na poslką <code>-adobe-helvetica-bold-r-normal--12-*-*-*-*-*-iso8859-2</code>. Jeśli jej nie masz to zmień ostatni wiersz pliku <code>polish.lan</code> lub usuń tą linie, wtedy program usunie automatycznie wszystkie ogonki.
+<p>
+Jeśli chcesz zaznaczyć część macierzy używaj wciśniętego klawisza SHIFT
+<p>
+Jeśli masz kłopoty w drukowaniu lub pokazywniu wydruku, dopasuj plik <code>print.tcl</code>.
+Do druku używany jest system Latex a do pokazywania ghostview (wywoływany jako gv), które powinny być zainstalowane na twoim komputerzy, jeśli chcesz korzystać z możliwości automatycznego wydruku przez tkmatrix.
+<p>
+Program tkmatrix używa dużo XWindow Resources. Okno-Protołu potrzebuje przy Simplex około 2000 Windgets.
+Możesz używać ghostview do ogladania Protołu (menu Przejdz/Pokaz Wydruk Protokołu.
+Zmień też indiwidualne opcje, żeby okno protokułu nie zostawalo automatycznie wyświetlane.
+</body>
+</html>

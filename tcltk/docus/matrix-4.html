@@ -1,0 +1,762 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE> Dokumentation und Benutzeranweisungen des Programm: Beschreibung der Algorithmen; Mathe Definitionen</TITLE>
+ <LINK HREF="matrix-5.html" REL=next>
+ <LINK HREF="matrix-3.html" REL=previous>
+ <LINK HREF="matrix.html#toc4" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="matrix-5.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-3.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc4"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+<HR>
+<H2><A NAME="s4">4. Beschreibung der Algorithmen; Mathe Definitionen</A></H2>
+
+<P>Eine bessere Beschreibung der Mathematik in tkmatrix befindet
+sich als PDF oder PS Datei <EM>mathe1.ps</EM> mit in der Distribution
+des Programms.
+Html Vesion hat keinen guten Zeichensatz (Es is eben nicht
+möglich in html) und hat ein paar Fehler, die in der Latex Vesion
+korrigiert wurden.
+<P>Das ist eine Zusammenfassung meiner Vorlesungsunterlagen aus
+Mathe I. Es werden alle Algorithmen grob beschreiben, ohne
+jegliche Beweise. Es geht vor allem darum zu beschreiben wie die
+Algorithmen funktionieren und welche mathematische Probleme man
+mit ihnen lösen kann. Diese Beschreibung kann aber ein gutes
+Skript oder ein Mathebuch nicht ersetzen. Die Reihenfolge
+entspricht eher der Gliederung der Algorithmen als der beim
+wirklichen Vorlesung.
+<H2><A NAME="ss4.1">4.1 Eine Matrix</A>
+</H2>
+
+<P><B>Def:</B>
+<A NAME="MATRIX"></A> Def.:
+eine m&times; n <EM>Matrix</EM> (m mal n): m-Zeilenzahl;
+n-Spaltenzahl
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB> <TD>a<SUB>12</SUB> <TD>a<SUB>13</SUB> <TD>... <TD>a<SUB>1n</SUB> </TR><TR><TD>a<SUB>21</SUB><TD>a<SUB>22</SUB><TD>a<SUB>23</SUB><TD>... <TD>a<SUB>2n</SUB></TR><TR><TD>:<TD>:<TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>m1</SUB><TD>a<SUB>m2</SUB><TD>a<SUB>m2</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>
+<P>Alle Matrizen werden hier ohne Klammer geschrieben. Auch Vektoren
+werden in der html Version ohne den gewöhnten Pfeil geschrieben.
+(also "a" kann auch bedeuten "a-Vektor"). Es soll es den Kontext
+ersichtlich sein um welche Bedeutung es sich gerade handelt.
+<H2><A NAME="ss4.2">4.2 Grundliegende Algorithmen</A>
+</H2>
+
+<H3><A NAME="TREPPENFORM"></A> Treppenform </H3>
+
+<P><B>Def.:</B>  c=c<SUB>ij</SUB>  ist in Treppenform, falls c die
+Nullmatrix ist, oder es eine Folge
+<BR>
+ 1&lt;= j<SUB>1</SUB> &lt; j<SUB>2</SUB> &lt;  ... &lt; j<SUB>r</SUB> &lt;= l   
+von r Sprungstellen gibt mit
+<P>
+<OL>
+<LI>unterhalb der r Zeile stehen nur Nullen</LI>
+<LI>An dem Sprungstellen stehen Elemente c<SUB>ij</SUB> &lt;&gt;
+0</LI>
+<LI>Links von dem Sprungstellen stehen nur Nullen</LI>
+</OL>
+
+<I>Anzahl der Sprungstellen nennt man auch Rang der Matrix</I>
+<P>
+<H3><A NAME="TREPPENNORMALFORM"></A> Treppennormallform</H3>
+
+<P><B>Def.:</B> Eine Matrix ist in Treppennormalform
+c=(c<SUB>ij</SUB>) wenn sie in Treppenform ist und wenn
+zusätzlich
+<OL>
+<LI>Alle Sprungstellen c<SUB>ij</SUB>=1</LI>
+<LI>In jeder Sprungstellen Spalte sind alle Elemente bis auf
+das Sprungstellen Element gleich Null</LI>
+</OL>
+
+<EM>Treppennormalform ist eindeutig </EM>
+<P>
+<H2><A NAME="GAUSS"></A> <A NAME="ss4.3">4.3 Gauss Algorithmus</A>
+</H2>
+
+<P>Benutzt um Lösung 
+<A HREF="#LOESUNG">LOESUNG</A>
+ des linearen Gleichungsystem
+<A HREF="#LGS">LGS</A>
+zu finden.
+k-Spaltenzahl. Bringt die Matrix auf Treppenform 
+<A HREF="#TREPPENFORM">TREPPENFORM</A>
+
+<OL>
+<LI>Suche die erste Spalte Matrix c, die nicht nur Nullen
+erhält. Dies ist die j1-Spalte. Darin sei das Element
+c<SUB>ij1</SUB>&lt;&gt; 0 Dann vertausche die i-te Zeile mit
+der ersten Zeile.</LI>
+<LI>Für i=2,... .,k addiere der i-ten Zeilen das
+<SUP>-c<SUB>ij1</SUB></SUP><SUB>c<SUB>1j1</SUB></SUB> fache der
+1. Zeile.</LI>
+<LI>Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man
+aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen
+abschneidet.</LI>
+</OL>
+
+<CODE>Bemerkung:</CODE> c<SUB>ij1</SUB> bedeutet: i.te Zeile j.te
+Spalte 1. Algorithmus Durchgang
+<P>Es gibt viele Möglichkeiten eine Matrix auf Treppenform zu
+bringen (Treppenform ist nicht eindeutig). Man kann, um sich die
+Rechnungen zu erleichtern, auch Zeilen wechseln oder Zeilen mit
+verschiedene Faktoren multiplizieren. Für den Rechner ist das
+aber keine Erleichterung. Der Algorithmus in dieser Form ändern
+nicht die Determinante 
+<A HREF="#DETERMINANTE">DETERMINANTE</A>
+ von Matrix.
+<P>
+<H2><A NAME="JORDAN"></A> <A NAME="ss4.4">4.4 Gauss-Jordan Algorithmus</A>
+</H2>
+
+<P>Benutzt um Lösung 
+<A HREF="#LOESUNG">LOESUNG</A>
+ des linearen
+Gleichungsystem
+<A HREF="#LGS">LGS</A>
+zu finden.
+Weiterentwicklung von Gauss Algorithmus 
+<A HREF="#GAUSS">GAUSS</A>
+. Bringt
+die Matrix auf Treppennormallform 
+<A HREF="#TREPPENNORMALFORM">TREPPENNORMALFORM</A>
+.
+k-Spaltenzahl
+<OL>
+<LI>Suche die erste Spalte Matrix c, die nicht nur Nullen
+erhält. Dies ist die j1-Spalte. Darin sei das Element
+c<SUB>ij</SUB>1&lt;&gt; 0 Dann vertausche die i-te Zeile mit
+der ersten Zeile. Dann dividiere die Zeile durch
+c<SUB>ij1</SUB></LI>
+<LI>Für i=2,... .,k addiere der i-ten Zeilen das
+-c<SUB>ij1</SUB> fache der 1. Zeile. Mache alle Einträge
+unterhalb c<SUB>ij1</SUB> zu Nullen.</LI>
+<LI>Für alle Zeilen d=1,... ,i bilde
+1.Zeile=1.Zeile-c<SUB>dj1</SUB>*(i-te Zeile). Mache alle
+Einträge oberhalb c<SUB>ij1</SUB> zu Nullen.</LI>
+<LI>Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man
+aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen
+abschneidet.</LI>
+</OL>
+
+<B>Bemerkung:</B> Gauss und Gauss-Jordan-Algorithmus unterscheiden
+sich im 1. Punkt. Beim GaussJordan wird die Zeile durch
+Sprungstelleneintrag dieser Zeile geteilt. Dadurch erreicht man,
+daß Sprungstelleneintrag auf 1 skaliert wird. Das "vereinfacht"
+die Rechnung im Schritt 2.
+<P>
+<H2><A NAME="LGS"></A> <A NAME="ss4.5">4.5 Lineare Gleichungssysteme</A>
+</H2>
+
+<H3>Definition</H3>
+
+<P>
+<P><B>Def.:</B> Ein lineares Gleichungssystem mit n Gleichungen hat
+die Form
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB>*x<SUB>1</SUB> + a<SUB>12</SUB>*x<SUB>2</SUB> + a<SUB>13</SUB>*x<SUB>3</SUB> + ... + a<SUB>1n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>1</SUB></TR><TR><TD>a<SUB>21</SUB>*x<SUB>1</SUB> + a<SUB>22</SUB>*x<SUB>2</SUB> + a<SUB>23</SUB>*x<SUB>3</SUB> + ... + a<SUB>2n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>2</SUB></TR><TR><TD>a<SUB>31</SUB>*x<SUB>1</SUB> + a<SUB>32</SUB>*x<SUB>2</SUB> + a<SUB>33</SUB>*x<SUB>3</SUB> + ... + a<SUB>3n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>3</SUB></TR><TR><TD>: <TD>=<TD>:</TR><TR><TD>a<SUB>n1</SUB>*x<SUB>1</SUB> + a<SUB>n2</SUB>*x<SUB>2</SUB> + a<SUB>n3</SUB>*x<SUB>3</SUB> + ... + a<SUB>nn</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>n</SUB> </TR></TABLE>
+a<SUB>ij</SUB> sind die Koeffizienten
+wenn b<SUB>i</SUB>&gt;= 0 dann ist das ein homogenes
+Gleichungssystem, andernfalls inhomogenes
+<P>2.Die Matrix der Form
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB><TD>a<SUB>12</SUB><TD>... <TD>a<SUB>1n</SUB><TD>b<SUB>1</SUB></TR><TR><TD>a<SUB>21</SUB><TD>a<SUB>22</SUB><TD>... <TD>a<SUB>2n</SUB><TD>b<SUB>2</SUB></TR><TR><TD>:<TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>n1</SUB><TD>a<SUB>n2</SUB><TD>a<SUB>n3</SUB><TD>a<SUB>nn</SUB><TD>bn </TR></TABLE>
+heißt erweiterte Koeffizientenmatrix (ohne b<SUB>i</SUB>
+einfach Koeffizientenmatrix)
+<P>Man kann mit Hilfe der elementaren Umformungen (sie ändern nicht
+die Lösungsmenge) die Matrix in die Form bringen, in dem die
+Lösung des Gleichungssystem ersichtlich (leicht zu berechnen)
+ist. Gauss und Gauss-Jordan Algorithmus benutzen nur solche
+Umformungen. Zu solchen Umformungen gehören:
+<UL>
+<LI>Vertauschen zwei Zeilen</LI>
+<LI>Multiplikation einer Zeile mit Zahl   &lt;&gt; 0  </LI>
+<LI>Addition eines Vielfachen einer Zeile zu einer anderen
+Zeile</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="LOESUNG"></A> Lösungstypen von linearen Gleichungsystemen (LGS)</H3>
+
+<P>Es gibt drei möglichen Lösungstypen von Linearen
+Gleichungssystemen (LGS)
+<OL>
+<LI>LGS hat keine Lösung, dann Ergebnissmatrix ist leer.</LI>
+<LI>LGS hat eine Lösung, wenn Ausgangsmatrix m&times; n dann
+Ergebnissmatrix (n-1)*1
+<BR>
+<TABLE><TR><TD>x<SUB>1</SUB></TR><TR><TD>x<SUB>2</SUB></TR><TR><TD>:</TR><TR><TD>x<SUB>n-1</SUB> </TR></TABLE></LI>
+<LI>LGS hat mehrere Lösungen dann ist das Ergebnissmatrix
+(<CODE>Bezogen auf Programm Matrix </CODE>) (n*k k&lt; n) zusammengesetzt
+aus mehreren Spaltenvektoren, wobei das erste eine Lösung des LGS
+ist und die anderen die Basis des linearen Unterraums für das
+Lösung des zugehörigen homogenen Gleichungssystems. Jede mögliche
+Lösung des LGS kann man erreichen aus
+<BR>
+<V>x</V>=<V>a</V>+<V>u</V><SUB>1</SUB>*b<SUB>1</SUB>+... +<V>u</V><SUB>k-1</SUB>*b<SUB>k-1</SUB> 
+<UL>
+<LI>  <V>x</V>   : Vektor für alle Lösungen</LI>
+<LI>  <V>a</V>   : Erstes Spaltenvektor des Ergebnissmatrix
+(Eine Lösung)</LI>
+<LI>  <V>u</V><SUB>i</SUB>   : Weiter Spaltenvektoren</LI>
+<LI>  b<SUB>i</SUB>   : Freie Variablen</LI>
+</UL>
+</LI>
+</OL>
+<P>
+<H3>Lösung von LGS</H3>
+
+<P>Algorithmus:
+<OL>
+<LI>Bringe die erweiterte Koeffizientenmatrix auf Treppennormal
+Form mit Hilfe des Gauss-Jordan Algorithmus.</LI>
+<LI>Falls die Letzte Spalte eine Sprungsstelle ist dann keine
+Lösung. Ende.</LI>
+<LI>Es gibt nur Sprungstellen außer letzten Spalte dann ist die
+letzte Spalte die einzige Lösung des LGS. Ende.</LI>
+<LI>Es gibt mehrere Lösungen.</LI>
+<LI>Eine Lösung erhält man indem man für alle x für
+nicht-Sprungstellen Variablen Null einsetzt und für anderen
+nacheinander die Einträge der letzten Spalte </LI>
+<LI>Finde die Lösung eines homogenen Gleichungssystems. Es gibt
+frei wählbare Variablen (Parameter) nämlich, die an dem
+Nichsprugstellen. Setzt man nacheinander eine dieser frei
+wählbaren Variablen gleich 1 und die anderen frei wählbaren
+Variablen gleich 0 und löst auf, so erhält man eine Basis des
+Lösungsraumes. </LI>
+</OL>
+
+<B>Bsp.</B> (für Schritte 4-6)
+<BR>
+<TABLE><TR><TD>1<TD>5<TD>0<TD>0<TD>0<TD>2</TR><TR><TD>0<TD>0<TD>1<TD>2<TD>0<TD>4</TR><TR><TD>0<TD>0<TD>0<TD>0<TD>1<TD>5 </TR></TABLE>
+Eine Lösung
+<BR>
+ 
+x<SUB>1</SUB>=2     
+x<SUB>2</SUB>=0     
+x<SUB>3</SUB>=4     
+x<SUB>4</SUB>=0     
+x<SUB>5</SUB>=5 
+als Vektor 
+<BR>
+<TABLE><TR><TD>2</TR><TR><TD>0</TR><TR><TD>4</TR><TR><TD>0</TR><TR><TD>5 </TR></TABLE>
+Suche Basis des Lösung des homogenen Gleichungssystem (Schritt 6)
+<BR>
+<TABLE><TR><TD>1<TD>5<TD>0<TD>0<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>1<TD>2<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>0<TD>0<TD>1<TD>0 </TR></TABLE>
+Setzt man für x<SUB>2</SUB>=1 und x<SUB>4</SUB>=0 erhält man
+<BR>
+<TABLE><TR><TD>1*x<SUB>1</SUB> + 5*1 + 0*x<SUB>3</SUB> + 0*x<SUB>3</SUB> + 0*x<SUB>4</SUB><TD>=<TD>0</TR><TR><TD>0*x<SUB>1</SUB> + 0*x<SUB>2</SUB> + 1*x<SUB>3</SUB> + 2*0 + 0*x<SUB>4</SUB> <TD>=<TD>0</TR><TR><TD>0*x<SUB>1</SUB> + 0*x<SUB>2</SUB> + 0*x<SUB>3</SUB> + 0*x<SUB>3</SUB> + 0*x<SUB>4</SUB><TD>=<TD>0 </TR></TABLE>
+also 
+<BR>
+x<SUB>1</SUB>+5=0 
+Ein Vektor der Basis
+<BR>
+<TABLE><TR><TD>-5</TR><TR><TD>0</TR><TR><TD>0</TR><TR><TD>0</TR><TR><TD>0 </TR></TABLE>
+Den zweiten Vektor erhält man wenn man x<SUB>2</SUB>=0 und
+x<SUB>4</SUB>=1 einsetzt 
+also 
+<BR>
+x<SUB>2</SUB>+2=0
+<BR>
+<TABLE><TR><TD>0</TR><TR><TD>-2</TR><TR><TD>0</TR><TR><TD>0</TR><TR><TD>0 </TR></TABLE>
+Die dazugehörige Ergebnissmatrix wäre
+<BR>
+<TABLE><TR><TD>2<TD>-5<TD>0</TR><TR><TD>0<TD>0<TD>-2</TR><TR><TD>4<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>0</TR><TR><TD>5<TD>0<TD>0 </TR></TABLE>
+was bedeutet
+<BR>
+<TABLE><TR><TD>x<SUB>1</SUB><TD>=<TD>2-5*a</TR><TR><TD>x<SUB>2</SUB><TD>=<TD>-2*b</TR><TR><TD>x<SUB>3</SUB><TD>=<TD>4</TR><TR><TD>x<SUB>4</SUB><TD>=<TD>0</TR><TR><TD>x<SUB>5</SUB><TD>=<TD>5 </TR></TABLE>
+wobei a,b frei wählbar
+<P>
+<H2><A NAME="ABBILDUNGEN"></A> <A NAME="ss4.6">4.6 Lineare Abbildungen und Matrizen</A>
+</H2>
+
+<P>Sei A eine   m&times; n   Matrix, sei definiert die
+Abbildung   &#198;   
+<BR>
+ K<SUP>n</SUP> -&gt; K<SUP>m</SUP> 
+ K<SUP>n</SUP>  - lineares Unterraum von Dimension n
+<BR>
+      x -&gt; A*x = &#198; A(x) 
+<BR>
+ <V>x</V>=ein Vektor (n&times; 1) 
+<BR>
+      <V>x</V>=<TABLE><TR><TD>x<SUB>1</SUB></TR><TR><TD>x<SUB>2</SUB></TR><TR><TD>:</TR><TR><TD>x<SUB>n</SUB></TR></TABLE> 
+Die Abbildung   &#198;    ist linear 
+<A HREF="#LINEAR">LINEAR</A>
+<P><B>Def.:</B> Die Menge { &#198; A(x) | x Element K<SUP>n</SUP>
+} heißt Bild von   &#198;    A. Sie ist Teilmenge von 
+ K<SUP>n</SUP>   und ein linearer Unterraum von   K<SUP>n</SUP> .
+<P>Das Finden von Bild von A 
+<A HREF="#BILD">BILD</A>
+<P><B>Def.:</B> Die Menge { x Element K<SUP>n</SUP> | &#198;
+A(x)=0 } heißt Kern von   &#198;    A. Sie ist
+Teilmenge von   K<SUP>n</SUP>   und ein linearer Unterraum von 
+ K<SUP>n</SUP>  . 
+<P>Das Finden von Kern von A 
+<A HREF="#KERN">KERN</A>
+<P>Satz: Sei 
+<BR>
+ &#198; A K<SUP>n</SUP> -&gt; K<SUP>m</SUP> (A eine m&times; n Matrix) 
+(A eine m&times; n Matrix)
+<P>Dann gilt:   dim Kern &#198; A  + dim Bild &#198; A = n 
+<P>
+<P>
+<P>
+<H2><A NAME="BILD"></A> <A NAME="ss4.7">4.7 Errechnen von Bild von Matrix</A>
+</H2>
+
+<P>
+<P>
+<P>Man muß die Basis des auf den Spalten Vektoren aufgespannten
+linearen Unterraums finden. Am einfachsten geht man vor, wenn man
+die Matrix auf Treppenform
+<A HREF="#LGS">LGS</A>
+bringt und alle
+Spaltenvektoren aus Ursprungsmatrix zur Lösung nimmt, die
+Sprungstellen haben.
+z.B.
+<BR>
+<TABLE><TR><TD>0<TD>1<TD>2</TR><TR><TD>1<TD>2<TD>3</TR><TR><TD>0<TD>1<TD>2</TR><TR><TD>2<TD>3<TD>4</TR><TR><TD>0<TD>1<TD>2 </TR></TABLE>
+Nach Anwendung von Gauss-Jordan Algorithmus
+<BR>
+<TABLE><TR><TD>1<TD>0<TD>1</TR><TR><TD>0<TD>1<TD>2</TR><TR><TD>0<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>0 </TR></TABLE>
+Sprungstellen beim 1. und 2.Spalte kommen zur Lösung
+<BR>
+<TABLE><TR><TD>0<TD>1</TR><TR><TD>1<TD>2</TR><TR><TD>0<TD>1</TR><TR><TD>2<TD>3</TR><TR><TD>0<TD>1 </TR></TABLE>
+Die beiden Vektoren sind linear unabhängig und sind eine Basis
+des Bildes des Matrix
+<P>
+<P>
+<H2><A NAME="KERN"></A> <A NAME="ss4.8">4.8 Errechnen von Kern von Matrix</A>
+</H2>
+
+<P>
+<P>
+<P>Kern   &#198; A   ist die Lösung der Abbildung   &#198;
+A(x)=0  
+<P>Der Nullvektor gehört immer zur Lösung
+also z.B. der Kern von
+<BR>
+<TABLE><TR><TD>1<TD>2<TD>3</TR><TR><TD>2<TD>1<TD>0</TR><TR><TD>2<TD>4<TD>6 </TR></TABLE>
+ist die Lösungsmenge von LGS 
+<A HREF="#LGS">LGS</A>
+
+<BR>
+<TABLE><TR><TD>x<SUB>1</SUB>+2*x<SUB>2</SUB>+3*x<SUB>3</SUB><TD>=<TD>0</TR><TR><TD>2*x<SUB>1</SUB>+1*x<SUB>2</SUB><TD>=<TD>0</TR><TR><TD>2*x<SUB>1</SUB>+4*x<SUB>2</SUB>+6*x<SUB>3</SUB><TD>=<TD>0 </TR></TABLE>
+Hier in Programm wird zum Matrix eine Nullspalte addiert und
+durch GaussJordan 
+<A HREF="#JORDAN">JORDAN</A>
+Algorithmus die Lösungsmenge
+<A HREF="#LOESUNG">LOESUNG</A>
+ausgerechnet. Weil Kern ein lineares Unterraum
+ist, wird die eine spezielle Lösung (immer Nullvektor)
+abgeschnitten. Die übrigen Vektoren (wenn vorhanden) bilden die
+Basis des gesuchten Kerns.
+Hier:
+<BR>
+<TABLE><TR><TD>1<TD>2<TD>3<TD>0</TR><TR><TD>2<TD>1<TD>0<TD>0</TR><TR><TD>2<TD>4<TD>6<TD>0 </TR></TABLE>
+nach Gauss-Jordan
+<BR>
+<TABLE><TR><TD>1<TD>0<TD><SUP>1</SUP><SUB>3</SUB><TD>0</TR><TR><TD>0<TD>1<TD>1<SUP>1</SUP><SUB>3</SUB><TD>0</TR><TR><TD>0<TD>0<TD>0<TD>0 </TR></TABLE>
+eine Lösung ist Nullvektor; Kern ist
+<BR>
+<TABLE><TR><TD>-<SUP>1</SUP><SUB>3</SUB></TR><TR><TD>-1<SUP>1</SUP><SUB>3</SUB></TR><TR><TD>0 </TR></TABLE>
+der Kern ist nicht eindeutig (Es gibt viele unterschiedliche
+Kerne von einer Matrix)
+<H2><A NAME="LABLOESUNG"></A> <A NAME="ss4.9">4.9 Lösung von (LGS) und lineare Abbildungen</A>
+</H2>
+
+<P>
+<P>Ein LGS kann man als lineare Abbildung betrachten
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB>*x<SUB>1</SUB> + a<SUB>12</SUB>*x<SUB>2</SUB> + a<SUB>13</SUB>*x<SUB>3</SUB> + ... + a<SUB>1n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>1</SUB></TR><TR><TD>a<SUB>21</SUB>*x<SUB>1</SUB> + a<SUB>22</SUB>*x<SUB>2</SUB> + a<SUB>23</SUB>*x<SUB>3</SUB> + ... + a<SUB>2n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>2</SUB></TR><TR><TD>a<SUB>31</SUB>*x<SUB>1</SUB> + a<SUB>32</SUB>*x<SUB>2</SUB> + a<SUB>33</SUB>*x<SUB>3</SUB> + ... + a<SUB>3n</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>3</SUB></TR><TR><TD>:<TD>=<TD>:</TR><TR><TD>a<SUB>n1</SUB>*x<SUB>1</SUB> + a<SUB>n2</SUB>*x<SUB>2</SUB> + a<SUB>n3</SUB>*x<SUB>3</SUB> + ... + a<SUB>nn</SUB>*x<SUB>n</SUB> <TD>=<TD>b<SUB>n</SUB> </TR></TABLE> 
+als   A*<V>x</V>=<V>b</V>  
+wo A die Koeffizienten Matrix 
+<A HREF="#LGS">LGS</A>
+<P>betrachte A:     &#198; A(x)=A*x : K<SUP>n</SUP> -&gt;
+K<SUP>m</SUP> dann   &#198; A(x) = b  
+<P>Dann gilt:
+<UL>
+<LI> LGS ist genau dann lösbar, wenn b in Bild 
+<A HREF="#BILD">BILD</A>
+
+von   &#198; A(x)  </LI>
+<LI> Lösungsmenge=spezielle Lösung+Kern 
+<A HREF="#KERN">KERN</A>
+ &#198; A(x)   </LI>
+</UL>
+<P>
+<H2><A NAME="ss4.10">4.10 Weitere Operationen auf Matrizen</A>
+</H2>
+
+<H3><A NAME="MULTIPLIKATION"></A> Matrix-Multiplikation</H3>
+
+<P>
+<P>
+<P>Sei  A eine m&times; n Matrix
+<P>sei  B eine n*t Matrix
+<P>
+<BR>
+A=<TABLE><TR><TD>a<SUB>11</SUB><TD>... <TD>a<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>m1</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>B=<TABLE><TR><TD>b<SUB>11</SUB><TD>... <TD>b<SUB>1t</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>b<SUB>n1</SUB><TD>... <TD>a<SUB>nt</SUB> </TR></TABLE>
+Dann ist C=A*B eine   m&times; t   Matrix mit
+<BR>
+C=<TABLE><TR><TD>c<SUB>11</SUB><TD>... <TD>c<SUB>1t</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>c<SUB>m1</SUB><TD>... <TD>c<SUB>mt</SUB> </TR></TABLE>
+c<SUB>ij</SUB>- i_te Zeile von A; j_te Spalte von B
+<BR>
+c<SUB>ij</SUB>=a<SUB>i1</SUB>*b<SUB>1j</SUB>+a<SUB>i2</SUB>*b<SUB>2j</SUB>+a<SUB>i3</SUB>*b <SUB>3j</SUB>+... +a<SUB>in</SUB>b<SUB>nj</SUB> 
+<H3><A NAME="ADDITION"></A> Matrix-Addition</H3>
+
+<P>
+<P>
+<P>Sei  A eine m&times; n Matrix
+sei  B eine m&times; n Matrix
+<BR>
+A=<TABLE><TR><TD>a<SUB>11</SUB><TD>... <TD>a<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>m1</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>B=<TABLE><TR><TD>b<SUB>11</SUB><TD>... <TD>b<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>b<SUB>m1</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>
+Dann ist C=A+B eine   m&times; n   Matrix mit
+<BR>
+C=<TABLE><TR><TD>c<SUB>11</SUB><TD>... <TD>c<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>c<SUB>m1</SUB><TD>... <TD>c<SUB>mn</SUB> </TR></TABLE>
+c<SUB>ij</SUB>- i_te Zeile von A,B; j_te Spalte von A,B
+<BR>
+c<SUB>ij</SUB>=a<SUB>ij</SUB>+b<SUB>ij</SUB>
+<P>
+<H3><A NAME="SUBSTRAKTION"></A> Matrixsubstraktion</H3>
+
+<P>
+<P>
+<P>Sei  A eine m&times; n Matrix
+sei  B eine m&times; n Matrix
+<BR>
+A=<TABLE><TR><TD>a<SUB>11</SUB><TD>... <TD>a<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>m1</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>B=<TABLE><TR><TD>b<SUB>11</SUB><TD>... <TD>b<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>b<SUB>m1</SUB><TD>... <TD>a<SUB>mn</SUB> </TR></TABLE>
+Dann ist C=A-B eine   m&times; n   Matrix mit
+<BR>
+C=<TABLE><TR><TD>c<SUB>11</SUB><TD>... <TD>c<SUB>1n</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>c<SUB>m1</SUB><TD>... <TD>c<SUB>mn</SUB> </TR></TABLE>
+c<SUB>ij</SUB>- i_te Zeile von A,B; j_te Spalte von A,B
+<BR>
+c<SUB>ij</SUB>=a<SUB>ij</SUB>-b<SUB>ij</SUB>
+<P>
+<H2><A NAME="LINEAR"></A> <A NAME="ss4.11">4.11 linearer Unterraum</A>
+</H2>
+
+<P><B>Def.:</B> linearer Unterrau
+<P>Eine Teilmenge U von   K<SUP>n</SUP>   heißt linearer Unterraum
+wenn gilt,
+<UL>
+<LI> für alle a Element von  K und u Element von U gilt a*u ist
+ein Element in U</LI>
+<LI> für alle u1 und u2 Element von U, u1+u2 ist wieder in U</LI>
+</UL>
+<H2><A NAME="INVERSE"></A> <A NAME="ss4.12">4.12 Inverse der Matrix</A>
+</H2>
+
+<P>
+<P>
+<P>Es gibt nur eine Inverse von   n&times; n   Matrizen
+A-1 ist Eine Inverse von A wenn gilt   A-1 * A=I<SUB>n</SUB>  
+wobei In ist eine Einheitsmatrix wie folgt
+<BR>
+ I<SUB>n</SUB>= <TABLE><TR><TD>1<TD>0<TD>0<TD>0</TR><TR><TD>0<TD>1<TD>0<TD>0</TR><TR><TD>0<TD>0<TD>1<TD>0</TR><TR><TD>0<TD>0<TD>0<TD>1 </TR></TABLE> 
+für n=4
+<P>  I<SUB>n</SUB>   ist ein neutrales Element bezüglich
+Multiplikation 
+<A HREF="#MULTIPLIKATION">MULTIPLIKATION</A>
+
+Matrix A heißt dann inventierbar
+Man findet eine Inverse, indem man zur gegebenen Matrix eine
+Einheitsmatrix dazu fügt und anschließend mit Gauss-Jordan 
+<A HREF="#JORDAN">JORDAN</A>
+ behandelt z.B
+zur Matrix
+<BR>
+<TABLE><TR><TD>5<TD>10<TD>20</TR><TR><TD>1<TD>1<TD>1</TR><TR><TD>12<TD>12<TD>20 </TR></TABLE> 
+eine Einheitsmatrix zufügt
+<BR>
+ <TABLE><TR><TD>5<TD>10<TD>20<TD>1<TD>0<TD>0</TR><TR><TD>1<TD>1<TD>1<TD>0<TD>1<TD>0</TR><TR><TD>12<TD>12<TD>20<TD>0<TD>0<TD>1</TR></TABLE> 
+nach Gauss-Jordan
+<BR>
+<TABLE><TR><TD>1<TD>0<TD>0<TD>-<SUP>1</SUP><SUB>5</SUB><TD>-1<TD><SUP>1</SUP><SUB>4</SUB></TR><TR><TD>0<TD>1<TD>0<TD><SUP>1</SUP><SUB>5</SUB><TD><SUP>7</SUP><SUB>2</SUB><TD>-<SUP>3</SUP><SUB> 8</SUB></TR><TR><TD>0<TD>0<TD>1<TD>0<TD>-<SUP>3</SUP><SUB>2</SUB><TD><SUP>1</SUP><SUB>8</SUB></TR></TABLE> 
+Die Inverse ist dann
+<BR>
+ <TABLE><TR><TD>-<SUP>1</SUP><SUB>5</SUB><TD>-1<TD><SUP>1</SUP><SUB>4</SUB></TR><TR><TD><SUP>1</SUP><SUB>5</SUB><TD><SUP>7</SUP><SUB>2</SUB><TD>-<SUP>3</SUP><SUB>8</SUB></TR><TR><TD>0<TD>-<SUP>3</SUP><SUB>2</SUB><TD><SUP>1</SUP><SUB>8</SUB></TR></TABLE> 
+Eine Matrix ist nicht inventierbar wenn nach Gauss-Jordan am
+Anfang der Matrix keine Einheitsmatrix ersichtlich wird.
+<P>
+<H2><A NAME="DETERMINANTE"></A> <A NAME="ss4.13">4.13 Determinante der Matrix</A>
+</H2>
+
+<P>
+<P>Die Determinante ist nur auf n&times; n Matrizen definiert. Im
+Programm kann auch eine Determinante aus   n&times; (n+1)  
+Matrix ausgerechnet werden. Die letzte Spalte wird einfach
+ignoriert. Es soll noch Leute geben, die mit Hilfe der
+Determinanten LGS 
+<A HREF="#LGS">LGS</A>
+ lösen. Ohne hier drauf genauer
+anzugehen muß man sagen Determinanten sind OUT.
+<P>Es gibt grundsätzlich zwei Methoden um eine Determinante
+auszurechnen
+<UL>
+<LI> Rekursiv (In dem Programm nicht implementiert), sie ist
+wegen exponential wachsenden Aufwand nicht bevorzuziehen.</LI>
+<LI> Durch Hilfe von Gauss-Algorithmus 
+<A HREF="#GAUSS">GAUSS</A>
+. Man
+benutzt dabei zwei Eigenschaften:
+<UL>
+<LI> Addiert man das x-Fache einer Zeile zu einer anderen
+Zeile, dann ändert sich die Determinante nicht.</LI>
+<LI> Vertauscht man zwei Zeilen, dann ändert sich die
+Determinante um Faktor -1.</LI>
+</UL>
+</LI>
+</UL>
+
+Ist die Matrix in Treppenform 
+<A HREF="#LGS">LGS</A>
+bekommt man die
+Determinante, indem man alle Diagonalen Einträge (mit Index i,i)
+miteinander multipliziert und gegeben falls um Faktor aus Punkt
+b) korrigiert.
+<P>
+<P>
+<H2><A NAME="SIMPLEX"></A> <A NAME="ss4.14">4.14 Optimierungsverfahren von linearen Ungleichungssystemen</A>
+(Simplex)</H2>
+
+<P>
+<P>
+<P>Problem: Suche die beste (optimale) Lösung eines
+Ungleicheungssystem bezüglich einer zu maximierenden Funktion 
+ G(<V>x</V>)  . 
+<OL>
+<LI> Bringe alle Ungleichungen in die Form
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB>*x<SUB>1</SUB> + a<SUB>12</SUB>*x<SUB>2</SUB> + a<SUB>13</SUB>*x<SUB>3</SUB> + ... + a<SUB>1n</SUB>*x<SUB>n</SUB> <TD>&gt;= <TD>b<SUB>1</SUB></TR><TR><TD>a<SUB>21</SUB>*x<SUB>1</SUB> + a<SUB>22</SUB>*x<SUB>2</SUB> + a<SUB>23</SUB>*x<SUB>3</SUB> + ... + a<SUB>2n</SUB>*x<SUB>n</SUB> <TD>&gt;= <TD>b<SUB>2</SUB></TR><TR><TD>a<SUB>31</SUB>*x<SUB>1</SUB> + a<SUB>32</SUB>*x<SUB>2</SUB> + a<SUB>33</SUB>*x<SUB>3</SUB> + ... + a<SUB>3n</SUB>*x<SUB>n</SUB> <TD>&gt;= <TD>b<SUB>3</SUB></TR><TR><TD>:<TD>:<TD>:</TR><TR><TD>a<SUB>m1</SUB>*x<SUB>1</SUB> + a<SUB>m2</SUB>*x<SUB>2</SUB> + a<SUB>m3</SUB>*x<SUB>3</SUB> + ... + a<SUB>mn</SUB>*x<SUB>n</SUB> <TD>&gt;= <TD>b<SUB>m</SUB> </TR></TABLE>
+evtl. durch Multiplikation mit -1 und Einsetzen von Gleichungen
+in die Ungleichungen</LI>
+<LI>  sei gegeben eine zu maximierende Funktion G
+<BR>
+      G(x<SUB>1</SUB>+... +x<SUB>n>)=G(v</SUB>x/)=g<SUB>0</SUB>+g<SUB>1</SUB>*x<SUB>1</SUB>+g<SUB>2</SUB>*x<SUB>2</SUB>+&amp; hellip; +g<SUB>n</SUB>*x<SUB>n</SUB>=g<SUB>0</SUB>+<V>g</V>(<V>x</V>) 
+(wenn G zu Minimieren ist, dann durch -1 Multiplizieren)</LI>
+<LI> Die Ausgangsmatrix zum Simplex Algorithmus hat das
+Aussehen
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB><TD>a<SUB>12</SUB><TD>a<SUB>13</SUB><TD>... <TD>a<SUB>1n</SUB><TD>b<SUB>1</SUB></TR><TR><TD>a<SUB>21</SUB><TD>a<SUB>22</SUB><TD>a<SUB>23</SUB><TD>... <TD>a<SUB>2n</SUB><TD>b<SUB>2</SUB></TR><TR><TD>:<TD>:<TD>:<TD>:<TD>:<TD>b<SUB>3</SUB></TR><TR><TD>a<SUB>m1</SUB><TD>a<SUB>m2</SUB><TD>a<SUB>m2</SUB><TD>... <TD>a<SUB>mn</SUB><TD>b<SUB>m</SUB></TR><TR><TD>g<SUB>1</SUB><TD>g<SUB>2</SUB><TD>g<SUB>3</SUB><TD>... <TD>g<SUB>n</SUB><TD>G </TR></TABLE>
+Letzte Spalte heißt Gewinnspalte
+<P>Allgemein:
+<BR>
+<TABLE><TR><TD>A<TD>b</TR><TR><TD>g<TD>G </TR></TABLE>
+Bedeutet   A(<V>x</V>)&gt;= <V>b</V>   und   G=g<SUB>0</SUB>  
+<P>
+</LI>
+<LI>  Finde eine Lösung des Ungleichungsystems 
+<A HREF="#EINELOESUNG">EINELOESUNG</A>
+
+sei <V>u</V> diese Lösung A*<V>u</V> &lt;= <V>b</V>, dann 
+ k=A<V>x</V>-<V>b</V>  
+Vektor <V>k</V> hat Einträge nur größer oder gleich Null
+Ausgangsmatrix zum Eckenfindungsalgorithmus (m+1)*(n+1)
+<BR>
+<TABLE><TR><TD>a<SUB>11</SUB><TD>a<SUB>12</SUB><TD>a<SUB>13</SUB><TD>... <TD>a<SUB>1n</SUB><TD>k1</TR><TR><TD>a<SUB>21</SUB><TD>a<SUB>22</SUB><TD>a<SUB>23</SUB><TD>... <TD>a<SUB>2n</SUB><TD>k2</TR><TR><TD>:<TD>:<TD>:<TD>:<TD>:<TD>k3</TR><TR><TD>a<SUB>m1</SUB><TD>a<SUB>m2</SUB><TD>a<SUB>m2</SUB><TD>... <TD>a<SUB>mn</SUB><TD>km</TR><TR><TD>g<SUB>1</SUB><TD>g<SUB>2</SUB><TD>g<SUB>3</SUB><TD>... <TD>g<SUB>n</SUB><TD>G </TR></TABLE> 
+<BR>
+ G=G(<V>u</V>)= g<SUB>0</SUB>+g<SUB>1</SUB>*u<SUB>1</SUB>+g<SUB>2</SUB>*u<SUB>2</SUB>+... +g<SUB>n</SUB>*u<SUB>n</SUB> </LI>
+<LI> Benutze Ekenfindung-Algorithmus 
+<A HREF="#ECKENFINDUNG">ECKENFINDUNG</A>
+</LI>
+<LI> Wenn der Eckenfindung Algorithmus beim Maximumkriterium
+(1. Schritt) abbricht dann gilt.
+<P>Wir haben l verschiedene Spalten verarbeitet und daher l
+verschiedene Zeilen erhalten, die jetzt Standartbasis Vektoren
+sind   (0,... ,1,... ,0)   mit n+1 Koordinaten
+und mit "1" an einer der ersten n-Stellen. Es seien  i<SUB>1</SUB>,... ,i<SUB>l</SUB>   diese Zeilenindizies. Wir
+setzen zusätzlich voraus, daß die Gewinnzeile g(l) von B(l) nur
+negative Einträge erhält
+<BR>
+ g<SUB>i</SUB>(l)&gt;= 0 
+Wenn nicht dann fahre fort mit Schritt 8
+Dann gibt es eine optimale Lösung(en) auf   Ax&gt;= b  
+diese erhält man folgendermaßen. Man nehme die Zeile  i1... il   von A und b der Ausgangsmatirx und betrachtet
+<BR>
+ (^A) * <V>x</V> = (^b) 
+Dies ist lösbar und jede Lösung 
+<A HREF="#LOESUNG">LOESUNG</A>
+y davon erfühlt 
+A*<V>y</V>&gt;=  und   G(v/y/)   ist ein Maximum von
+A*y&gt;= b.
+</LI>
+<LI> Wenn der Eckenfindung-Algorithmus beim Quotientenkriterium
+endet (2. Schritt) (zwar Spalte keine Zeile), dann ist die
+Gewinnfunktion G auf der Lösung Menge   A*x&gt;= b   nach
+oben unbeschränkt (kein Maximum)</LI>
+<LI>Benutze Eckenaustausch-Algorithmus
+Beim ihm gelten die Selbe Regel wie beim Eckenfindung-Algorithmus
+<A HREF="#ECKENFINDUNG">ECKENFINDUNG</A>
+. Nur die Spalten werden nicht markiert
+und der Algorithmus endet wenn alle Einträge in der Gewinnzeile 
+ g<SUB>i</SUB>   negativ sind. Es kann passieren, daß dieser
+Algorithmus nicht endet (nicht terminiert). Ich konnte leider
+keine Abbruchbedingung in der Literatur finden, obwohl solche
+existiert. Im Programm endet der Algorithmus nach n Schritten.</LI>
+</OL>
+<P>
+<H2><A NAME="PIVOTIEREN"></A> <A NAME="ss4.15">4.15 Pivotieren</A>
+</H2>
+
+<P>
+<P>Spaltenpivotierung an der Stelle <SUB>ij</SUB>
+<BR>
+<TABLE><TR><TD>b<SUB>11</SUB><TD>b<SUB>12</SUB><TD>b<SUB>13</SUB><TD>... <TD>b<SUB>1n</SUB></TR><TR><TD>b<SUB>21</SUB><TD>b<SUB>22</SUB><TD>b<SUB>23</SUB><TD>... <TD>b<SUB>2n</SUB></TR><TR><TD>:<TD>:<TD>:<TD>:<TD>:</TR><TR><TD>b<SUB>m1</SUB><TD>b<SUB>m2</SUB><TD>b<SUB>m2</SUB><TD>... <TD>b<SUB>mn</SUB> </TR></TABLE>
+sei das Element b<SUB>ij</SUB>&lt;&gt; 0
+<OL>
+<LI> Multipliziere die i-te Spalte mit
+<SUP>1</SUP><SUB>b<SUB>ij</SUB></SUB>. Dann steht an der
+Stelle 1</LI>
+<LI> Für alle Spalten verschieden von j-ten
+Führe aus
+<BR>
+ 
+k-te Spalte = k-te Spalte - b<SUB>ik</SUB> * j-te Spalte, 
+dann stehen an allen (i,k)-ten Stellen (mit   k&lt;&gt; j 
+) nur Nullen</LI>
+</OL>
+<P>
+<H2><A NAME="ECKENFINDUNG"></A> <A NAME="ss4.16">4.16 Eckenfindung-Algorithmus</A>
+</H2>
+
+<P>
+<P>
+<P>Ein Teil von Simplex Algorithmus
+<OL>
+<LI> Schritt (Maximumkriterium)
+Wähle einen Spaltenindex j mit 1 &lt;= j&lt;= n (letzte Spalte
+mit b's ausgeschlossen), derart daß die j-te Spalte von B
+&lt;&gt; 0 (Nullvektor) ist und, daß   |
+g<SUB>j</SUB>|    den größten Wert hat. Markiere diese
+Spalte.
+Wenn ein solches j nicht existiert dann ende des Algorithmus.
+(Wenn mehrere j mit dieser Eigenschaft dann kleinste j)</LI>
+<LI> Schritt (Quotientenkriterium)
+Ist die j-te Spalte von 1. Schritt
+<BR>
+<TABLE><TR><TD>a<SUB>1j</SUB></TR><TR><TD>a<SUB>2j</SUB></TR><TR><TD>:</TR><TR><TD>a<SUB>nj</SUB></TR><TR><TD>g<SUB>j</SUB> </TR></TABLE>
+Dann betrachte die "relevante Zeilenmenge" R
+<BR>
+ R={ i | a<SUB>ij</SUB> &lt;&gt; 0 UND a<SUB>ij</SUB>gj&lt;= 0 } 
+Wenn R die leere Menge, dann Ende des Algorithmus
+<P>Wenn R nicht leer ist, dann wähle i Element Reell aus, so daß
+<BR>
+      <SUP>k<SUB>i</SUB></SUP><SUB> | a<SUB>ij</SUB>| </SUB>  &lt;=  <SUP>k<SUB>l</SUB></SUP><SUB> | a<SUB>ij</SUB>| </SUB> 
+für alle l Element R
+<P>( Wenn mehrere i dann nimmt das kleinste )
+</LI>
+<LI> Schritt. Führe für B Spaltenpivotierung 
+<A HREF="#PIVOTIEREN">PIVOTIEREN</A>
+an der Stelle (i,j)
+Man erhält neue Matrix B2 wobei Zeilenvektor von B2 so aussieht
+<P>0... 1... 0    
+i-te Zeile 1 in der j-ten Spalte
+<P>
+</LI>
+<LI> Schritt: gehe zum 1. Schritt . Laß allerdings die zuvor
+markierten Spalten bei der Auswahl von j-Außer Betracht.</LI>
+</OL>
+
+(Der Eckenfindung-Algorithmus endet spätesten nach n Runden)
+<P>
+<H2><A NAME="EINELOESUNG"></A> <A NAME="ss4.17">4.17 Das Suchen nach einer speziellen Lösung von Ax &gt;=</A>
+b</H2>
+
+<P>
+<P>
+<OL>
+<LI> wenn alle b<SUB>i</SUB>&lt;= 0 (i=1,..,m)  dann ist
+<V>u</V>=0 (Vektor) eine Lösung von A*x&gt;= b sonst,</LI>
+<LI> Betrachte die Matrix
+<BR>
+^A=A<TABLE><TR><TD>-1</TR><TR><TD>-1</TR><TR><TD>:</TR><TR><TD>-1 </TR></TABLE> 
+Man fügt zu Matrix A einfach eine Spalte mit nur "-1" zu</LI>
+<LI> füge zu x eine neue Koordinate
+<BR>
+x&nbsp;=<TABLE><TR><TD>x<SUB>1</SUB></TR><TR><TD>x<SUB>2</SUB></TR><TR><TD>:</TR><TR><TD>x<SUB>n</SUB></TR><TR><TD>x<SUB>n+1</SUB> </TR></TABLE>
+Betrachte A&nbsp; * x&nbsp; &gt;= b</LI>
+<LI> Sei w = max ( b<SUB>i</SUB> )    1 &lt;= i &lt;= m
+<P>dann ist
+<BR>
+u&nbsp;=<TABLE><TR><TD>0</TR><TR><TD>0</TR><TR><TD>:</TR><TR><TD>-w </TR></TABLE>
+eine Lösung von A&nbsp; * x&nbsp; &gt;= b
+</LI>
+<LI> Ist
+<BR>
+v&nbsp;=<TABLE><TR><TD>v<SUB>1</SUB></TR><TR><TD>v<SUB>2</SUB></TR><TR><TD>:</TR><TR><TD>v<SUB>n+1</SUB> </TR></TABLE>
+eine Lösung von A&nbsp; * x&nbsp; &gt;= b ( Suche nach dieser Lösung
+mit Eckenfindung evtl. Eckenaustauschalgorithmus
+<A HREF="#SIMPLEX">SIMPLEX</A>
+) mit v<SUB>n+1</SUB> &gt;= 0 dann ist
+<BR>
+v&nbsp;=<TABLE><TR><TD>v<SUB>1</SUB></TR><TR><TD>v<SUB>2</SUB></TR><TR><TD>:</TR><TR><TD>v<SUB>n</SUB> </TR></TABLE>
+eine Lösung von A * x &gt;= b</LI>
+<LI> Wenn für alle Lösungen v&nbsp; von A&nbsp; * x&nbsp; &gt;= b immer
+gilt v<SUB>n+1</SUB> &lt; 0  dann hat A * x &gt;= b keine
+Lösung</LI>
+</OL>
+
+Anmerkungen: 
+Man kann den Algorithmus verkürzen. Es wird nur eine Lösung von
+A&nbsp; * x&nbsp; &gt;= b nicht unbedingt die optimale Lösung
+gesucht. Man kann den o.g. Algorithmus abbrechen sobald der
+Gewinn positiv ist. Es gibt dann eine Lösung des Gleichungssystem
+<BR>
+      A * s = k(l) - k    k = A*u-b 
+für die gilt
+<BR>
+      G(s+u) &gt;= 0 
+Jede Lösung von A*x = k(l) + b + G(l)*Einheitsvektor
+erfühlt A * v &gt;= b
+<P>
+<H2><A NAME="NAEHRUNG"></A> <A NAME="ss4.18">4.18 Nährungslösung</A>
+</H2>
+
+<P>
+<P>
+<P>Sei A eine m&times; n Matrix und b Element Rm dann gilt für das
+Gleichungssystem
+<BR>
+  (A<SUP>t</SUP> * A) * x = A<SUP>t</SUP> * b      
+A<SUP>t</SUP> ist eine Trasponente von A
+<P>ist immer lösbar und die Lösungen sind die besten Lösungen von
+A * x = b
+<P>"beste Lösung" Das heißt wenn u diese Lösung ist dann für alle v
+<BR>
+ | A*u-b|  &lt;  | Av - b| 
+also ist     | A*u-b|     minimal.
+ | a|   ist die Länge von a und ist
+definiert als
+<BR>
+     | a| = (a<SUB>1</SUB>+a<SUB>2</SUB>+... +a<SUB>n</SUB>)^&frac12; 
+<H2><A NAME="TRANSPONENTE"></A> <A NAME="ss4.19">4.19 Trasponente</A>
+</H2>
+
+<P>Die Transponente von A m&times; n Matrix ist eine At  n&times; m   Matrix, wo die Spalten von At die Zeilen von A
+sind.
+<P>
+<H2><A NAME="MATRIXSPIELE"></A> <A NAME="ss4.20">4.20 Matrixspiele</A>
+</H2>
+
+<P>Matrixspiele lassen sich mit Hilfe von Simplexverfahren lösen.
+D.h zu jedem Matrixspiel, bei dem kein Sattelpunkt existiert, läßt sich mit Hilfe von Simplexverfahren eine optimale gemischte Strategie finden.
+Auch jedes Optiemirungsproblem hat eine Entsprechung als Matrixspiel (Duealitätsatz).
+Im Program wurde das Verfahren aus dem Buch
+(Georg Schrage, Rüdeger Baumann, "Strategiespiele; Computerorientierte 
+Einfürung in Algorithmen der Spieltheorie", 
+R. Oldenbourg Verlag, München Wien 1984) benutzt.
+<P>Dazugehörige Simpexverfahren ist unterschiedlich zu dem übrigen im Program benutzten Verfahren.
+Zu den übrigen Erläuterungen verweise ich auf das obige Buch.
+<P>Das Programm berechnet den Wert des Spieles und die optimale Strategien für beide Spieler. Ergebnismatrix wird die optimale Strategie des ersten Spielers.
+<P>
+<HR>
+<A HREF="matrix-5.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-3.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc4"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+</BODY>
+</HTML>

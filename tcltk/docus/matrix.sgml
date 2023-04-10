@@ -1,0 +1,1830 @@
+<!doctype linuxdoc system>
+<article>
+<title> Dokumentation und Benutzeranweisungen des Programm
+tkmatrix
+für Linux
+<author>Artur Trzewik <tt/mail@xdobry.de/
+<date>v0.4, 26.03.1998 Verändert 26.06.1999
+<abstract>
+Kontakt:
+<tt><htmlurl url="mailto:mail@xdobry.de"
+name="mail@xdobry.de"> <htmlurl
+url="http://www.xdobry/tkmatrix"
+name="http://www.xdobry/tkmatrix"></tt>
+Das Programm tkmatrix ist die Erweiterung des Programms matrix um
+eine graphische Benutzeroberfläche auf der Basis von Tk/Tcl
+Programiersprache.
+Tkmatrix soll verschiedene Algorithmen auf Matrizen durchführen
+wie (Gauss, Simplex zusammen 11 Operationen). Die
+Zwischenschritte können prokolliert werden und in verschiedenen
+Formaten (html,latex,ascii) ausgegeben werden. Zu der
+Distribution gehört weiterhin das Schellprogramm matrix. 
+</abstract>
+
+<toc>
+
+<sect>Einführung
+<sect1>Was macht das Programm?
+<p>
+Zu der Distribution gehören eigentlich zwei Programme matrix und
+tkmatrix.
+Matrix ist ein Programm, das diverse Operationen auf Matrizen
+ausführen kann. 
+Hierzu gehören Gaussalgorithmus, Jordanalgorithmus, Ausrechnen
+von Bild und Kern einer Matrix, Inverse, Nährungsverfahren,
+Determinante und ganze Reihe von Algorithmen zur Optimierung von
+Ungleichungssystemen.
+Tkmatrix ist eine Erweiterung des Programm matrix um eine
+graphische Benutzeroberfläche. Dabei ist tkmatrix kein backend
+sondern benutzt spezielprogrammierte Tcl-bibliothek.
+Matrizen gehören zu linearer Algebra, und sind der Stoff, damit
+die Professoren die armen Erstsemester quälen (z.B.
+Wirtschaftsinformatiker)
+<p><bf/Vorsicht/<em/ Das Programm ist vor allem für Lern- und
+Testzwecke bedacht.
+Deswegen wurde der Haupaugenmekt auf ausgiebige Protokolle der
+Zwischenschritte der Algorithmen gelegt.
+Alle Berechnungen können auch auf Bruchzahlen durchgeführt
+werden.
+Benutzen Sie, liebe Informatikfreude, das Programm nicht um
+irgendwelche sensible Daten zu berechnen.
+Für die Richtigkeit der Ergebnissen kann ich nicht garantieren,
+also benutzen Sie das Programm auf eigene Risiko./
+ 
+<sect1>Für wem wäre es interessant?
+<p>
+Das Programm soll dabei helfen, das Erlernen von diesen
+Algorithmen zu erleichtern.
+Es ist kein Lernprogramm im engen Sinne, obwohl in dieser
+Hilfe-Datei alle Informationen enthalten sind, die man braucht,
+um die Algorithmen nachvollziehen zu können (d.h. Formel, ohne
+dazugehörige mathematische Beweise).
+Man kann es Benutzen, um die Richtigkeit seiner eigenen
+Rechnungen zu überprüfen.
+Dabei bleibt der mühsame Weg "per Hand Rechnen" nicht erspart,
+wenn man sich die Rechnenfertigkeiten aneignen möchte, um z.B.
+die bevorstehende Mathe I Klausur zu bestehen.
+<p>
+Benutzte Algorithmendefinitionen und Notationen entsprechen der
+Vorlesung von Wintersemester '95 UGH Essen Lineare Algebra für
+<em>Wirtschaftsinformatiker</em>.
+Weil es eine ganze Reihe von Notationen bezüglich
+Optimierungsverfahren gibt, werden sie genau beschrieben.
+Das Programm war auf allen Aufgaben aus der Vorlesung getestet
+und funktionierte einwandfrei.
+
+<sect1>Lizenz Wichtig!!!
+<p>
+Dieses Programm ist freie Software. Sie können es unter
+den Bedingungen ähnlich der GNU General Public License, wie von
+der
+Free Software Foundation herausgegeben, weitergeben und/oder
+modifizieren, entweder unter Version 2 der Lizenz oder (wenn
+Sie es wünschen) jeder späteren Version. Es steht jedem frei zur
+Verfügung,
+kann modifiziert und weiter entwickelt werden. Kann aber nicht
+mit veränderten  (beschränkten) Rechten weiter verbreitet werden.
+Bei Benutzung von Teilen des Programms soll
+der Autor (Artur Trzewik) explizit angegeben werden. 
+<p>
+Insbesondere darf der Quelltext nicht vorbehalten werden.
+Das bezieht sich auch auf die Teile des Programms.
+Es darf nichtkommerziell verbreitet werden.
+Der Preis, der dafür verlangt wird, darf die Materialkosten nicht
+wesentlich Übersteigen, es darf damit kein Profit 
+gemacht werden.
+Einzige Ausnahme sind Sammlungen von PD-Software, Freeware und
+Shareware auf CD-ROM.
+
+Die Veröffentlichung dieses Programms erfolgt in der
+Hoffnung, daß es Ihnen von Nutzen sein wird, aber <em/OHNE JEDE
+GEWÄHRLEISTUNG/ - sogar ohne die implizite Gewährleistung
+der <em/MARKTREIFE/ oder der <em/EIGNUNG FÜR EINEN BESTIMMTEN
+ZWECK/.
+Details finden Sie in der GNU General Public License.
+
+
+<sect1>Wie funktioniert es? Programmmerkmale
+<p>
+Die Vorgehensweise ist bei tkmatrix folgende.
+<itemize>
+<item>Eine Matrix erzeugen und mit Werten füllen. 
+Dabei kann es sich um eine Bruch- oder Fließkommazahlen handel.
+Die Matrix kann auch mit einem normalen ASC Editor wie Emacs
+erstellt werden oder aus der Datei geladen werden.
+<item>Matrix für spätere Verwendung speichern
+<item>Auf der Matrix Algorithmus anwenden.
+Es ensteht eine Ergebnismatrix und ein Protokoll des Algorithmus
+<item>Ergebnismatrix als auch Protokoll können betrachtet,
+ausgedruckt und in verschiedenen Formaten gesichert werden
+<item>Neben Algorithmen existieren auch Operationen auf Matrizen
+(Addition, Substraktion, Multiplikation).
+Dazu braucht man zwei Matrizen des passenden Formats
+</itemize>
+Das Programm matrix ist ein Schellkommando, das auch als
+Filterkommando eigesetzt werden kann.
+Seine Fähigkeiten gleichen dem des Programm tkmatrix.
+Es kann aber keine Operationen auf Matrizen berechnen.
+Die Formate sind kompatibel.
+
+Das Programm kann die Matrizen aus einer ASCII Datei lesen (diese
+Datei muß mit irgend einem Editor (z.B. emacs) oder tkmatrix
+erstellt werden <ref id=matrixformat>.
+Das Programm liest und verarbeitet die Matrix. Die Ergebnisse
+können auf dem Bildschirm oder in eine Datei in verschiedenen
+Formaten ausgegeben werden. Dabei kann nicht nur das Ergebnis
+aber auch die kommentierte Zwischenschritte betrachtet werden.<p>
+Das Format der Ausgabe kann mit Hilfe von Formatdateien gesteuert
+werden
+<p>
+Ein Beispiel:
+<tscreen><code>
+matrix --algorithmus gauss --output matrix.html
+ --type html --protokoll gauss.mat
+</code></tscreen>
+Verkürzt:
+<tscreen><code>
+matrix -a 1 -o matrix.html -t html -p gauss.mat
+</code></tscreen>
+Dieses veranlast das Programm matrix die Datei <tt/gauss.mat/ zu
+lesen. Auf die dem Gauss-Algorithmus anwenden und mit
+Zwischenschritten in die Datei <tt/matrix.html/ als Html Datei zu
+speichern.
+
+<sect>Benutzung von tkmatrix
+<sect1>Erste Schritte, Grundfunktionen
+<p>
+Zuerst muß eine Matrix erzeugt werden.
+Das geschieht mit dem Menü Datei/Neu.
+Dabei muß das Format (Spalten- und Zeilenzahl) der Matrix und
+ihre Art in einem Dialogfenster eingegeben werden.
+<p>
+Naher wird die Matrix mit Werten gefüllt, editiert.
+Die Eingabe von Werten erfolgt im oberen linken Edietierfeld.
+Ähnlich wie beim Kalkulationsprogrammen.
+
+<p>
+<em/Vorsicht!/ Die Brüche werden mit einem Komma geschrieben. 
+<p>
+<f><fr><nu/1/<de/3/</fr></f> wird geschrieben als `1,3'<P>
+<f>1<fr><nu/1/<de/3/</fr></f> wird geschrieben als `1,3,1'<P>
+<p>
+Die Werten können kopiert und eingefügt werden.
+Um ein Matixbereich zu markieren benutzt man gedrückte SHIFT
+taste. (anders als bei Windows Version)
+Alle Editierfunktionnen sind in dem Menü Bearbeiten zugänglich.
+Das Programm unterstützt auch das Kopieren und Einfügen von Matrixteilen.
+<p>                              
+Es sind folgende Bearbeitungsarten möglich
+<itemize>
+<item>Größe der Matrix verändern
+<item>Aus einen markierten und kopierten Bereich neue Matrix erzeugen
+<item>Matrix duplizieren
+<item>Matrix aus einer Bruchzahlenmatrix in eine
+Fließkommazahlenmatrix umwandeln
+<item>Elementare Unformungen Durchführen. Die Editiermatrix wird nach der Operation sofort verändert. Die Operation wird auch protokoliert
+  <itemize>
+   <item>Spalten oder Zeilen mitanander tauschen
+   <item>Zeile oder Spale mit einem Faktor multiplizieren
+   <item>Zu einer Zeile oder Spalte das vielfache eines anderen hinzufügen
+   <item>Pivotieren
+   <item>Austauschschritt: Wie bei manchem Simplexalgorithusvarianten
+  </itemize>
+</itemize>
+
+
+<sect1>Leitmotiv
+<p>
+Es wird vorausgesetzt, daß alle Algorithmen Matrizen zu anderen
+Matrizen verarbeiten.
+Hierbei kann man zwei Fälle unterscheiden:
+<enum>
+<item>Matrix -&gt; Matrix_e        ; z.B. Gaussalgorithmus
+<item>Matrix1 + Matrix2 -&gt; Matrix_e    ;Operationen wie Matrix
+Addieren
+</enum>
+Matrix_e  wird weiter Ergebnismatrix genannt. Die Matrizen links
+von -&gt; Ausgangsmatrizen.
+<p>
+Fast jeder Algorithmus besteht aus einer Zahl der
+Zwischenschritten. 
+Die Aufzeichnung der Zwischenschritte wird das Protokoll genannt. 
+So entsteht im Programm eine logische Einheit Ausgangsmatrix,
+(eventuell Ausgang
+smatrix2), Protokoll, Ergebnissmatrix
+<p>
+Konkretisierung im Programm:
+<itemize>
+<item>Die Ausgangsmatrix kann erzeugt und ausgefüllt werden
+(Editieren). Sie kann gespeichert und wiedergeladen werden.
+<item>Ergebnissmatrix und Protokoll entstehen erst nach
+Aufwendung eines Algorithmus und können sowohl angesehen und
+gedruckt werden als auch für spätere Verarbeitung außer dem
+Programm als Textdateien gespeichert werden.
+<item>Das Protokoll ist eine Sequenz aus Matrizen und Sätzen
+(Kommentar).
+</itemize>
+<p>
+Zu Berechnungen:
+Alle Berechnungen werden auf Bruchzahlen (im Normallform) oder
+Gleitkommazahlendurchgeführt. Brüche werden automatisch gekürzt.
+<p>
+Aufbau des Programms, Strategie:
+<itemize>
+<item>Das Programm soll sich auf alle geläufige Standards (GUI-
+Grafische Benutzer Schnittstellen) halten.
+Es soll den "Text-Editor-Programmen oder
+Tabellenkalkulations-Programmen" im Aufbau ähnlich sein.
+<item>Multidokument. Ein Schlagwort, das bedeutet das mehrere
+Matrizen (Einheiten-Ausgangsmatrix, Protokoll, Ergebnissmatrix)
+in einem Programm (Instanz) verarbeiten  werden können. (Es
+gehört mittlerweile zum Standart). Sinnvollerweise gehört einem
+Fenster eine Matrix.
+-
+</itemize>
+
+<sect1>Menus
+<sect2>Datei
+<p>
+Befehlsgruppe, die Grundlegende Programmeigenschaften umfaßt.
+<itemize>
+<item>Neu: Eine neue Matrix wird definiert. Man muß die Zeilen-
+und Spaltenzahl angeb en.
+In Optionsfeld kann man zusätzlich angeben, ob es sich hier um
+eine Gleitkommazahl Matrix handelt oder als Standard Bruchzahlen
+Matrix.
+Die neue Matrix wird erst mit Nullwerten ausgefüllt.
+<item>Öffnen: Eine bereits existierende Matrix (Datei mit Endung
+.mat) kann geladen werden.
+<item>Speichern und Speicher unter: Die Ausgangsmatrix wird für
+spätere Auseinandersetzungen  aufgehoben.
+<item>Exportieren: Die Matrix kann als ascii, html oder latex
+Datei gespeicher werden.
+<item>Drucken: Die Matrix wird mit Benutzung von Latex Programm
+ausgedruckt
+<item>Druckvorschau: Der Ausdruck kann mit Hilfe von ghostview
+betrachtet werden.
+<item>Ergebnis Speicher: Die Ergebnismatrix wird als html, ascii
+,latex  Datei gespeichert
+<item>Protokoll Speichern: Das Protokoll wird als html, ascii
+,latex Datei gespeichert.
+<item>Beenden: Logo. Vorsicht es wird nicht ermittelt, ob die
+Matrizen gesichert wurden
+</itemize>
+<sect2>Bearbeiten
+<p>
+Befehlsgruppe, die sich vorwiegend mit dem Editieren des Matrix
+beschäftigt.
+Auch das Umschalten zwischen Eiditiermodus und elementare Unformungen-Modus
+<itemize>
+<item>Editieren: Checkbox für normale editieren
+<item>elem. Unformungen: Checkbox für elementare Unformungen-Modus.
+<item>Kopieren: Der markierte Bereich wird in ein Puffer kopiert.
+Es existieren zwei Puffer,  jeweils für Bruchzahlen und
+Gleitkomma Matrizen. 
+Ein Puffer beinhaltet immer eine Matrix oder ist leer.
+<item>Einfügen: Kopiert den Puffer auf den, durch den Cursor,
+markierten Bereich. 
+Es wird erstemal durch ein Dialogfenster abgefragt welche Ecke
+(links oben, rechts oben...) des zu kopierten Puffer der Cursor
+festlegt.
+<item>Größe Ändern: Ruft ein Dialogfenster Größe Ändern
+<item>Markieren: Unterteilt auf Spalte, Zeile, Alles. Hilft einen
+bestimmten Bereich zu markieren.
+</itemize>
+Die weiteren Befehle erzeugen eine neue Matrix, die man getrennt
+bearbeiten kann.
+<itemize>
+<item>Ergebnis Öffnen: Ergebnis Matrix aus dem letzten
+Algorithmus wird separat geöffnet. (wird selbst zu
+Ausgangsmatrix)
+<item>Puffer Öffnen: Die Matrix in Puffer wird zum Editieren
+geöffnet.
+<item>Dupplizieren: Es wird noch mal die gleiche Matrix geöffnet.
+<item>Öffnen als Gleitkomma: Die Matrix (nur Bruchzahl) wird als
+Gleitkomma Matrix geöffnet.
+</itemize>
+
+<sect2>Menü Ansicht
+<p>
+Man kann Ausgangsmatrix, Ergebnissmatrix oder das Protokoll
+betrachten Das Programm öffnet normalerweise  nach der Ausführung
+eines Algorithmus automatisch die Ergebnis- und
+Protokollfenstern.
+<p>
+Anmerkung: Die Fenstern Ergebnis und Protokoll kann man nur nach
+der Ausführung eines Algorithmus betrachten.
+
+
+<sect1>Drucken und Druckvorschau
+<p>
+Für das Drucken wird das System Latex benutzt. 
+Dabei wird jede Matrix in Latex umgewandelt und in temporären
+Verzeichnis /tmp zu dvi Datei umgewandelt. 
+Nacher wird mit hilfe des Programm dvips und lpr eine
+Druckerausgabe erzeugt.
+Das Setzungssystem Latex und gut instaliertes und konfiguriertes
+Druckdämon lpd sind für den Ausdruck der Matrizen notwendig.
+<p>
+Der Druckvorschau wird mit dem Programm ghostview realisiert
+(Aufruf gv)
+<p>
+Für richtige Anpassung bitte die Dateien <tt/print.tcl/ anpassen
+<sect1>Besondere Hinweise Performance
+<p>
+tkmatrix brauch ziemlich viel XWindows Resourcen.
+Besonders das Protokoll benötigt eine Unmenge von Widgets
+(Graphischen Elementen).
+Ein Protokoll des Optiemierungsalgorithmus braucht ungefähr 2000
+Widgets.
+Das kann den gesamten XWindows System so belasten, daß eine
+produktive Arbeit nicht möglich ist oder sekundenlange Pausen
+entstehen.
+<p>
+<em/LÖSUNG/ Schalten sie in Einstellungen-Dialog, die Option
+&quot;nach einem Algorithmus&quot; Protokollfenster öffnen und
+Betrachten sie das Protokoll mit Hilfe von ghostview (menu
+Ansicht / Protokoll Druckvorschau).
+Ein Druckvorschau braucht zunächst Konvertierung zu PostScript
+mit Hilfe von Latex und dvips. Das kann ein paar Sekunden dauern. 
+
+<sect>matrix als Shellkommando
+<sect1>Erzeugung der Matrix Datei
+<p>
+<label id="matrixformat">
+Diese Datei hat formell den Aufbau.
+Sie kann auch mit dem Programm tkmatrix erzeugt werden. (in BNF
+ungefähr)
+<tscreen><code>
+Matrixdatei = ["FLOAT"] zeilenzahl spaltenzahl {zahl}
+zeilenzahl,spaltenzahl=integer
+zahl=Bruch|Floatzahl
+Bruch=integer | (integer separator integer separator integer) | 
+(integer separator integer)
+separator= ","|"/"
+Floatzahl=C double   
+</code></tscreen>
+Kontext:<p>
+Anzahl von Zahl = zeilenzahl * spaltenzahl<p>
+wenn FLOAT dann keine Brüche und umgekehrt<p>
+integer = -2147483648...-2147483647  double int<p>
+Ein Beispiel für eine 3x4 Bruch Matrix
+<tscreen><code>
+3 4
+1,2 1 3 4
+1 -1 -1,2,3 4
+8 0 -2,3 4,3  
+</code></tscreen>
+Was eine  <f> 3&times; 4 </f>  Matrix bedeutet (3-Zeilenzahl
+4-Spaltenzahl)
+<dm><ar CA=cccc>
+<fr><nu/1/<de/2/</fr>| 1| 3| 4@
+1| -1| -1<fr><nu/2/<de/3/</fr>| 4@
+8| 0| -<fr><nu/2/<de/3/</fr>| <fr><nu/4/<de/3/</fr>  
+</ar></dm>
+Zum Bruch Schreibweise  <f><fr><nu/1/<de/3/</fr></f> wird
+geschrieben als `1,3'<P>
+<f>1<fr><nu/1/<de/3/</fr></f> wird geschrieben als `1,3,1'<P>
+Gleitkommazahlen werden wie üblich mit Punkt (auch mit Exponenten
+Teil) geschrieben (z.B 1.234e-12)
+<sect1>Was ist Protokoll ?<label id="PROTOKOLL">
+<p>
+Die meisten interessiert nicht das Ergebnis aber der Weg wie es
+zu ihm kommt. Dazu dient Protokoll, er beinhaltet alle
+Zwischenschritte vom Ausgangsmatrix zum Ergebnis mit zugehörigen
+Kommentar. <em>Protokollierung schaltet man ein mit Option
+<tt/--protokoll/ oder <tt/-p/</em>
+<p>
+Eigentlich bedeutet das Begriff Protokoll in Informatik eine
+Menge von Regeln die zum Informationsaustausch zwischen zwei
+Kommunikationspartner dienen. z.B. IP,TCP,HTTP Protokoll. Ich
+benutze dem Begriff in seiner eher ursprünglicher Bedeutung.
+<p>
+<bf/(Nach Duden)/ <it/Protokoll: wortgetreue auf die wesentliche
+Punkte beschränkte schriftliche Fixierung des Hergangs einer
+Sitzung Verhandlung, eines Verhörs/
+<p>
+<em/Sorry/ für Begriffsunstimmigkeiten, aber es ist eben ein
+Merkmal der weichen Sprachen
+<sect1>Arbeitsweisen
+<sect2>Behelszeile
+<p>
+<bf/matrix/ <tt/-a Algorithmus  {Matrixdatei(en)} | -s &lsqb;-o
+Outputdatei&rsqb; &lsqb;-t Outputtyp&rsqb; &lsqb;-v
+Vorlagenpfad&rsqb;  &lsqb;-e Ergebnismatrix&rsqb; &lsqb;-s&rsqb;
+&lsqb;-p&rsqb; &lsqb;-k&rsqb; &lsqb;-b&rsqb;/
+<p>
+Algorithmus= ("none" | "gauss" | "jordan" | "loesung" | "kern" |
+"bild" | "inverse" | "determinante" | ("pivotiere" spalte zeile)
+| "naehrung" | "eckenfindung" | "simplex") | nummer
+<p>oder ein Nummer z.B. 1 für gauss
+<p>Outputtyp="ascii" | "html" | "latex"
+<p>Lange Optionsnammen
+<itemize>
+<item>-a, --algorithmus: muß definiert werden
+<item>-o, --output: wie matrix >Outputdatei
+<item>-t, --typeoutput : Type des Ausgabe z.B. {ascii,html,latex}
+<item>-v, --vorlagen: Pfad mit Vorlagen Dateien (*.mform) sonst
+gesucht da wo das Programm
+<item>-s, --stdin: Matrix wird aus Standarteingabe gelesen
+<item>-k, --konvert: Brüche werden zu Gleitkommazahlen
+umgewandelt
+<item>-b, --bruch: Brüche werden ohne den Ganzzahl geschrieben
+<item>-p, --protokoll: Alle Zwischenschritte ausgeben
+<item>-e, --ergebnis: Ergebnis als Datei Speichern
+<item>-h, --help: Dieses Text
+</itemize>
+<p>
+Gibt es mehrere mtrixdateien werden sie nacheinander bearbeitet.
+Outputs gehen nur in eine Datei oder ein Strom (stream). Bei
+Option -e wird das Ergebnis von letzten matrixdatei gespeichert.
+<p>
+<sect2>Interaktiv
+<p>
+Wird Matrix ohne Parameter gestartet meldet es sich mit einem
+Menüauswahl interaktiv. Ich bin nicht besonders stolz auf diesen
+Modus. Man sollte lieber Shell benutzen es ist schneller und
+einfacher.<p>
+Die Menüs sind eigentlich selbsterklärend man muß nur die
+richtige Nummer eintippen.<p>
+Nicht alle Möglichkeiten des Programm sind in interaktiven Modus
+erreichbar.
+<sect1>Formatdateien
+<p>
+Formatdateien haben den Aufbau object.typ."mform"
+<p>object={ "main" | "string" | "matrix" | "eqnarray" |
+"solution" | "determinante" | "simplex" }
+<p> Objectdateien für <tt/main,string und matrix/ müssen für
+jedes Typ vorhanden sein.
+<p>typ = { "ascii" | "html" | "latex" }
+<p>Die Erzeugung den neuen  Formatdateinen sollen auf Hand von
+bereits vorhandenen genommen werden. In Quellcode Datei
+<tt/protformat.h/ ist der Aufbau der Datein als Kommetar genau
+beschrieben.
+<p>Ein paar Besonderheiten
+<itemize>
+<item>Es gibt keine Kommentarzeilen
+<item>Formatdatei besteht aus Felder dessen Name mit % Anfängt.
+Die Felder müssen in festen Reihenfolge und alle für bestimmtes
+Objekt vorkommen
+<item>Für jedes Feld soll eine Zeichenkette zu definieren sein
+<item>Eine Zeile beginnt entweder von <tt/%Feldname/ oder die
+Zeile wird zum Zeichenkette des letztes Feldes hinzugefügt.
+<item>Die Zeichenkette gilt nach ersten Zeichen nach 
+<tt/%Feldname/. In dieser Zeile wird zu Zeichenkette kein
+<tt/newline/ hinzugefügt.
+<item>In Zeilen ohne <tt/%Feldname/ wird ein <tt/newline/
+hinzugefügt es sei denn die Zeile endet mit \
+<item>Erstes Zeichen in Zeile ohne <tt/%Feldname/ wird ignoriert.
+Ich habe immer '-' geschrieben
+</itemize>
+Das Format ist zugegeben ziemlich seltsam aber man kann alles
+damit erreichen. (Und es war leicht zu programmieren :-) )
+
+<sect>Beschreibung der Algorithmen; Mathe Definitionen
+<p>
+Eine bessere Beschreibung der Mathematik in tkmatrix befindet
+sich als PDF oder PS Datei <em/mathe1.ps/ mit in der Distribution
+des Programms.
+Html Vesion hat keinen guten Zeichensatz (Es is eben nicht
+möglich in html) und hat ein paar Fehler, die in der Latex Vesion
+korrigiert wurden.
+<p>
+Das ist eine Zusammenfassung meiner Vorlesungsunterlagen aus
+Mathe I. Es werden alle Algorithmen grob beschreiben, ohne
+jegliche Beweise. Es geht vor allem darum zu beschreiben wie die
+Algorithmen funktionieren und welche mathematische Probleme man
+mit ihnen lösen kann. Diese Beschreibung kann aber ein gutes
+Skript oder ein Mathebuch nicht ersetzen. Die Reihenfolge
+entspricht eher der Gliederung der Algorithmen als der beim
+wirklichen Vorlesung.
+<sect1>Eine Matrix
+<p>
+<bf/Def:/
+<label id="MATRIX">Def.:
+eine m&times; n <em/Matrix/ (m mal n): m-Zeilenzahl;
+n-Spaltenzahl
+<dm><ar CA="ccccc">
+a<inf/11/ | a<inf/12/ |a<inf/13/ |&hellip; |a<inf/1n/ @
+a<inf/21/|a<inf/22/|a<inf/23/|&hellip; |a<inf/2n/@
+:|:|:|:|:@
+a<inf/m1/|a<inf/m2/|a<inf/m2/|&hellip; |a<inf/mn/
+</ar></dm>
+
+Alle Matrizen werden hier ohne Klammer geschrieben. Auch Vektoren
+werden in der html Version ohne den gewöhnten Pfeil geschrieben.
+(also "a" kann auch bedeuten "a-Vektor"). Es soll es den Kontext
+ersichtlich sein um welche Bedeutung es sich gerade handelt.
+<sect1>Grundliegende Algorithmen
+<sect2>Treppenform <label id="TREPPENFORM">
+<p>
+<bf/Def.:/ <f> c=c<inf/ij/ </f> ist in Treppenform, falls c die
+Nullmatrix ist, oder es eine Folge
+<dm>
+1&lt;= j<inf/1/ < j<inf/2/ <  &hellip; < j<inf/r/ &lt;= l
+</dm>  
+von r Sprungstellen gibt mit
+
+<enum>
+<item>unterhalb der r Zeile stehen nur Nullen
+<item>An dem Sprungstellen stehen Elemente <f>c<inf/ij/ &lt;&gt;
+0</f>
+<item>Links von dem Sprungstellen stehen nur Nullen
+</enum>
+<it/Anzahl der Sprungstellen nennt man auch Rang der Matrix/
+
+<sect2>Treppennormallform<label id="TREPPENNORMALFORM">
+<p>
+<bf/Def.:/ Eine Matrix ist in Treppennormalform
+<f>c=(c<inf/ij/)</f> wenn sie in Treppenform ist und wenn
+zusätzlich
+<enum>
+<item>Alle Sprungstellen <f>c<inf/ij/=1</f>
+<item>In jeder Sprungstellen Spalte sind alle Elemente bis auf
+das Sprungstellen Element gleich Null
+</enum>
+<em/Treppennormalform ist eindeutig /
+
+<sect1>Gauss Algorithmus<label id="GAUSS">
+<p>
+Benutzt um Lösung <ref id="LOESUNG"> des linearen Gleichungsystem
+<ref id="LGS">zu finden.
+k-Spaltenzahl. Bringt die Matrix auf Treppenform <ref
+id="TREPPENFORM">
+<enum>
+<item>Suche die erste Spalte Matrix c, die nicht nur Nullen
+erhält. Dies ist die j1-Spalte. Darin sei das Element
+<f>c<inf/ij1/&lt;&gt; 0</f> Dann vertausche die i-te Zeile mit
+der ersten Zeile.
+<item>Für i=2,&hellip; .,k addiere der i-ten Zeilen das
+<f><fr><nu>-c<inf/ij1/</nu><de>c<inf/1j1/</de></fr></f> fache der
+1. Zeile.
+<item>Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man
+aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen
+abschneidet.
+</enum>
+<tt/Bemerkung:/ <f>c<inf/ij1/</f> bedeutet: i.te Zeile j.te
+Spalte 1. Algorithmus Durchgang
+<p>
+Es gibt viele Möglichkeiten eine Matrix auf Treppenform zu
+bringen (Treppenform ist nicht eindeutig). Man kann, um sich die
+Rechnungen zu erleichtern, auch Zeilen wechseln oder Zeilen mit
+verschiedene Faktoren multiplizieren. Für den Rechner ist das
+aber keine Erleichterung. Der Algorithmus in dieser Form ändern
+nicht die Determinante <ref id="DETERMINANTE"> von Matrix.
+
+<sect1>Gauss-Jordan Algorithmus<label id="JORDAN">
+<p>
+Benutzt um Lösung <ref id="LOESUNG"> des linearen
+Gleichungsystem<ref id="LGS">zu finden.
+Weiterentwicklung von Gauss Algorithmus <ref id="GAUSS">. Bringt
+die Matrix auf Treppennormallform <ref id="TREPPENNORMALFORM">.
+k-Spaltenzahl
+<enum>
+<item>Suche die erste Spalte Matrix c, die nicht nur Nullen
+erhält. Dies ist die j1-Spalte. Darin sei das Element
+<f>c<inf/ij/1&lt;&gt; 0</f> Dann vertausche die i-te Zeile mit
+der ersten Zeile. Dann dividiere die Zeile durch
+<f>c<inf/ij1/</f>
+<item>Für i=2,&hellip; .,k addiere der i-ten Zeilen das
+<f>-c<inf/ij1/</f> fache der 1. Zeile. Mache alle Einträge
+unterhalb <f>c<inf/ij1/</f> zu Nullen.
+<item>Für alle Zeilen d=1,&hellip; ,i bilde
+<f>1.Zeile=1.Zeile-c<inf/dj1/*(i-te Zeile)</f>. Mache alle
+Einträge oberhalb <f>c<inf/ij1/</f> zu Nullen.
+<item>Wende Schritt 1 und 2 auf Matrix c2, das entsteht wenn man
+aus Matrix c nur die Zeile 2 bis k nimmt und j ersten Stellen
+abschneidet.
+</enum>
+<bf/Bemerkung:/ Gauss und Gauss-Jordan-Algorithmus unterscheiden
+sich im 1. Punkt. Beim GaussJordan wird die Zeile durch
+Sprungstelleneintrag dieser Zeile geteilt. Dadurch erreicht man,
+daß Sprungstelleneintrag auf 1 skaliert wird. Das "vereinfacht"
+die Rechnung im Schritt 2.
+
+<sect1>Lineare Gleichungssysteme<label id="LGS">
+<sect2>Definition
+<p>
+
+<bf/Def.:/ Ein lineares Gleichungssystem mit n Gleichungen hat
+die Form
+<dm><ar CA="rcl">
+a<inf/11/*x<inf/1/ + a<inf/12/*x<inf/2/ + a<inf/13/*x<inf/3/ +
+&hellip; + a<inf/1n/*x<inf/n/ |=| b<inf/1/@
+a<inf/21/*x<inf/1/ + a<inf/22/*x<inf/2/ + a<inf/23/*x<inf/3/ +
+&hellip; + a<inf/2n/*x<inf/n/ |=| b<inf/2/@
+a<inf/31/*x<inf/1/ + a<inf/32/*x<inf/2/ + a<inf/33/*x<inf/3/ +
+&hellip; + a<inf/3n/*x<inf/n/ |=| b<inf/3/@
+: |=|:@
+a<inf/n1/*x<inf/1/ + a<inf/n2/*x<inf/2/ + a<inf/n3/*x<inf/3/ +
+&hellip; + a<inf/nn/*x<inf/n/ |=| b<inf/n/
+</ar></dm>
+<f>a<inf/ij/</f> sind die Koeffizienten
+wenn <f>b<inf/i/&gt;= 0</f> dann ist das ein homogenes
+Gleichungssystem, andernfalls inhomogenes
+<p>
+2.Die Matrix der Form
+<dm><ar CA="ccccc"> 
+a<inf/11/|a<inf/12/|&hellip; |a<inf/1n/|b<inf/1/@
+a<inf/21/|a<inf/22/|&hellip; |a<inf/2n/|b<inf/2/@
+:|:|:|:@
+a<inf/n1/|a<inf/n2/|a<inf/n3/|a<inf/nn/|bn
+</ar></dm>
+heißt erweiterte Koeffizientenmatrix (ohne b<f><inf/i/</f>
+einfach Koeffizientenmatrix)
+
+Man kann mit Hilfe der elementaren Umformungen (sie ändern nicht
+die Lösungsmenge) die Matrix in die Form bringen, in dem die
+Lösung des Gleichungssystem ersichtlich (leicht zu berechnen)
+ist. Gauss und Gauss-Jordan Algorithmus benutzen nur solche
+Umformungen. Zu solchen Umformungen gehören:
+<itemize>
+<item>Vertauschen zwei Zeilen
+<item>Multiplikation einer Zeile mit Zahl  <f> &lt;&gt; 0 </f> 
+<item>Addition eines Vielfachen einer Zeile zu einer anderen
+Zeile
+</itemize>
+
+
+<sect2>Lösungstypen von linearen Gleichungsystemen (LGS)<label
+id="LOESUNG">
+<p>
+Es gibt drei möglichen Lösungstypen von Linearen
+Gleichungssystemen (LGS)
+<enum>
+<item>LGS hat keine Lösung, dann Ergebnissmatrix ist leer.
+<item>LGS hat eine Lösung, wenn Ausgangsmatrix m&times; n dann
+Ergebnissmatrix (n-1)*1
+<dm><ar CA="c">
+     x<inf/1/@
+     x<inf/2/@
+     :@
+     x<inf/n-1/
+</ar></dm>
+<item>LGS hat mehrere Lösungen dann ist das Ergebnissmatrix
+(<tt/Bezogen auf Programm Matrix /) (n*k k&lt; n) zusammengesetzt
+aus mehreren Spaltenvektoren, wobei das erste eine Lösung des LGS
+ist und die anderen die Basis des linearen Unterraums für das
+Lösung des zugehörigen homogenen Gleichungssystems. Jede mögliche
+Lösung des LGS kann man erreichen aus
+<dm><v/x/=<v/a/+<v/u/<inf/1/*b<inf/1/+&hellip;
++<v/u/<inf/k-1/*b<inf/k-1/ </dm>
+<itemize>
+<item> <f> <v/x/ </f>  : Vektor für alle Lösungen
+<item> <f> <v/a/ </f>  : Erstes Spaltenvektor des Ergebnissmatrix
+(Eine Lösung)
+<item> <f> <v/u/<inf/i/ </f>  : Weiter Spaltenvektoren
+<item> <f> b<inf/i/ </f>  : Freie Variablen
+</itemize>
+</enum>
+
+<sect2>Lösung von LGS
+<p>
+Algorithmus:
+<enum> 
+<item>Bringe die erweiterte Koeffizientenmatrix auf Treppennormal
+Form mit Hilfe des Gauss-Jordan Algorithmus.
+<item>Falls die Letzte Spalte eine Sprungsstelle ist dann keine
+Lösung. Ende.
+<item>Es gibt nur Sprungstellen außer letzten Spalte dann ist die
+letzte Spalte die einzige Lösung des LGS. Ende.
+<item>Es gibt mehrere Lösungen.
+<item>Eine Lösung erhält man indem man für alle x für
+nicht-Sprungstellen Variablen Null einsetzt und für anderen
+nacheinander die Einträge der letzten Spalte 
+<item>Finde die Lösung eines homogenen Gleichungssystems. Es gibt
+frei wählbare Variablen (Parameter) nämlich, die an dem
+Nichsprugstellen. Setzt man nacheinander eine dieser frei
+wählbaren Variablen gleich 1 und die anderen frei wählbaren
+Variablen gleich 0 und löst auf, so erhält man eine Basis des
+Lösungsraumes. 
+</enum>
+<bf/Bsp./ (für Schritte 4-6)
+<dm><ar CA="cccccc">
+1|5|0|0|0|2@
+0|0|1|2|0|4@
+0|0|0|0|1|5
+</ar></dm>
+Eine Lösung
+<dm> 
+x<inf/1/=2     
+x<inf/2/=0     
+x<inf/3/=4     
+x<inf/4/=0     
+x<inf/5/=5
+</dm>
+als Vektor 
+<dm><ar CA="c">     
+2@
+0@
+4@
+0@
+5
+</ar></dm>
+Suche Basis des Lösung des homogenen Gleichungssystem (Schritt 6)
+<dm><ar CA="cccccc">
+1|5|0|0|0|0@
+0|0|1|2|0|0@
+0|0|0|0|1|0
+</ar></dm>
+Setzt man für <f>x<inf/2/=1</f> und <f>x<inf/4/=0</f> erhält man
+<dm><ar CA="rcl">
+1*x<inf/1/ + 5*1 + 0*x<inf/3/ + 0*x<inf/3/ + 0*x<inf/4/| =| 0@
+0*x<inf/1/ + 0*x<inf/2/ + 1*x<inf/3/ + 2*0 + 0*x<inf/4/ |=| 0@
+0*x<inf/1/ + 0*x<inf/2/ + 0*x<inf/3/ + 0*x<inf/3/ + 0*x<inf/4/|
+=| 0
+</ar></dm>
+also <dm>x<inf/1/+5=0</dm> 
+Ein Vektor der Basis
+<dm><ar CA="c">
+     -5@
+     0@
+     0@
+     0@
+     0
+</ar></dm>
+Den zweiten Vektor erhält man wenn man x<f><inf/2/</f>=0 und
+x<f><inf/4/</f>=1 einsetzt 
+also <dm>x<inf/2/+2=0</dm>
+<dm><ar CA="c">     
+0@
+-2@
+0@
+0@
+0
+</ar></dm>
+Die dazugehörige Ergebnissmatrix wäre
+<dm><ar CA="ccc">
+2|-5|0@
+0|0|-2@
+4|0|0@
+0|0|0@
+5|0|0
+</ar></dm>
+was bedeutet
+<dm><ar CA="rcl">
+     x<inf/1/|=|2-5*a@
+     x<inf/2/|=|-2*b@
+     x<inf/3/|=|4@
+     x<inf/4/|=|0@
+     x<inf/5/|=|5
+</ar></dm>
+wobei a,b frei wählbar
+
+<sect1>Lineare Abbildungen und Matrizen<label id="ABBILDUNGEN">
+<p>
+Sei A eine  <f> m&times; n </f>  Matrix, sei definiert die
+Abbildung  <f> &phis;  </f> 
+<dm>
+K<sup/n/ &rarr; K<sup/m/
+</dm>
+ <f> K<sup/n/ </f> - lineares Unterraum von Dimension n
+<dm>
+     x &rarr A*x = &phis; A(x)
+</dm>
+<dm>
+<v/x/=ein Vektor (n&times; 1)
+</dm>
+<dm>
+     <v/x/=<ar CA="c">x<inf/1/@x<inf/2/@:@x<inf/n/</ar>
+</dm>
+Die Abbildung  <f> &phis;  </f>  ist linear <ref id="LINEAR">
+
+<bf/Def.:/ Die Menge <f>{ &phis; A(x) &verbar; x Element K<sup/n/
+}</f> heißt Bild von  <f> &phis;  </f>  A. Sie ist Teilmenge von 
+<f> K<sup/n/ </f>  und ein linearer Unterraum von  <f> K<sup/n/
+</f> .
+<p>Das Finden von Bild von A <ref id="BILD">
+
+<bf/Def.:/ Die Menge <f>{ x Element K<sup/n/ &verbar; &phis;
+A(x)=0 }</f> heißt Kern von  <f> &phis;  </f>  A. Sie ist
+Teilmenge von  <f> K<sup/n/ </f>  und ein linearer Unterraum von 
+<f> K<sup/n/ </f> . 
+<p>Das Finden von Kern von A <ref id="KERN">
+
+Satz: Sei 
+<dm>
+&phis; A K<sup/n/ &rarr; K<sup/m/ (A eine m&times; n Matrix)
+</dm>
+(A eine m&times; n Matrix)
+<p>Dann gilt:  <f> dim Kern &phis; A  + dim Bild &phis; A = n
+</f> 
+
+
+
+<sect1>Errechnen von Bild von Matrix<label id="BILD">
+<p>
+
+
+Man muß die Basis des auf den Spalten Vektoren aufgespannten
+linearen Unterraums finden. Am einfachsten geht man vor, wenn man
+die Matrix auf Treppenform<ref id="LGS">bringt und alle
+Spaltenvektoren aus Ursprungsmatrix zur Lösung nimmt, die
+Sprungstellen haben.
+z.B.
+<dm><ar CA="ccc">
+0|1|2@
+1|2|3@
+0|1|2@
+2|3|4@
+0|1|2
+</ar></dm>
+Nach Anwendung von Gauss-Jordan Algorithmus
+<dm><ar CA="ccc">
+1|0|1@
+0|1|2@
+0|0|0@
+0|0|0@
+0|0|0
+</ar></dm>
+Sprungstellen beim 1. und 2.Spalte kommen zur Lösung
+<dm><ar CA="cc">
+0|1@
+1|2@
+0|1@
+2|3@
+0|1
+</ar></dm>
+Die beiden Vektoren sind linear unabhängig und sind eine Basis
+des Bildes des Matrix
+
+
+<sect1>Errechnen von Kern von Matrix<label id="KERN">
+<p>
+
+
+Kern  <f> &phis; A </f>  ist die Lösung der Abbildung  <f> &phis;
+A(x)=0 </f> <p>
+Der Nullvektor gehört immer zur Lösung
+also z.B. der Kern von
+<dm><ar CA="ccc">
+1|2|3@
+2|1|0@
+2|4|6
+</ar></dm>
+ist die Lösungsmenge von LGS <ref id="LGS">
+<dm><ar CA="rcl">
+     x<inf/1/+2*x<inf/2/+3*x<inf/3/|=|0@
+     2*x<inf/1/+1*x<inf/2/|=|0@
+     2*x<inf/1/+4*x<inf/2/+6*x<inf/3/|=|0
+</ar></dm>
+Hier in Programm wird zum Matrix eine Nullspalte addiert und
+durch GaussJordan <ref id="JORDAN">Algorithmus die Lösungsmenge
+<ref id="LOESUNG">ausgerechnet. Weil Kern ein lineares Unterraum
+ist, wird die eine spezielle Lösung (immer Nullvektor)
+abgeschnitten. Die übrigen Vektoren (wenn vorhanden) bilden die
+Basis des gesuchten Kerns.
+Hier:
+<dm><ar CA="cccc">
+1|2|3|0@
+2|1|0|0@
+2|4|6|0
+</ar></dm>
+nach Gauss-Jordan
+<dm><ar CA="cccc">
+     1|0|<fr><nu/1/<de/3/</fr>|0@
+     0|1|1<fr><nu/1/<de/3/</fr>|0@
+     0|0|0|0
+</ar></dm>
+eine Lösung ist Nullvektor; Kern ist
+<dm><ar CA="c">
+     -<fr><nu/1/<de/3/</fr>@
+     -1<fr><nu/1/<de/3</fr>@
+     0
+</ar></dm>
+der Kern ist nicht eindeutig (Es gibt viele unterschiedliche
+Kerne von einer Matrix)
+<sect1>Lösung von (LGS) und lineare Abbildungen<label
+id="LABLOESUNG">
+<p>
+
+Ein LGS kann man als lineare Abbildung betrachten
+<dm><ar CA="rcl">
+a<inf/11/*x<inf/1/ + a<inf/12/*x<inf/2/ + a<inf/13/*x<inf/3/ +
+&hellip; + a<inf/1n/*x<inf/n/ |=| b<inf/1/@
+a<inf/21/*x<inf/1/ + a<inf/22/*x<inf/2/ + a<inf/23/*x<inf/3/ +
+&hellip; + a<inf/2n/*x<inf/n/ |=| b<inf/2/@
+a<inf/31/*x<inf/1/ + a<inf/32/*x<inf/2/ + a<inf/33/*x<inf/3/ +
+&hellip; + a<inf/3n/*x<inf/n/ |=| b<inf/3/@
+:|=|:@
+a<inf/n1/*x<inf/1/ + a<inf/n2/*x<inf/2/ + a<inf/n3/*x<inf/3/ +
+&hellip; + a<inf/nn/*x<inf/n/ |=| b<inf/n/
+</ar>
+</dm>
+als  <f> A*<v/x/=<v/b/ </f> 
+wo A die Koeffizienten Matrix <ref id="LGS">
+<p>betrachte A:     <f>&phis; A(x)=A*x : K<sup/n/ &rarr;
+K<sup/m/</f> dann  <f> &phis; A(x) = b </f> 
+<p>
+Dann gilt:
+<itemize>
+<item> LGS ist genau dann lösbar, wenn b in Bild <ref id="BILD">
+von  <f> &phis; A(x) </f> 
+<item> Lösungsmenge=spezielle Lösung+Kern <ref id="KERN"> <f>
+&phis; A(x) </f>  
+</itemize>
+
+<sect1>Weitere Operationen auf Matrizen
+<sect2>Matrix-Multiplikation<label id="MULTIPLIKATION">
+<p>
+
+
+Sei  A eine m&times; n Matrix<p>
+sei  B eine n*t Matrix<p>
+<dm>A=<ar CA=ccc>
+a<inf/11/|&hellip; |a<inf/1n/@
+:|:|:@
+a<inf/m1/|&hellip; |a<inf/mn/
+</ar>B=<ar CA=ccc>
+b<inf/11/|&hellip; |b<inf/1t/@
+:|:|:@
+b<inf/n1/|&hellip; |a<inf/nt/
+</ar></dm>
+Dann ist C=A*B eine  <f> m&times; t </f>  Matrix mit
+<dm>C=<ar CA=ccc>
+c<inf/11/|&hellip; |c<inf/1t/@
+:|:|:@
+c<inf/m1/|&hellip; |c<inf/mt/
+</ar></dm>
+<f>c<inf/ij/</f>- i_te Zeile von A; j_te Spalte von B
+<dm>c<inf/ij/=a<inf/i1/*b<inf/1j/+a<inf/i2/*b<inf/2j/+a<inf/i3/*b
+<inf/3j/+&hellip; +a<inf/in/b<inf/nj/
+</dm>
+<sect2>Matrix-Addition<label id="ADDITION">
+<p>
+
+
+Sei  A eine m&times; n Matrix
+sei  B eine m&times; n Matrix
+<dm>A=<ar CA=ccc>
+a<inf/11/|&hellip; |a<inf/1n/@
+:|:|:@
+a<inf/m1/|&hellip; |a<inf/mn/
+</ar>B=<ar CA=ccc>
+b<inf/11/|&hellip; |b<inf/1n/@
+:|:|:@
+b<inf/m1/|&hellip; |a<inf/mn/
+</ar></dm>
+Dann ist C=A+B eine  <f> m&times; n </f>  Matrix mit
+<dm>C=<ar CA=ccc>
+c<inf/11/|&hellip; |c<inf/1n/@
+:|:|:@
+c<inf/m1/|&hellip; |c<inf/mn/
+</ar></dm>
+<f>c<inf/ij/</f>- i_te Zeile von A,B; j_te Spalte von A,B
+<dm>c<inf/ij/=a<inf/ij/+b<inf/ij/</dm>
+
+<sect2>Matrixsubstraktion<label id="SUBSTRAKTION">
+<p>
+
+
+Sei  A eine m&times; n Matrix
+sei  B eine m&times; n Matrix
+<dm>A=<ar CA=ccc>
+a<inf/11/|&hellip; |a<inf/1n/@
+:|:|:@
+a<inf/m1/|&hellip; |a<inf/mn/
+</ar>B=<ar CA=ccc>
+b<inf/11/|&hellip; |b<inf/1n/@
+:|:|:@
+b<inf/m1/|&hellip; |a<inf/mn/
+</ar></dm>
+Dann ist C=A-B eine  <f> m&times; n </f>  Matrix mit
+<dm>C=<ar CA=ccc>
+c<inf/11/|&hellip; |c<inf/1n/@
+:|:|:@
+c<inf/m1/|&hellip; |c<inf/mn/
+</ar></dm>
+<f>c<inf/ij/</f>- i_te Zeile von A,B; j_te Spalte von A,B
+<dm>c<inf/ij/=a<inf/ij/-b<inf/ij/</dm>
+
+<sect1>linearer Unterraum<label id="LINEAR">
+<p>
+<bf/Def.:/ linearer Unterrau
+
+Eine Teilmenge U von  <f> K<sup/n/ </f>  heißt linearer Unterraum
+wenn gilt,
+<itemize>
+<item> für alle a Element von  K und u Element von U gilt a*u ist
+ein Element in U
+<item> für alle u1 und u2 Element von U, u1+u2 ist wieder in U
+</itemize>
+<sect1>Inverse der Matrix<label id="INVERSE">
+<p>
+
+
+Es gibt nur eine Inverse von  <f> n&times; n </f>  Matrizen
+A-1 ist Eine Inverse von A wenn gilt  <f> A-1 * A=I<inf/n/ </f> 
+wobei In ist eine Einheitsmatrix wie folgt
+<dm>
+I<inf/n/=
+<ar CA="cccc"> 
+1|0|0|0@
+0|1|0|0@
+0|0|1|0@
+0|0|0|1
+</ar>
+</dm>
+für n=4
+<p> <f> I<inf/n/ </f>  ist ein neutrales Element bezüglich
+Multiplikation <ref id="MULTIPLIKATION">
+Matrix A heißt dann inventierbar
+Man findet eine Inverse, indem man zur gegebenen Matrix eine
+Einheitsmatrix dazu fügt und anschließend mit Gauss-Jordan <ref
+id="JORDAN"> behandelt z.B
+zur Matrix
+<dm><ar CA="ccc">
+     5|10|20@
+     1|1|1@
+     12|12|20
+</ar>
+</dm>
+eine Einheitsmatrix zufügt
+<dm>
+<ar CA="cccccc">
+     5|10|20|1|0|0@
+     1|1|1|0|1|0@
+     12|12|20|0|0|1</ar>
+</dm>
+nach Gauss-Jordan
+<dm><ar CA="cccccc">
+     1|0|0|-<fr><nu/1/<de/5/</fr>|-1|<fr><nu/1/<de/4/</fr>@
+     
+0|1|0|<fr><nu/1/<de/5/</fr>|<fr><nu/7/<de/2/</fr>|-<fr><nu/3/<de/
+8/</fr>@
+     0|0|1|0|-<fr><nu/3/<de/2/</fr>|<fr><nu/1/<de/8/</fr></ar>
+</dm>
+Die Inverse ist dann
+<dm>
+<ar CA="ccc">
+     -<fr><nu/1/<de/5/</fr>|-1|<fr><nu/1/<de/4/</fr>@
+     
+<fr><nu/1/<de/5/</fr>|<fr><nu/7/<de/2/</fr>|-<fr><nu/3/<de/8/</fr
+>@
+     0|-<fr><nu/3/<de/2/</fr>|<fr><nu/1/<de/8/</fr></ar>
+</dm>
+Eine Matrix ist nicht inventierbar wenn nach Gauss-Jordan am
+Anfang der Matrix keine Einheitsmatrix ersichtlich wird.
+
+<sect1>Determinante der Matrix<label id="DETERMINANTE">
+<p>
+
+Die Determinante ist nur auf n&times; n Matrizen definiert. Im
+Programm kann auch eine Determinante aus  <f> n&times; (n+1) </f> 
+Matrix ausgerechnet werden. Die letzte Spalte wird einfach
+ignoriert. Es soll noch Leute geben, die mit Hilfe der
+Determinanten LGS <ref id="LGS"> lösen. Ohne hier drauf genauer
+anzugehen muß man sagen Determinanten sind OUT.
+<p>Es gibt grundsätzlich zwei Methoden um eine Determinante
+auszurechnen
+<itemize>
+<item> Rekursiv (In dem Programm nicht implementiert), sie ist
+wegen exponential wachsenden Aufwand nicht bevorzuziehen.
+<item> Durch Hilfe von Gauss-Algorithmus <ref id="GAUSS">. Man
+benutzt dabei zwei Eigenschaften:
+<itemize>
+<item> Addiert man das x-Fache einer Zeile zu einer anderen
+Zeile, dann ändert sich die Determinante nicht.
+<item> Vertauscht man zwei Zeilen, dann ändert sich die
+Determinante um Faktor -1.
+</itemize>
+</itemize>
+Ist die Matrix in Treppenform <ref id="LGS">bekommt man die
+Determinante, indem man alle Diagonalen Einträge (mit Index i,i)
+miteinander multipliziert und gegeben falls um Faktor aus Punkt
+b) korrigiert.
+
+
+<sect1>Optimierungsverfahren von linearen Ungleichungssystemen
+(Simplex)<label id="SIMPLEX">
+<p>
+
+
+Problem: Suche die beste (optimale) Lösung eines
+Ungleicheungssystem bezüglich einer zu maximierenden Funktion 
+<f> G(<v/x/) </f> . 
+<enum>
+<item> Bringe alle Ungleichungen in die Form
+<dm><ar CA="rcl">
+a<inf/11/*x<inf/1/ + a<inf/12/*x<inf/2/ + a<inf/13/*x<inf/3/ +
+&hellip; + a<inf/1n/*x<inf/n/ |&gt;= | b<inf/1/@
+a<inf/21/*x<inf/1/ + a<inf/22/*x<inf/2/ + a<inf/23/*x<inf/3/ +
+&hellip; + a<inf/2n/*x<inf/n/ |&gt;= | b<inf/2/@
+a<inf/31/*x<inf/1/ + a<inf/32/*x<inf/2/ + a<inf/33/*x<inf/3/ +
+&hellip; + a<inf/3n/*x<inf/n/ |&gt;= | b<inf/3/@
+:|:|:@
+a<inf/m1/*x<inf/1/ + a<inf/m2/*x<inf/2/ + a<inf/m3/*x<inf/3/ +
+&hellip; + a<inf/mn/*x<inf/n/ |&gt;= | b<inf/m/
+</ar></dm>
+evtl. durch Multiplikation mit -1 und Einsetzen von Gleichungen
+in die Ungleichungen
+<item>  sei gegeben eine zu maximierende Funktion G
+<dm>
+     G(x<inf/1/+&hellip;
++x<inf/n>)=G(v/x/)=g<inf/0/+g<inf/1/*x<inf/1/+g<inf/2/*x<inf/2/+&
+hellip; +g<inf/n/*x<inf/n/=g<inf/0/+<v/g/(<v/x/)
+</dm>
+(wenn G zu Minimieren ist, dann durch -1 Multiplizieren)
+<item> Die Ausgangsmatrix zum Simplex Algorithmus hat das
+Aussehen
+<dm><ar CA="ccccc|c">
+a<inf/11/|a<inf/12/|a<inf/13/|&hellip; |a<inf/1n/|b<inf/1/@
+a<inf/21/|a<inf/22/|a<inf/23/|&hellip; |a<inf/2n/|b<inf/2/@
+:|:|:|:|:|b<inf/3/@
+a<inf/m1/|a<inf/m2/|a<inf/m2/|&hellip; |a<inf/mn/|b<inf/m/@
+g<inf/1/|g<inf/2/|g<inf/3/|&hellip; |g<inf/n/|G
+</ar></dm>
+Letzte Spalte heißt Gewinnspalte
+<p>Allgemein:
+<dm><ar CA="c|c">
+A|b@
+g|G
+</ar></dm>
+Bedeutet  <f> A(<v/x/)&gt;= <v/b/ </f>  und  <f> G=g<inf/0/ </f> 
+
+<item>  Finde eine Lösung des Ungleichungsystems <ref
+id="EINELOESUNG">
+sei <f><v/u/</f> diese Lösung <f>A*<v/u/ &lt;= <v/b/</f>, dann 
+<f> k=A<v/x/-<v/b/ </f> 
+Vektor <f><v/k/</f> hat Einträge nur größer oder gleich Null
+Ausgangsmatrix zum Eckenfindungsalgorithmus (m+1)*(n+1)
+<dm><ar CA="ccccc|c">
+a<inf/11/|a<inf/12/|a<inf/13/|&hellip; |a<inf/1n/|k1@
+a<inf/21/|a<inf/22/|a<inf/23/|&hellip; |a<inf/2n/|k2@
+:|:|:|:|:|k3@
+a<inf/m1/|a<inf/m2/|a<inf/m2/|&hellip; |a<inf/mn/|km@
+g<inf/1/|g<inf/2/|g<inf/3/|&hellip; |g<inf/n/|G
+</ar>
+</dm>
+<dm>
+G=G(<v/u/)= g<inf/0/+g<inf/1/*u<inf/1/+g<inf/2/*u<inf/2/+&hellip;
++g<inf/n/*u<inf/n/
+</dm>
+<item> Benutze Ekenfindung-Algorithmus <ref id="ECKENFINDUNG">
+<item> Wenn der Eckenfindung Algorithmus beim Maximumkriterium
+(1. Schritt) abbricht dann gilt.
+<p>Wir haben l verschiedene Spalten verarbeitet und daher l
+verschiedene Zeilen erhalten, die jetzt Standartbasis Vektoren
+sind  <f> (0,&hellip; ,1,&hellip; ,0) </f>  mit n+1 Koordinaten
+und mit "1" an einer der ersten n-Stellen. Es seien  <f>
+i<inf/1/,&hellip; ,i<inf/l/ </f>  diese Zeilenindizies. Wir
+setzen zusätzlich voraus, daß die Gewinnzeile g(l) von B(l) nur
+negative Einträge erhält
+<dm>
+g<inf/i/(l)&gt;= 0
+</dm>
+Wenn nicht dann fahre fort mit Schritt 8
+Dann gibt es eine optimale Lösung(en) auf  <f> Ax&gt;= b </f> 
+diese erhält man folgendermaßen. Man nehme die Zeile  <f>
+i1&hellip; il </f>  von A und b der Ausgangsmatirx und betrachtet
+<dm>
+(<ovl/A/) * <v/x/ = (<ovl/b/)
+</dm>
+Dies ist lösbar und jede Lösung <ref id="LOESUNG">y davon erfühlt 
+<f>A*<v/y/&gt;= </f> und  <f> G(v/y/) </f>  ist ein Maximum von
+<f>A*y&gt;= b</f>.
+<item> Wenn der Eckenfindung-Algorithmus beim Quotientenkriterium
+endet (2. Schritt) (zwar Spalte keine Zeile), dann ist die
+Gewinnfunktion G auf der Lösung Menge  <f> A*x&gt;= b </f>  nach
+oben unbeschränkt (kein Maximum)
+<item>Benutze Eckenaustausch-Algorithmus
+Beim ihm gelten die Selbe Regel wie beim Eckenfindung-Algorithmus
+<ref id="ECKENFINDUNG">. Nur die Spalten werden nicht markiert
+und der Algorithmus endet wenn alle Einträge in der Gewinnzeile 
+<f> g<inf/i/ </f>  negativ sind. Es kann passieren, daß dieser
+Algorithmus nicht endet (nicht terminiert). Ich konnte leider
+keine Abbruchbedingung in der Literatur finden, obwohl solche
+existiert. Im Programm endet der Algorithmus nach n Schritten.
+</enum>
+
+<sect1>Pivotieren<label id="PIVOTIEREN">
+<p>
+
+Spaltenpivotierung an der Stelle <f><inf/ij/</f>
+<dm><ar CA="ccccc">
+b<inf/11/|b<inf/12/|b<inf/13/|&hellip; |b<inf/1n/@
+b<inf/21/|b<inf/22/|b<inf/23/|&hellip; |b<inf/2n/@
+:|:|:|:|:@
+b<inf/m1/|b<inf/m2/|b<inf/m2/|&hellip; |b<inf/mn/
+</ar></dm>
+sei das Element b<f><inf/ij/&lt;&gt; 0</f>
+<enum>
+<item> Multipliziere die i-te Spalte mit
+<f><fr><nu/1/<de>b<inf/ij/</de></fr></f>. Dann steht an der
+Stelle 1
+<item> Für alle Spalten verschieden von j-ten
+Führe aus
+<dm> 
+k-te Spalte = k-te Spalte - b<inf/ik/ * j-te Spalte,
+</dm>
+dann stehen an allen (i,k)-ten Stellen (mit  <f> k&lt;&gt; j </f>
+) nur Nullen
+</enum>
+
+<sect1>Eckenfindung-Algorithmus<label id="ECKENFINDUNG">
+<p>
+
+
+Ein Teil von Simplex Algorithmus
+<enum>
+<item> Schritt (Maximumkriterium)
+Wähle einen Spaltenindex j mit 1 &lt;= j&lt;= n (letzte Spalte
+mit b's ausgeschlossen), derart daß die j-te Spalte von B
+&lt;&gt; 0 (Nullvektor) ist und, daß  <f> &verbar;
+g<inf/j/&verbar;  </f>  den größten Wert hat. Markiere diese
+Spalte.
+Wenn ein solches j nicht existiert dann ende des Algorithmus.
+(Wenn mehrere j mit dieser Eigenschaft dann kleinste j)
+<item> Schritt (Quotientenkriterium)
+Ist die j-te Spalte von 1. Schritt
+<dm><ar CA="c">
+     a<inf/1j/@          
+     a<inf/2j/@
+     :@
+     a<inf/nj/@
+     g<inf/j/
+</ar></dm>
+Dann betrachte die "relevante Zeilenmenge" R
+<dm>
+R={ i &verbar; a<inf/ij/ &lt;&gt; 0 UND a<inf/ij/gj&lt;= 0 }
+</dm>
+Wenn R die leere Menge, dann Ende des Algorithmus
+<p>Wenn R nicht leer ist, dann wähle i Element Reell aus, so daß
+<dm>
+     <fr><nu>k<inf/i/</nu><de> &verbar; a<inf/ij/&verbar;
+</de></fr>  &lt;=  <fr><nu>k<inf/l/</nu><de> &verbar;
+a<inf/ij/&verbar; </de></fr>
+</dm>
+für alle l Element R
+<p>( Wenn mehrere i dann nimmt das kleinste )
+<item> Schritt. Führe für B Spaltenpivotierung <ref
+id="PIVOTIEREN">an der Stelle (i,j)
+Man erhält neue Matrix B2 wobei Zeilenvektor von B2 so aussieht
+<p>
+0&hellip; 1&hellip; 0    
+i-te Zeile 1 in der j-ten Spalte
+<p>
+<item> Schritt: gehe zum 1. Schritt . Laß allerdings die zuvor
+markierten Spalten bei der Auswahl von j-Außer Betracht.
+</enum>
+(Der Eckenfindung-Algorithmus endet spätesten nach n Runden)
+
+<sect1>Das Suchen nach einer speziellen Lösung von Ax &gt;=
+b<label id="EINELOESUNG">
+<p>
+
+<enum>
+<item> wenn alle <f>b<inf/i/&lt;= 0 (i=1,..,m) </f> dann ist
+<f><v/u/=0</f> (Vektor) eine Lösung von <f>A*x&gt;= b</f> sonst,
+<item> Betrachte die Matrix
+<dm><ovl/A/=A<ar CA="c">
+     -1@
+     -1@
+     :@
+     -1
+</ar>
+</dm>
+Man fügt zu Matrix A einfach eine Spalte mit nur "-1" zu
+<item> füge zu x eine neue Koordinate
+<dm>x~=<ar CA="cc">
+     x<inf/1/@
+     x<inf/2/@
+     :@
+     x<inf/n/@
+     x<inf/n+1/
+</ar></dm>
+Betrachte <f>A~ * x~ &gt;= b</f>
+<item> Sei <f>w = max ( b<inf/i/ )    1 &lt;= i &lt;= m</f>
+<p>dann ist
+<dm>u~=<ar CA="cc">
+     0@
+     0@
+     :@
+     -w
+</ar></dm>
+eine Lösung von <f>A~ * x~ &gt;= b</f>
+<item> Ist
+<dm>v~=<ar CA="cc">
+     v<inf/1/@
+     v<inf/2/@
+     :@
+     v<inf/n+1/
+</ar></dm>
+eine Lösung von <f>A~ * x~ &gt;= b</f> ( Suche nach dieser Lösung
+mit Eckenfindung evtl. Eckenaustauschalgorithmus<ref
+id="SIMPLEX">) mit <f>v<inf/n+1/ &gt;= 0</f> dann ist
+<dm>v~=<ar CA="cc">
+     v<inf/1/@
+     v<inf/2/@
+     :@
+     v<inf/n/
+</ar></dm>
+eine Lösung von <f>A * x &gt;= b</f>
+<item> Wenn für alle Lösungen v~ von <f>A~ * x~ &gt;= b</f> immer
+gilt <f>v<inf/n+1/ < 0</f>  dann hat <f>A * x &gt;= b</f> keine
+Lösung
+</enum>
+Anmerkungen: 
+Man kann den Algorithmus verkürzen. Es wird nur eine Lösung von
+<f>A~ * x~ &gt;= b</f> nicht unbedingt die optimale Lösung
+gesucht. Man kann den o.g. Algorithmus abbrechen sobald der
+Gewinn positiv ist. Es gibt dann eine Lösung des Gleichungssystem
+<dm>
+     A * s = k(l) - k    k = A*u-b
+</dm>
+für die gilt
+<dm>
+     G(s+u) &gt;= 0
+</dm>
+Jede Lösung von <f>A*x = k(l) + b + G(l)*Einheitsvektor</f>
+erfühlt <f>A * v &gt;= b</f>
+
+<sect1>Nährungslösung<label id="NAEHRUNG">
+<p>
+
+
+Sei A eine m&times; n Matrix und b Element Rm dann gilt für das
+Gleichungssystem
+<dm>
+ (A<sup/t/ * A) * x = A<sup/t/ * b      
+</dm>
+<f>A<sup/t/</f> ist eine Trasponente von A
+<p>ist immer lösbar und die Lösungen sind die besten Lösungen von
+<f>A * x = b</f>
+<p>
+"beste Lösung" Das heißt wenn u diese Lösung ist dann für alle v
+<dm>
+&verbar; A*u-b&verbar;  <  &verbar; Av - b&verbar; 
+</dm>
+also ist    <f> &verbar; A*u-b&verbar;  </f>   minimal.
+ <f> &verbar; a&verbar; </f>  ist die Länge von a und ist
+definiert als
+<dm>
+    &verbar; a&verbar; = <root>a<inf/1/+a<inf/2/+&hellip;
++a<inf/n/</root>
+</dm>
+<sect1>Trasponente<label id="TRANSPONENTE">
+<p>
+Die Transponente von A m&times; n Matrix ist eine At  <f>
+n&times; m </f>  Matrix, wo die Spalten von At die Zeilen von A
+sind.
+
+<sect1>Matrixspiele<label id="MATRIXSPIELE">
+<p>
+Matrixspiele lassen sich mit Hilfe von Simplexverfahren lösen.
+D.h zu jedem Matrixspiel, bei dem kein Sattelpunkt existiert, läßt sich mit Hilfe von Simplexverfahren eine optimale gemischte Strategie finden.
+Auch jedes Optiemirungsproblem hat eine Entsprechung als Matrixspiel (Duealitätsatz).
+Im Program wurde das Verfahren aus dem Buch
+(Georg Schrage, Rüdeger Baumann, "Strategiespiele; Computerorientierte 
+Einfürung in Algorithmen der Spieltheorie", 
+R. Oldenbourg Verlag, München Wien 1984) benutzt.
+
+Dazugehörige Simpexverfahren ist unterschiedlich zu dem übrigen im Program benutzten Verfahren.
+Zu den übrigen Erläuterungen verweise ich auf das obige Buch.
+
+Das Programm berechnet den Wert des Spieles und die optimale Strategien für beide Spieler. Ergebnismatrix wird die optimale Strategie des ersten Spielers.
+
+<sect>Octave Schnittstelle
+<p>
+Octave ist ein freies Programm für numerische Mathematik.
+Es gehört inzwischen fast zu jeder Standartdistribution von
+Linux.
+<htmlurl url="http://bevo.che.wisc.edu/octave" name="Octave
+Homepage">
+
+<sect1>Importieren und Exportieren von Matrizen
+<p>
+tkmatrix kann jetzt die Matrizen in Binäre und ASCII Format von
+Octave speichern und lesen.
+Auch der Format von MathLab ist unterstützt.
+Leider bis jetzt nicht getestet.
+Einzige Beschränkung tkmatrix kann nur Octave (Little-Endian)
+Format für Matrizen mit Double Float Zahlen richtig lesen.
+Bei exportieren zu Octave wird eine Variable mit dem Name
+tkmatrix gebildet.
+<sect1>tkmatrix als FrontEnd für Octave
+<p>
+Tkmatrix kann auch direkt Octave benutzten.
+Dabei wird ein Octave Prozess im Hintergrund gestartet.
+Nur Handhabung von Fließkommazahlen ist mit Octave möglich.
+Dabei kann tkmatrix nicht nur die Einfachen matrix Operationen
+von Octave nutzen aber auch ganze Skripten ablaufen lassen und
+die Ergebnisse richtig auslesen.
+Für die Skripte werden die .tkm Skripte benutzt (z.B.
+zerobonds.tkm) Sie bestehen aus einen tcl-Script und einen Octave
+Teil.
+Der Tcl-Teil dient der Initialiesierung von Parameter für Octave.
+Der Octaveteil erzeugt eine Reihe von Ausdrucken die von tkmatrix
+ausgewertet werden.
+Dabei wird ein Protokoll initialisiert und Ergebnismatrix richtig
+gesetzt.
+Durch diese Methode kann man mit Hilfe von tkmatrix die Ergebnise
+von Octave
+sehr leicht zu Latex oder Html konvertieren.
+Auch Komfortable GUI kann hier von Vorteil sein.
+
+<sect>tkmatrix intern
+<sect1>Anfang
+<p>
+Das Programm wurde zuerst auf <em/AMIGA 500 (!) 1MB 8MHz (kein
+HD)/ geschrieben und getestet. Ich habe nur Standard IN/OUT
+Funktionen aus C++ Bibliothek benutzt (Version 1.0). Das Programm
+war damit nicht komfortabel aber das Quellcode kann auf jedes
+System, was C++ hat, portiert werden. (Was auf Amiga läuft, läuft
+überall) .Diese erste Version kann ich mit Quellcode jeden zur
+Verfügung stellen.
+Ich habe verzichtet, das Programm auf Amiga weiter zu entwickeln
+und habe weiter unter Windows gearbeitet. Leider kann ich hier
+nicht von einen Vorschritt sagen, oft ist das das Gegenteil. Ich
+habe sehr mühsam eine Oberfläche gebastelt und das Programm ist
+rasch um 20-fache am Größe gewachsen.
+So ist die Matrix 2.0 (für Win 3.1) entstanden. Es ist ein Public
+Domain Programm.
+Grundcharakteristika: (Negativ + Positiv)
+<itemize>
+<item> Windows 3.1 Entwicklung und Aussehen
+<item> Keine Überprüfung der Überläufe bei Berechnungen. (Bei
+normalen Übungsaufgaben sollte das nicht passieren)
+<item> Keine Möglichkeit die Matrix auszudrucken.
+<item> Berechnungen nur mit Bruchzahlen (Keine Gleitkommazahlen)
+<item> Nur eine Matrix kann in einen Programm bearbeitet werden
+<item> das Programm ist umsonst
+</itemize>
+
+Naher habe ich mit Windows 95 gearbeitet (sich gequält). 80% der
+Anstrengung ging in die GUI Entwicklung.  
+<p>
+Matrix 3.0 Die Neuheiten:
+<itemize>
+<item> Der interne Aufbau der Algorithmen gleich der Version 3.0
+<item> Multidokumentmöglichkeit (Bearbeitung von vielen Matrizen
+in einem Programm gleichzeitig)
+<item> 32bit <item>Windows 95 Version (feel &amp; look Windows
+95)
+<item> Ausdrucksmöglichkeit (Eine Matrix kommt schwarz auf weiß
+auf dem Papier)
+<item> Verschiedene Möglichkeiten der Benutzeranpassung
+(Zeichensatz, Formatierung).
+<item> verschiedene neue Editiermöglichkeiten (z.B. Transponente,
+Copy, Paste)
+<item> Alle Berechnungen auch auf Gleitkommazahlen.
+<item> Überprüfung der Überläufe.
+<item> neue Algorithmen (Matrizen-Multiplikation und &hellip; )
+</itemize>
+
+Die beide Versionen sind kostenlos auf meiner Homepage
+runterzuladen<p>
+Ende 1997 habe ich Linux entdeckt.
+Der Anfang war schwierig aber inzwischen bin ich davon total
+begeistert.
+Die Entwicklung unter Win95 habe ich aufgeben und beschränke mich
+nur noch auf Bugsentfernen. 
+Ich müßte noch ein ganzes Sätzungprogramm dazu schreiben und
+unter Linux habe ich doch Latex.
+Ich habe auch keine Lust noch weitere Windows95 feel&amp; look
+(schnick &amp; schnack) zu interpretieren. 
+Zumindest, weil es nie auf Anhieb funktioniert und man sich
+unheimlich ärgern muß.
+<p>
+Ende 1998 habe ich entlich Zeit gefunden die graphische
+Benutzeroberflächer für den Programm auf XWindows Systeme zu
+schreiben.
+Statt weiter in C++ zu programmieren beschloß ich die GUI in
+Tk/Tcl zu schreiben und die ganze Mathe als eine Tcl Biblothek zu
+kappseln.
+Die Resultate waren sehr gut, die Entwicklung mit tk was sehr
+schnell und angenehm.
+Dagegen sind Visual C++ oder Visual Basic reine Quellerei und
+sollten durch UNO oder sonst was verboten werden.
+<p>
+Ein paar statistische Daten. Die ich bei der Entwicklung
+gesammelt habe
+Zeit in Stunden, LOC = Line of Code
+<p>
+tcl Biblothek (927 LOC)- Design 3 ,Kodierung 11.5, Tests 9
+<p>
+Tk Oberfläche (2550 LOC) - Design 2 ,Kodierung 41, Tests 7
+<p>
+Dokumentation- 10 
+<p>
+Gesamtaufwand (nur tk Version) , ohne Reserch, Internetsurfen und
+Support 70.5 Stunden
+<sect1>Weiterentwicklung des Programms
+<p>
+Die Entwicklung könnte sich in verschiedene Richtungen bewegen
+<itemize>
+<item> Internationalisierung: In dem Fall Übersetzung ins
+<em/!Englische!/
+<item> Weitere Formatierungs Dateien (z.B rtf (Richt Text
+Format), sgml, &hellip; )
+<item> Weitere Matrizenunformungen wie: Eigenvektorenberechnung
+<item> Schaffung einer Umgebung für Konkrete Aufgaben die mit
+Hilfe von Matrix gelöst werden z.B.: Elektrotechnischeaufgaben,
+Ökonomische Kosten + Leistungberechnung
+<item> Debugging des Programm und Korrektur der Dokumentation 
+<item> Einbindung von Numerischen Verfahren für Berechnugen von
+Eigenwerten und Lösen von LGS
+</itemize>
+Mit Englischen Version schaffe ich es nicht. Deutsch ist bereits
+meine 2. Sprache. 
+Ich zähle auf eure Hilfe. Werden Sie zum Entwickler.
+<p>
+<bf/Ich suche Hilfe/: In dieser früheren Phase sind Bugsreports
+besonders wichtig.
+Ich werde mich freuen, wenn irgendjemand ein Fehler entdeckt.
+<tt/Wenn irgendjemand sich über Rechtschreib- und Gramatikfehler
+aufregt, kann er die korrigierte sgml Dokumentation Quelle an
+mich zurückschicken/.
+Ich möchte das Programm vorallen auch inhaltlich (mathematisch)
+erweitern, leider sind meine Kenntnisse, was lineare Algebra
+angeht, hier zu Ende.
+Vorschläge zu dieser Erweiterung (Algorithmen) sind willkommen.
+ 
+<sect1>Grenzen des Programm; Fehler
+<p>
+Ab Version 0.4 benutzt tkmatrix für Bruchrechnungen die
+Biblithek gmp (GNU multiple precision arithmetic library).
+Die Länge der Zahlen ist nur mit dem Speicherplatz des Komputers begrentzt.
+Man kann aber den Programm mit dem allten Modul kompilieren 
+(siehe Datei rational.h) Dabei gilt
+Für jedes Bruch werden 3 long integer benutzt (für Ganzzahl,
+Nenner und Zähler). Die Zahlen Überläufe werden erkannt. 
+<p>
+Ich habe das auf allen Aufgaben, die ich bekommen könnte
+getestet. Es funktionierte wie erhofft. Das heißt es aber nicht,
+daß das Programm alle möglichen Aufgaben gut lösen kann. Das kann
+kein Programmierer garantieren. (Verifikation des Codes ist nur
+theoretisch möglich und darum kann es keine völlig korrekte
+Programme geben)
+Deswegen kann es vorkommen, daß sinnlose Ergebnisse ausgegeben
+werden . Der Komputerabsturz kann wegen Endlosschleifen auch
+passieren. (Nicht gleich den Programmierer verfluchen)
+Die Algorithmen können auch (wo passiert das nicht) beim
+ungewöhnlichen Input Matrizen nicht richtige Ergebnisse liefern
+oder sogar nicht terminieren.(Aufpassen beim Eckenfindung)
+<p>I
+<em/Ich nehme keine Verantwortung für Schaden, die das Programm
+anrichten könnte./
+<p>
+Funktionierte etwas bei deiner Maschine nicht. Laß mich davon
+wissen. Eine genaue Beschreibung von Fehlfunktionen und frühere
+Eingaben (Inputs) werden die Fehlersuche erleichtern und sogar
+erst möglich gemacht.
+<p>
+ 
+<sect1>Programminterna
+<p>
+Der Kern des Programms wurde von über 2 Jahren geschrieben und
+nur für eigene Benutzung bedacht.
+Irgendwann habe ich die Mathe I Klausur bestanden aber das
+Programm entwickelte ich weiter.
+Inzwischen hat der Code ein paar Compiler und 3 Systeme
+(Amiga, Win95, Linux) beschäftigt.
+<p>
+Daraus ergeben sich zwei Sachen. Erstmals der Code ist manchmal
+erstaunlich ungleich in Programmiertechnikniveau (von Unbeholfen
+zum Überreif, mit ein paar Tricks um miese Compiler
+auszutricksen). Zweitens es hat sich bewahrt.
+<p>
+Es ist alles in C++ geschrieben. Ich habe versucht nur in gutem
+Still und zukunftbezogen zu Programmieren.
+Das Klassendesign habe ich schon 2 mal mit großen Aufwand
+geändert.
+Zu diesem Zeit benutzt es <tt/nur gute Object Orientiete
+Techniken/;),da wo es nötig ist.
+Alles ist schön in Klassen geordnet mit Is-A und Has-A
+(templates) Beziehungen.
+Ich benutzte Standart Template Library und habe das Code mit
+Hilfe von Templates klein und verständlich gehalten.
+Fehlerbehandlung wird mit Hilfe von Fehlerklassen erledigt
+<p>
+das Code ist geteilt auf Dateien
+<itemize>
+<item><tt/matrix_p.cc/ Steuerungs Modul; Lesen von Parameter und
+Interaktivität
+<item><tt/rational.h/ Bruchzahlen und ein C++ Interface zu der Biblothek gmp
+<item><tt/matrix3.h/ Kern der Algorithmen in Klase Template
+matrix&lt; &hellip; &gt; (darum in .h)
+<item><tt/polynom.h/ Eine Polynomklasse zu Berechnnung des 
+charakteristischen Polynoms
+matrix&lt; &hellip; &gt; (darum in .h)
+<item><tt/matrix3.cc/ Klassen für Bruchberechnung und Überlauf
+Abfang
+<item><tt/protstream.cc protstream.h/ Klasse protstream Container
+für Protokollelemente und dessen ausgabe 
+<item><tt/protformat.cc protformat.h/ Klasse protformat für
+Formatierungsdateien Behandlung protformat.h enthält in Komentar
+die Beschreibung aller Ellemente der *.fmat Dateien
+<item><tt/matrixtcl.cc matrixtcl-object.cc matrixtcl.h/ - tcl Biblothek (Schnittstelle)
+<item><tt/*.tcl/ - Tk Sctipte
+</itemize>
+Compilieren mit gcc<p>
+Meine Version von gcc hatte ein paar Probleme mit solchen nicht
+trivialen Sachen wie Templates und Fehlerklassen (keine
+parametrisierte Templates) und keine Fehlerklassen mit
+dynamischen Komponenten waren möglich.  
+<p>
+Das Programm ist unter GNU Lizenz geschrieben. Du kannst es für
+nicht kommerzielle Zwecke benutzen, verändern, aber du kannst
+kein Pfennie damit verdienen. (Programmierer leben nur von der
+Behebung der Schäden, die durch ihre Programme entstanden sind)
+<p>
+Werden Sie zum Mitentwickler: Wenn Sie etwas unlogisch, schwer
+Begreiflich, oder einfach etwas für verbesserungsbedürtig, im
+Programm halten, lassen Sie mich davon wissen.
+<p>
+Das Programm darf nicht verkauft und auch anders kommerziell
+verbreitet werden.<p>
+<em/Ich nehme keine Verantwortung für die Schaden, die das
+Programm verursachenkönnte./
+<sect1>Tcl Bibliothek matrixtcl.so
+<p>
+Tkmatrix is kein back-end zu Programm matrix im engen Sinne. Ich
+habe eine Tcl Biblothek geschaffen, die von Tk/Tcl geladen wird.
+Tcl/Tk wird so neue Funktion <tt/matrixtcl/ bekommen
+<p>
+Benutzung von matizen von tcl wird objektorientiert entworfen.
+<tt/matrixtcl/ wird zu einen Behälter (Konteiner) für matrix
+Objekte.
+Man kann entweder Operationnen auf dem Konteiner selbst oder auf
+die Matrix-Objekte vornehmen.
+<p>
+Operationen auf dem Behälter
+<itemize>
+<item><tt/matrixtcl create m n &lsqb;-float|-widefloat|-rational&rsqb;/ Konstuktor für
+eine m x n Matrix. Es wird ein Handle zurückgegeben.
+<item><tt/matrixtcl load file/ Konstuktor für eine Matrix. Sie
+wird aus der Datei gelesen. Es wird ein Handle zurückgegeben.
+<item><tt/matrixtcl info/ Gibt eine Liste mit Händler von allen
+Matrixzen in den Konteiner.
+<item><tt/matrixtcl destroy HANDLER/ Löscht die Matrix mit dem
+Händler HANDLER aus dem Konteiner.
+<item><tt/matrixtcl configure/ Optionnen -noprot -dir -onlyfraction -widefloat_prec 
+benutztung wie tk configure bei Widgets
+</itemize>
+Operationen auf Matrizen
+<itemize>
+<item><tt/matrixtcl HANDLER operation mul|add|sub HANDLER2/
+<item><tt/matrixtcl HANDLER algorithmus gauss jordan loesung kern
+bild inverse determinante pivotiere naehrung eckenfindung simplex
+transponiere chpolynom matrixspiel/ für pivotiere noch zeile und spalte.
+<item><tt/matrixtcl HANDLER elemunf (swap col|row index1 index2) | (factormul col|row index factor) | (factoradd col|row index1 index2 factor) | (pivot col|row indexy indexx) (changestep indexy indexx)/ elementare Unformungen. Die Ausgagmatrix wird verändert und Protokoll darüber vervollständigt.
+<item><tt/matrixtcl HANDLER resize m n vonoben vonliks/ vonoben
+und vonlinks sind Booltype
+<item><tt/matrixtcl HANDLER duplicate/ Es wird ein Handle
+zurückgegeben.
+<item><tt/matrixtcl HANDLER tofloat &lsqb;-widefloat&rsqb;/ Konventieren zu Fließkommamatrix. Es wird ein Handle zurückgegeben. 
+<item><tt/matrixtcl HANDLER copy y1 x1 y2 x2/ Schneidet aus der
+Matrix ein Rechteck . Es wird ein Handle zurückgegeben.
+<item><tt/matrixtcl HANDLER info size|type|issolution|isprotocol/
+<item><tt/matrixtcl HANDLER save filename/
+<item><tt/matrixtcl HANDLER getform latex|ascii|tcl 
+&lsqb;-protocol|-solution&rsqb;/
+<item><tt/matrixtcl HANDLER setelem m n elem/ Brüche werden als
+eine Liste eingegeben eineinhalb als {1 1 2}. Der Element wird
+auch gekürzt und zurückgegeben
+<item><tt/matrixtcl HANDLER getelem m n/
+</itemize>
+Funktionen die Schnittstellen zu anderen Programmen unterstützen
+sollen.
+Protokol und Matrixergebnis setzten.
+<itemize>
+<item><tt/matrixtcl HANDLER deleteprot/ Leer Protokoll
+<item><tt/matrixtcl HANDLER setsolution matrixlist/ Setzt das
+Ergebnismatrix
+<item><tt/matrixtcl HANDLER addprot (type objectlist)|editmatrix/ Ergänzt das
+Protokoll um eine Formatierte Matrix oder um String.
+Type ist ein Element der Liste: matrix, gleichung, simplex,
+loesung , determinante, polynom, string. Alle außer ''string''
+sind Matrizenlist. Im einer Matrizenliste. ist jede Zeile eine
+Liste. Jedes Bruch auch.
+<code>
+{
+{2 3 {1 2}}
+{3 {1 2} 3}
+{{2 3 4} 3 34}
+}
+</code>
+ist eine 3 mal 3 Matrix mit Brüchen
+</itemize>
+
+<sect1>Zu Dokumentation
+<p>
+Diese Dokumentation wurde mit sgml-tools ertellt. Man kann sie in
+verschiedene Formate transferieren. Am besten sieht es aber als
+Latex Datei. Übersetzt mit
+Kommando <tt/sgml2latex -a -g -p matrix.sgml/ zu Post Script. So
+sind alle mathematische Zeichen ersichtlicht. Für Html
+Transformation mußte ich die Datei
+<tt>/usr/lib/sgml-tools/rep/html/mapping und general</tt>
+verändern. Sonst würde man überhaupt keine mathematische Zeichen
+sehen oder sie sich zudenken können.
+<p>
+Der mathematische Teil habe ich im Latex übergearbeitet und als
+<tt/mathe1.pdf/ und <tt/mathe1.ps/ zu verfügung gestellt. 
+
+<sect1>Author
+<p>
+Zur Zeit studiere ich Wirtschaftsinformatik an der UGH Essen. Das
+Programm habe ich noch im 1. Semester des Studium angefangen.
+Primär um c++ zu lernen.
+Nacher habe ich immer neue techniken im Programm benutzt, so daß
+es jetzt ziemlich komplieziert und voll von akademieschen
+Spinnereien ist.
+<p>
+Einen Wirtschaftsinformatiker unterscheidet man von einem
+Informatiker, danach daß Informatiker immer Computer einsetzten,
+Wirtschaftsinformatiker nur sinnvoll.
+
+<p>Artur Trzewik  <tt><htmlurl url="mailto:mail@xdobry.de" 
+name="mail@xdobry.de"></tt>
+<p>Homepage <tt><htmlurl
+url="http://www.xdobry/tkmatrix" name
+="www.xdobry/tkmatrix"></tt>
+
+<sect>Beispielmatrizen <label id="BEISPIELE">
+<p>
+Für jeden Algorithmus wurde eine sinnvolle Beispielmatrix mit dem
+Programm mitgeliefert (oder es sein sollte). Hier werden alle
+Beispielmatrizen vorgestellt und gedeutet.
+<itemize>
+<item><tt/gauss.mat/     diese Matrix ist eine Abbildung des
+Gleichungssystem:
+<dm><ar CA="rcl">
+1<inf>*</inf>x<inf>1 </inf>+ 2<inf>*</inf>x2 + 4*x3 |=| 200@
+1*x<inf/1/ + 1*x<inf/2/ + 1*x<inf/3/ |=| 100@
+3*x<inf/1/ + 3*x<inf/2/ + 5*x<inf/3/ |=| 350
+</ar></dm>
+auf dieser Matrix können sinnvoll Gauss <ref id="GAUSS"> und
+Gauss-Jordan <ref id="JORDAN" name="JORDAN"> Algorithmen
+angewendet werden. Auch die Lösung <ref id="LOESUNG"
+name="LOESUNG"> des linearen Gleichungssystems <ref id="LGS"
+name="LGS"> kann ausgerechnet werden (Ergänzung zu Gauss-Jordan);
+die lautet
+<dm>
+x<inf/1/ = 50 ; x<inf/2/ = 25 ; x<inf/3/ = 25
+</dm>
+<item><tt/bild.mat/ Auf dieser Matrix kann Bild <ref id="BILD"
+name="BILD"> ausgerechnet werden.
+<item><tt/kern.mat/ das Gleiche aber Kern <ref id="KERN"
+name="KERN"> der Matrix
+<item><tt/determ.mat/ die Determinante <ref id="DETERMINANTE"
+name="DETERMINANTE"> wird mit Hilfe von Gauss-Algorithmus
+ausgerechnet.
+<item><tt/inverse.mat/ diese Matrix hat n&times; n Format
+(Quadratisch) und darauf kann der Inverse <ref id="INVERSE"
+name="INVERSE">Algorithmus ausprobiert werden.
+<item><tt/naehrung.mat/ Nährunglösung <ref id="NAEHRUNG"
+name="NAEHRUNG">der Aufgabetext zu der Matrix lautete:
+<p> 
+Bestimmen Sie die Ausgleichgerade die durch die Punkte
+P1(1; 3,1) P2(2; 4,9) P3(3; 7,1) P4(4; 8,9)
+<p>
+Ansatz: Wir suchen eine Gerade y=m*x+b, man kann 4 Gleichungen
+bilden
+<dm><ar CA=rcl>
+3,1 |=| m*1 + b@
+4,2 |=| m*2 + b@
+7,1 |=| m*3 + b@
+8,9 |=| m*4 + b
+</ar></dm>
+ daher die Matrix (naehrung.mat)
+<item><tt/ecken.mat/ Ausgangsmatrix zum Eckenfindugsalgoritmus
+s.Simplex Algorithmus <ref id="SIMPLEX" name="SIMPLEX"> Schritt
+4. Beachte: letzte Spalte muß immer positiv sein (Außer letzten
+Element Gewinn hier = 2)
+<item><tt/optiem1.mat/ Ausgangsmatrix zu Simplexalgorithmus <ref
+id="SIMPLEX" name="SIMPLEX"> (Optimierugsverfahren). Die
+dazugehörige Aufgabe lautete. Finden Sie die Optimale Lösung(en)
+der zu maximierenden Funktion
+<dm>
+     G(x)=30*x<inf/1/ - 70*x<inf/2/ - 90*x<inf/n/ - 41600
+</dm>
+unter der Nebenbedingungen:
+<dm><ar CA=rcl>
+-2*x1 + x2 + 4*x3 |&gt;= | 100@
+2*x1 - 3*x2 -1*x3 |&gt;= | -100@
+-1*x1 + 2*x2 -4*x3 |&gt;= | -180
+</ar></dm>
+<dm><ar CA=rcl>
+x1 |&gt;= | 0@
+-x1 |&gt;= | -40@
+x2 |&gt;= | 0@
+-x2 |&gt;= | -30@
+x3 |&gt;= | 0@
+-x3 |&gt;= | -60
+</ar></dm>
+In diesem Fall muß bei Simplexalgorithmus (Vergleich Protokoll
+<ref id="PROTOKOLL">) erstmals eine Lösung <ref id="EINELOESUNG"
+name="EINELOESUNG"> gesucht werden ( nicht alle  <f> b<inf/i/
+&lt;= 0 </f>  ) Nachher braucht nur noch Eckenfindungalgorithmus
+angewendet werden.
+<item><tt/optiem2.mat/ noch eine Beispielmatrix für Simplex
+Algorithmus <ref id="SIMPLEX">. Notation sehe optiem1.mat
+Beschreibung. In diesem Fall ist eine Lösung sofort sichtbar
+Nullvektor, weil alle  <f> b<inf/i/ &lt;= 0 </f> . Nach dem
+Eckenfindung <ref id="ECKENFINDUNG" name="ECKENFINDUNG"> muß noch
+mal Eckenaustausch <ref id="SIMPLEX" name="SIMPLEX"> vorgenommen
+werden.
+</itemize>
+</article>

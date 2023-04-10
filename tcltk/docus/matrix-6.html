@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE> Dokumentation und Benutzeranweisungen des Programm: tkmatrix intern</TITLE>
+ <LINK HREF="matrix-7.html" REL=next>
+ <LINK HREF="matrix-5.html" REL=previous>
+ <LINK HREF="matrix.html#toc6" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="matrix-7.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-5.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc6"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+<HR>
+<H2><A NAME="s6">6. tkmatrix intern</A></H2>
+
+<H2><A NAME="ss6.1">6.1 Anfang</A>
+</H2>
+
+<P>Das Programm wurde zuerst auf <EM>AMIGA 500 (!) 1MB 8MHz (kein
+HD)</EM> geschrieben und getestet. Ich habe nur Standard IN/OUT
+Funktionen aus C++ Bibliothek benutzt (Version 1.0). Das Programm
+war damit nicht komfortabel aber das Quellcode kann auf jedes
+System, was C++ hat, portiert werden. (Was auf Amiga läuft, läuft
+überall) .Diese erste Version kann ich mit Quellcode jeden zur
+Verfügung stellen.
+Ich habe verzichtet, das Programm auf Amiga weiter zu entwickeln
+und habe weiter unter Windows gearbeitet. Leider kann ich hier
+nicht von einen Vorschritt sagen, oft ist das das Gegenteil. Ich
+habe sehr mühsam eine Oberfläche gebastelt und das Programm ist
+rasch um 20-fache am Größe gewachsen.
+So ist die Matrix 2.0 (für Win 3.1) entstanden. Es ist ein Public
+Domain Programm.
+Grundcharakteristika: (Negativ + Positiv)
+<UL>
+<LI> Windows 3.1 Entwicklung und Aussehen</LI>
+<LI> Keine Überprüfung der Überläufe bei Berechnungen. (Bei
+normalen Übungsaufgaben sollte das nicht passieren)</LI>
+<LI> Keine Möglichkeit die Matrix auszudrucken.</LI>
+<LI> Berechnungen nur mit Bruchzahlen (Keine Gleitkommazahlen)</LI>
+<LI> Nur eine Matrix kann in einen Programm bearbeitet werden</LI>
+<LI> das Programm ist umsonst</LI>
+</UL>
+<P>Naher habe ich mit Windows 95 gearbeitet (sich gequält). 80% der
+Anstrengung ging in die GUI Entwicklung.  
+<P>Matrix 3.0 Die Neuheiten:
+<UL>
+<LI> Der interne Aufbau der Algorithmen gleich der Version 3.0</LI>
+<LI> Multidokumentmöglichkeit (Bearbeitung von vielen Matrizen
+in einem Programm gleichzeitig)</LI>
+<LI> 32bit </LI>
+<LI>Windows 95 Version (feel &amp; look Windows
+95)</LI>
+<LI> Ausdrucksmöglichkeit (Eine Matrix kommt schwarz auf weiß
+auf dem Papier)</LI>
+<LI> Verschiedene Möglichkeiten der Benutzeranpassung
+(Zeichensatz, Formatierung).</LI>
+<LI> verschiedene neue Editiermöglichkeiten (z.B. Transponente,
+Copy, Paste)</LI>
+<LI> Alle Berechnungen auch auf Gleitkommazahlen.</LI>
+<LI> Überprüfung der Überläufe.</LI>
+<LI> neue Algorithmen (Matrizen-Multiplikation und ... )</LI>
+</UL>
+<P>Die beide Versionen sind kostenlos auf meiner Homepage
+runterzuladen
+<P>Ende 1997 habe ich Linux entdeckt.
+Der Anfang war schwierig aber inzwischen bin ich davon total
+begeistert.
+Die Entwicklung unter Win95 habe ich aufgeben und beschränke mich
+nur noch auf Bugsentfernen. 
+Ich müßte noch ein ganzes Sätzungprogramm dazu schreiben und
+unter Linux habe ich doch Latex.
+Ich habe auch keine Lust noch weitere Windows95 feel&amp; look
+(schnick &amp; schnack) zu interpretieren. 
+Zumindest, weil es nie auf Anhieb funktioniert und man sich
+unheimlich ärgern muß.
+<P>Ende 1998 habe ich entlich Zeit gefunden die graphische
+Benutzeroberflächer für den Programm auf XWindows Systeme zu
+schreiben.
+Statt weiter in C++ zu programmieren beschloß ich die GUI in
+Tk/Tcl zu schreiben und die ganze Mathe als eine Tcl Biblothek zu
+kappseln.
+Die Resultate waren sehr gut, die Entwicklung mit tk was sehr
+schnell und angenehm.
+Dagegen sind Visual C++ oder Visual Basic reine Quellerei und
+sollten durch UNO oder sonst was verboten werden.
+<P>Ein paar statistische Daten. Die ich bei der Entwicklung
+gesammelt habe
+Zeit in Stunden, LOC = Line of Code
+<P>tcl Biblothek (927 LOC)- Design 3 ,Kodierung 11.5, Tests 9
+<P>Tk Oberfläche (2550 LOC) - Design 2 ,Kodierung 41, Tests 7
+<P>Dokumentation- 10 
+<P>Gesamtaufwand (nur tk Version) , ohne Reserch, Internetsurfen und
+Support 70.5 Stunden
+<H2><A NAME="ss6.2">6.2 Weiterentwicklung des Programms</A>
+</H2>
+
+<P>Die Entwicklung könnte sich in verschiedene Richtungen bewegen
+<UL>
+<LI> Internationalisierung: In dem Fall Übersetzung ins
+<EM>!Englische!</EM></LI>
+<LI> Weitere Formatierungs Dateien (z.B rtf (Richt Text
+Format), sgml, ... )</LI>
+<LI> Weitere Matrizenunformungen wie: Eigenvektorenberechnung</LI>
+<LI> Schaffung einer Umgebung für Konkrete Aufgaben die mit
+Hilfe von Matrix gelöst werden z.B.: Elektrotechnischeaufgaben,
+Ökonomische Kosten + Leistungberechnung</LI>
+<LI> Debugging des Programm und Korrektur der Dokumentation </LI>
+<LI> Einbindung von Numerischen Verfahren für Berechnugen von
+Eigenwerten und Lösen von LGS</LI>
+</UL>
+
+Mit Englischen Version schaffe ich es nicht. Deutsch ist bereits
+meine 2. Sprache. 
+Ich zähle auf eure Hilfe. Werden Sie zum Entwickler.
+<P><B>Ich suche Hilfe</B>: In dieser früheren Phase sind Bugsreports
+besonders wichtig.
+Ich werde mich freuen, wenn irgendjemand ein Fehler entdeckt.
+<CODE>Wenn irgendjemand sich über Rechtschreib- und Gramatikfehler
+aufregt, kann er die korrigierte sgml Dokumentation Quelle an
+mich zurückschicken</CODE>.
+Ich möchte das Programm vorallen auch inhaltlich (mathematisch)
+erweitern, leider sind meine Kenntnisse, was lineare Algebra
+angeht, hier zu Ende.
+Vorschläge zu dieser Erweiterung (Algorithmen) sind willkommen.
+<P>
+<H2><A NAME="ss6.3">6.3 Grenzen des Programm; Fehler</A>
+</H2>
+
+<P>Ab Version 0.4 benutzt tkmatrix für Bruchrechnungen die
+Biblithek gmp (GNU multiple precision arithmetic library).
+Die Länge der Zahlen ist nur mit dem Speicherplatz des Komputers begrentzt.
+Man kann aber den Programm mit dem allten Modul kompilieren 
+(siehe Datei rational.h) Dabei gilt
+Für jedes Bruch werden 3 long integer benutzt (für Ganzzahl,
+Nenner und Zähler). Die Zahlen Überläufe werden erkannt. 
+<P>Ich habe das auf allen Aufgaben, die ich bekommen könnte
+getestet. Es funktionierte wie erhofft. Das heißt es aber nicht,
+daß das Programm alle möglichen Aufgaben gut lösen kann. Das kann
+kein Programmierer garantieren. (Verifikation des Codes ist nur
+theoretisch möglich und darum kann es keine völlig korrekte
+Programme geben)
+Deswegen kann es vorkommen, daß sinnlose Ergebnisse ausgegeben
+werden . Der Komputerabsturz kann wegen Endlosschleifen auch
+passieren. (Nicht gleich den Programmierer verfluchen)
+Die Algorithmen können auch (wo passiert das nicht) beim
+ungewöhnlichen Input Matrizen nicht richtige Ergebnisse liefern
+oder sogar nicht terminieren.(Aufpassen beim Eckenfindung)
+<P>I
+<EM>Ich nehme keine Verantwortung für Schaden, die das Programm
+anrichten könnte.</EM>
+<P>Funktionierte etwas bei deiner Maschine nicht. Laß mich davon
+wissen. Eine genaue Beschreibung von Fehlfunktionen und frühere
+Eingaben (Inputs) werden die Fehlersuche erleichtern und sogar
+erst möglich gemacht.
+<P>
+<P>
+<H2><A NAME="ss6.4">6.4 Programminterna</A>
+</H2>
+
+<P>Der Kern des Programms wurde von über 2 Jahren geschrieben und
+nur für eigene Benutzung bedacht.
+Irgendwann habe ich die Mathe I Klausur bestanden aber das
+Programm entwickelte ich weiter.
+Inzwischen hat der Code ein paar Compiler und 3 Systeme
+(Amiga, Win95, Linux) beschäftigt.
+<P>Daraus ergeben sich zwei Sachen. Erstmals der Code ist manchmal
+erstaunlich ungleich in Programmiertechnikniveau (von Unbeholfen
+zum Überreif, mit ein paar Tricks um miese Compiler
+auszutricksen). Zweitens es hat sich bewahrt.
+<P>Es ist alles in C++ geschrieben. Ich habe versucht nur in gutem
+Still und zukunftbezogen zu Programmieren.
+Das Klassendesign habe ich schon 2 mal mit großen Aufwand
+geändert.
+Zu diesem Zeit benutzt es <CODE>nur gute Object Orientiete
+Techniken</CODE>;),da wo es nötig ist.
+Alles ist schön in Klassen geordnet mit Is-A und Has-A
+(templates) Beziehungen.
+Ich benutzte Standart Template Library und habe das Code mit
+Hilfe von Templates klein und verständlich gehalten.
+Fehlerbehandlung wird mit Hilfe von Fehlerklassen erledigt
+<P>das Code ist geteilt auf Dateien
+<UL>
+<LI><CODE>matrix_p.cc</CODE> Steuerungs Modul; Lesen von Parameter und
+Interaktivität</LI>
+<LI><CODE>rational.h</CODE> Bruchzahlen und ein C++ Interface zu der Biblothek gmp</LI>
+<LI><CODE>matrix3.h</CODE> Kern der Algorithmen in Klase Template
+matrix&lt; ... &gt; (darum in .h)</LI>
+<LI><CODE>polynom.h</CODE> Eine Polynomklasse zu Berechnnung des 
+charakteristischen Polynoms
+matrix&lt; ... &gt; (darum in .h)</LI>
+<LI><CODE>matrix3.cc</CODE> Klassen für Bruchberechnung und Überlauf
+Abfang</LI>
+<LI><CODE>protstream.cc protstream.h</CODE> Klasse protstream Container
+für Protokollelemente und dessen ausgabe </LI>
+<LI><CODE>protformat.cc protformat.h</CODE> Klasse protformat für
+Formatierungsdateien Behandlung protformat.h enthält in Komentar
+die Beschreibung aller Ellemente der *.fmat Dateien</LI>
+<LI><CODE>matrixtcl.cc matrixtcl-object.cc matrixtcl.h</CODE> - tcl Biblothek (Schnittstelle)</LI>
+<LI><CODE>*.tcl</CODE> - Tk Sctipte</LI>
+</UL>
+
+Compilieren mit gcc
+<P>Meine Version von gcc hatte ein paar Probleme mit solchen nicht
+trivialen Sachen wie Templates und Fehlerklassen (keine
+parametrisierte Templates) und keine Fehlerklassen mit
+dynamischen Komponenten waren möglich.  
+<P>Das Programm ist unter GNU Lizenz geschrieben. Du kannst es für
+nicht kommerzielle Zwecke benutzen, verändern, aber du kannst
+kein Pfennie damit verdienen. (Programmierer leben nur von der
+Behebung der Schäden, die durch ihre Programme entstanden sind)
+<P>Werden Sie zum Mitentwickler: Wenn Sie etwas unlogisch, schwer
+Begreiflich, oder einfach etwas für verbesserungsbedürtig, im
+Programm halten, lassen Sie mich davon wissen.
+<P>Das Programm darf nicht verkauft und auch anders kommerziell
+verbreitet werden.
+<P><EM>Ich nehme keine Verantwortung für die Schaden, die das
+Programm verursachenkönnte.</EM>
+<H2><A NAME="ss6.5">6.5 Tcl Bibliothek matrixtcl.so</A>
+</H2>
+
+<P>Tkmatrix is kein back-end zu Programm matrix im engen Sinne. Ich
+habe eine Tcl Biblothek geschaffen, die von Tk/Tcl geladen wird.
+Tcl/Tk wird so neue Funktion <CODE>matrixtcl</CODE> bekommen
+<P>Benutzung von matizen von tcl wird objektorientiert entworfen.
+<CODE>matrixtcl</CODE> wird zu einen Behälter (Konteiner) für matrix
+Objekte.
+Man kann entweder Operationnen auf dem Konteiner selbst oder auf
+die Matrix-Objekte vornehmen.
+<P>Operationen auf dem Behälter
+<UL>
+<LI><CODE>matrixtcl create m n [-float|-widefloat|-rational]</CODE> Konstuktor für
+eine m x n Matrix. Es wird ein Handle zurückgegeben.</LI>
+<LI><CODE>matrixtcl load file</CODE> Konstuktor für eine Matrix. Sie
+wird aus der Datei gelesen. Es wird ein Handle zurückgegeben.</LI>
+<LI><CODE>matrixtcl info</CODE> Gibt eine Liste mit Händler von allen
+Matrixzen in den Konteiner.</LI>
+<LI><CODE>matrixtcl destroy HANDLER</CODE> Löscht die Matrix mit dem
+Händler HANDLER aus dem Konteiner.</LI>
+<LI><CODE>matrixtcl configure</CODE> Optionnen -noprot -dir -onlyfraction -widefloat_prec 
+benutztung wie tk configure bei Widgets</LI>
+</UL>
+
+Operationen auf Matrizen
+<UL>
+<LI><CODE>matrixtcl HANDLER operation mul|add|sub HANDLER2</CODE></LI>
+<LI><CODE>matrixtcl HANDLER algorithmus gauss jordan loesung kern
+bild inverse determinante pivotiere naehrung eckenfindung simplex
+transponiere chpolynom matrixspiel</CODE> für pivotiere noch zeile und spalte.</LI>
+<LI><CODE>matrixtcl HANDLER elemunf (swap col|row index1 index2) | (factormul col|row index factor) | (factoradd col|row index1 index2 factor) | (pivot col|row indexy indexx) (changestep indexy indexx)</CODE> elementare Unformungen. Die Ausgagmatrix wird verändert und Protokoll darüber vervollständigt.</LI>
+<LI><CODE>matrixtcl HANDLER resize m n vonoben vonliks</CODE> vonoben
+und vonlinks sind Booltype</LI>
+<LI><CODE>matrixtcl HANDLER duplicate</CODE> Es wird ein Handle
+zurückgegeben.</LI>
+<LI><CODE>matrixtcl HANDLER tofloat [-widefloat]</CODE> Konventieren zu Fließkommamatrix. Es wird ein Handle zurückgegeben. </LI>
+<LI><CODE>matrixtcl HANDLER copy y1 x1 y2 x2</CODE> Schneidet aus der
+Matrix ein Rechteck . Es wird ein Handle zurückgegeben.</LI>
+<LI><CODE>matrixtcl HANDLER info size|type|issolution|isprotocol</CODE></LI>
+<LI><CODE>matrixtcl HANDLER save filename</CODE></LI>
+<LI><CODE>matrixtcl HANDLER getform latex|ascii|tcl [-protocol|-solution]</CODE></LI>
+<LI><CODE>matrixtcl HANDLER setelem m n elem</CODE> Brüche werden als
+eine Liste eingegeben eineinhalb als {1 1 2}. Der Element wird
+auch gekürzt und zurückgegeben</LI>
+<LI><CODE>matrixtcl HANDLER getelem m n</CODE></LI>
+</UL>
+
+Funktionen die Schnittstellen zu anderen Programmen unterstützen
+sollen.
+Protokol und Matrixergebnis setzten.
+<UL>
+<LI><CODE>matrixtcl HANDLER deleteprot</CODE> Leer Protokoll</LI>
+<LI><CODE>matrixtcl HANDLER setsolution matrixlist</CODE> Setzt das
+Ergebnismatrix</LI>
+<LI><CODE>matrixtcl HANDLER addprot (type objectlist)|editmatrix</CODE> Ergänzt das
+Protokoll um eine Formatierte Matrix oder um String.
+Type ist ein Element der Liste: matrix, gleichung, simplex,
+loesung , determinante, polynom, string. Alle außer ''string''
+sind Matrizenlist. Im einer Matrizenliste. ist jede Zeile eine
+Liste. Jedes Bruch auch.
+<HR>
+<PRE>
+{
+{2 3 {1 2}}
+{3 {1 2} 3}
+{{2 3 4} 3 34}
+}
+</PRE>
+<HR>
+
+ist eine 3 mal 3 Matrix mit Brüchen</LI>
+</UL>
+<P>
+<H2><A NAME="ss6.6">6.6 Zu Dokumentation</A>
+</H2>
+
+<P>Diese Dokumentation wurde mit sgml-tools ertellt. Man kann sie in
+verschiedene Formate transferieren. Am besten sieht es aber als
+Latex Datei. Übersetzt mit
+Kommando <CODE>sgml2latex -a -g -p matrix.sgml</CODE> zu Post Script. So
+sind alle mathematische Zeichen ersichtlicht. Für Html
+Transformation mußte ich die Datei
+<CODE>/usr/lib/sgml-tools/rep/html/mapping und general</CODE>
+verändern. Sonst würde man überhaupt keine mathematische Zeichen
+sehen oder sie sich zudenken können.
+<P>Der mathematische Teil habe ich im Latex übergearbeitet und als
+<CODE>mathe1.pdf</CODE> und <CODE>mathe1.ps</CODE> zu verfügung gestellt. 
+<P>
+<H2><A NAME="ss6.7">6.7 Author</A>
+</H2>
+
+<P>Zur Zeit studiere ich Wirtschaftsinformatik an der UGH Essen. Das
+Programm habe ich noch im 1. Semester des Studium angefangen.
+Primär um c++ zu lernen.
+Nacher habe ich immer neue techniken im Programm benutzt, so daß
+es jetzt ziemlich komplieziert und voll von akademieschen
+Spinnereien ist.
+<P>Einen Wirtschaftsinformatiker unterscheidet man von einem
+Informatiker, danach daß Informatiker immer Computer einsetzten,
+Wirtschaftsinformatiker nur sinnvoll.
+<P>
+<P>Artur Trzewik  <CODE>
+<A HREF="mailto:mail@xdobry.de">mail@xdobry.de</A></CODE>
+<P>Homepage <CODE>
+<A HREF="http://www.xdobry/tkmatrix">www.xdobry/tkmatrix</A></CODE>
+<P>
+<HR>
+<A HREF="matrix-7.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-5.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc6"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+</BODY>
+</HTML>

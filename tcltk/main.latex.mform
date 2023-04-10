@@ -1,0 +1,8 @@
+%head
+-\documentclass{article}
+-\title{ Matrix Output }
+-\usepackage[latin1]{inputenc}
+-\begin{document}
+%tail
+-\end{document}
+

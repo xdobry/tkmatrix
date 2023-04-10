@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE> Dokumentation und Benutzeranweisungen des Programm: Octave Schnittstelle</TITLE>
+ <LINK HREF="matrix-6.html" REL=next>
+ <LINK HREF="matrix-4.html" REL=previous>
+ <LINK HREF="matrix.html#toc5" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="matrix-6.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-4.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc5"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+<HR>
+<H2><A NAME="s5">5. Octave Schnittstelle</A></H2>
+
+<P>Octave ist ein freies Programm für numerische Mathematik.
+Es gehört inzwischen fast zu jeder Standartdistribution von
+Linux.
+<A HREF="http://bevo.che.wisc.edu/octave">Octave Homepage</A><P>
+<H2><A NAME="ss5.1">5.1 Importieren und Exportieren von Matrizen</A>
+</H2>
+
+<P>tkmatrix kann jetzt die Matrizen in Binäre und ASCII Format von
+Octave speichern und lesen.
+Auch der Format von MathLab ist unterstützt.
+Leider bis jetzt nicht getestet.
+Einzige Beschränkung tkmatrix kann nur Octave (Little-Endian)
+Format für Matrizen mit Double Float Zahlen richtig lesen.
+Bei exportieren zu Octave wird eine Variable mit dem Name
+tkmatrix gebildet.
+<H2><A NAME="ss5.2">5.2 tkmatrix als FrontEnd für Octave</A>
+</H2>
+
+<P>Tkmatrix kann auch direkt Octave benutzten.
+Dabei wird ein Octave Prozess im Hintergrund gestartet.
+Nur Handhabung von Fließkommazahlen ist mit Octave möglich.
+Dabei kann tkmatrix nicht nur die Einfachen matrix Operationen
+von Octave nutzen aber auch ganze Skripten ablaufen lassen und
+die Ergebnisse richtig auslesen.
+Für die Skripte werden die .tkm Skripte benutzt (z.B.
+zerobonds.tkm) Sie bestehen aus einen tcl-Script und einen Octave
+Teil.
+Der Tcl-Teil dient der Initialiesierung von Parameter für Octave.
+Der Octaveteil erzeugt eine Reihe von Ausdrucken die von tkmatrix
+ausgewertet werden.
+Dabei wird ein Protokoll initialisiert und Ergebnismatrix richtig
+gesetzt.
+Durch diese Methode kann man mit Hilfe von tkmatrix die Ergebnise
+von Octave
+sehr leicht zu Latex oder Html konvertieren.
+Auch Komfortable GUI kann hier von Vorteil sein.
+<P>
+<HR>
+<A HREF="matrix-6.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-4.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc5"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+</BODY>
+</HTML>

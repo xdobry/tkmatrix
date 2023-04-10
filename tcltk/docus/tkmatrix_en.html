@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+     <title>tkmatrix linux program</title>
+  </head>
+
+  <body>
+<h1>help for tkmatrix for linux</h1>
+<h2>what is tkmatrix?</h2>
+
+tkmatrix is an education mathematical program to manipulate matrices. Matrices are part of linear algebra.
+It was developed for students to learn algorithms and test own calculation.
+Therefore tkmatrix can give not even a solution but all algorithms steps as a protocol.
+It can calculate with floatnumbers and fractions. Solutions and protocols can be exported to ascii, html and latex files. (other files are possible). 
+The math-part of tkmatrix is programmed in C++ as tcl-library and graphical interface in Tk/Tcl.
+<p>
+Tkmatrix can be also a frontend for <a href="http://bevo.che.wisc.edu/octave">Octave</a> (A high-level interactive language for numerical computations.)
+At least for linear Algebra and matrices manipulation.
+Tkmatrix can load and save in octave format and run specially prepared octave scripts.
+<p>
+The distribution includes the program matrix too. It is pure shellprogram tkmatrix without GUI.
+<p>
+Full documentation is aviable only in German language. Mathematical short English documentation (mathematical part) is as <code>mathe_en.ps</code>. For viewing use ghostview. There is also source Latex file for it.
+
+<hr>
+Following mathematical operation are implemented:
+<ul>
+<li>gauss reduction
+<li>gauss-jordan reduction - make Hermite normal form
+<li>solve linear equations (also not unique solutions)
+<li>find basis of matrix
+<li>find kernel of matrix - basis of the solution space of the homogeneous system
+<li>determinant - by using gauss reduction
+<li>tranponent
+<li>best solution - linear regresion method
+<li>parts of simplex method (finding of corners of simplex, reduce matrix by columns)
+<li>simplex method - maximize function and satisfy the set of inequalities (canonical maximum problem)
+<li>charakteristic polynom (used for eigen values)
+<li>matrices multiplication, addition and substraction
+</ul>
+Full mathematical and program documentation is available only in german language.
+
+<h2>Helpfull Things</h2>
+If you want to print or preview matrices or protocols you need install Latex and ghostview (lunched as gv) on your computer. If it does not work adapt file <code>print.tcl</code>
+<p>
+For mark a part of matrix use SHIFT key
+<p>
+tkmatrix need for protocol-window many XWindows Resources (2000 Widgets for simplex protokol).
+If your system have bad performance use ghostview to view protokols (Menu view/protocol preview).
+You need to change preferences (menu edit/preferences) if the protocol-window do not need to be showed.
+<p>
+fractions are edited with a colon example 1,1,2 mean 1&frac12;
+</body>
+</html>

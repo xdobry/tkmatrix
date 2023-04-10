@@ -1,0 +1,19 @@
+%head
+-\begin{eqnarray}
+%rowhead
+%bruch1 %s x_{%i}
+%bruch2 \frac{%s}{%s} x_{%i}
+%bruch3 %s \frac{%s}{%s} x_{%i}
+%double %+lf x%i
+%cellseparator
+%equal  & = & 
+%rbruch1 %s
+%rbruch2 \frac{%s}{%s}
+%rbruch3 %s \frac{%s}{%s}
+%rdouble %lf
+%rowtail
+- \\\
+-
+%tail
+-
+-\end{eqnarray}

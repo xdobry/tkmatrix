@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE> Dokumentation und Benutzeranweisungen des Programm: matrix als Shellkommando</TITLE>
+ <LINK HREF="matrix-4.html" REL=next>
+ <LINK HREF="matrix-2.html" REL=previous>
+ <LINK HREF="matrix.html#toc3" REL=contents>
+</HEAD>
+<BODY>
+<A HREF="matrix-4.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-2.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc3"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+<HR>
+<H2><A NAME="s3">3. matrix als Shellkommando</A></H2>
+
+<H2><A NAME="ss3.1">3.1 Erzeugung der Matrix Datei</A>
+</H2>
+
+<P>
+<A NAME="matrixformat"></A> 
+Diese Datei hat formell den Aufbau.
+Sie kann auch mit dem Programm tkmatrix erzeugt werden. (in BNF
+ungefähr)
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+Matrixdatei = ["FLOAT"] zeilenzahl spaltenzahl {zahl}
+zeilenzahl,spaltenzahl=integer
+zahl=Bruch|Floatzahl
+Bruch=integer | (integer separator integer separator integer) | 
+(integer separator integer)
+separator= ","|"/"
+Floatzahl=C double   
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+
+Kontext:
+<P>Anzahl von Zahl = zeilenzahl * spaltenzahl
+<P>wenn FLOAT dann keine Brüche und umgekehrt
+<P>integer = -2147483648...-2147483647  double int
+<P>Ein Beispiel für eine 3x4 Bruch Matrix
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+3 4
+1,2 1 3 4
+1 -1 -1,2,3 4
+8 0 -2,3 4,3  
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+
+Was eine   3&times; 4   Matrix bedeutet (3-Zeilenzahl
+4-Spaltenzahl)
+<BR>
+<TABLE><TR><TD><SUP>1</SUP><SUB>2</SUB><TD>1<TD>3<TD>4</TR><TR><TD>1<TD>-1<TD>-1<SUP>2</SUP><SUB>3</SUB><TD>4</TR><TR><TD>8<TD>0<TD>-<SUP>2</SUP><SUB>3</SUB><TD><SUP>4</SUP><SUB>3</SUB>  </TR></TABLE>
+Zum Bruch Schreibweise  <SUP>1</SUP><SUB>3</SUB> wird
+geschrieben als `1,3'
+<P>1<SUP>1</SUP><SUB>3</SUB> wird geschrieben als `1,3,1'
+<P>Gleitkommazahlen werden wie üblich mit Punkt (auch mit Exponenten
+Teil) geschrieben (z.B 1.234e-12)
+<H2><A NAME="PROTOKOLL"></A> <A NAME="ss3.2">3.2 Was ist Protokoll ?</A>
+</H2>
+
+<P>Die meisten interessiert nicht das Ergebnis aber der Weg wie es
+zu ihm kommt. Dazu dient Protokoll, er beinhaltet alle
+Zwischenschritte vom Ausgangsmatrix zum Ergebnis mit zugehörigen
+Kommentar. <EM>Protokollierung schaltet man ein mit Option
+<CODE>--protokoll</CODE> oder <CODE>-p</CODE></EM>
+<P>Eigentlich bedeutet das Begriff Protokoll in Informatik eine
+Menge von Regeln die zum Informationsaustausch zwischen zwei
+Kommunikationspartner dienen. z.B. IP,TCP,HTTP Protokoll. Ich
+benutze dem Begriff in seiner eher ursprünglicher Bedeutung.
+<P><B>(Nach Duden)</B> <I>Protokoll: wortgetreue auf die wesentliche
+Punkte beschränkte schriftliche Fixierung des Hergangs einer
+Sitzung Verhandlung, eines Verhörs</I>
+<P><EM>Sorry</EM> für Begriffsunstimmigkeiten, aber es ist eben ein
+Merkmal der weichen Sprachen
+<H2><A NAME="ss3.3">3.3 Arbeitsweisen</A>
+</H2>
+
+<H3>Behelszeile</H3>
+
+<P><B>matrix</B> <CODE>-a Algorithmus  {Matrixdatei(en)} | -s [-o
+Outputdatei] [-t Outputtyp] [-v
+Vorlagenpfad]  [-e Ergebnismatrix] [-s]
+[-p] [-k] [-b]</CODE>
+<P>Algorithmus= ("none" | "gauss" | "jordan" | "loesung" | "kern" |
+"bild" | "inverse" | "determinante" | ("pivotiere" spalte zeile)
+| "naehrung" | "eckenfindung" | "simplex") | nummer
+<P>oder ein Nummer z.B. 1 für gauss
+<P>Outputtyp="ascii" | "html" | "latex"
+<P>Lange Optionsnammen
+<UL>
+<LI>-a, --algorithmus: muß definiert werden</LI>
+<LI>-o, --output: wie matrix >Outputdatei</LI>
+<LI>-t, --typeoutput : Type des Ausgabe z.B. {ascii,html,latex}</LI>
+<LI>-v, --vorlagen: Pfad mit Vorlagen Dateien (*.mform) sonst
+gesucht da wo das Programm</LI>
+<LI>-s, --stdin: Matrix wird aus Standarteingabe gelesen</LI>
+<LI>-k, --konvert: Brüche werden zu Gleitkommazahlen
+umgewandelt</LI>
+<LI>-b, --bruch: Brüche werden ohne den Ganzzahl geschrieben</LI>
+<LI>-p, --protokoll: Alle Zwischenschritte ausgeben</LI>
+<LI>-e, --ergebnis: Ergebnis als Datei Speichern</LI>
+<LI>-h, --help: Dieses Text</LI>
+</UL>
+<P>Gibt es mehrere mtrixdateien werden sie nacheinander bearbeitet.
+Outputs gehen nur in eine Datei oder ein Strom (stream). Bei
+Option -e wird das Ergebnis von letzten matrixdatei gespeichert.
+<P>
+<H3>Interaktiv</H3>
+
+<P>Wird Matrix ohne Parameter gestartet meldet es sich mit einem
+Menüauswahl interaktiv. Ich bin nicht besonders stolz auf diesen
+Modus. Man sollte lieber Shell benutzen es ist schneller und
+einfacher.
+<P>Die Menüs sind eigentlich selbsterklärend man muß nur die
+richtige Nummer eintippen.
+<P>Nicht alle Möglichkeiten des Programm sind in interaktiven Modus
+erreichbar.
+<H2><A NAME="ss3.4">3.4 Formatdateien</A>
+</H2>
+
+<P>Formatdateien haben den Aufbau object.typ."mform"
+<P>object={ "main" | "string" | "matrix" | "eqnarray" |
+"solution" | "determinante" | "simplex" }
+<P> Objectdateien für <CODE>main,string und matrix</CODE> müssen für
+jedes Typ vorhanden sein.
+<P>typ = { "ascii" | "html" | "latex" }
+<P>Die Erzeugung den neuen  Formatdateinen sollen auf Hand von
+bereits vorhandenen genommen werden. In Quellcode Datei
+<CODE>protformat.h</CODE> ist der Aufbau der Datein als Kommetar genau
+beschrieben.
+<P>Ein paar Besonderheiten
+<UL>
+<LI>Es gibt keine Kommentarzeilen</LI>
+<LI>Formatdatei besteht aus Felder dessen Name mit % Anfängt.
+Die Felder müssen in festen Reihenfolge und alle für bestimmtes
+Objekt vorkommen</LI>
+<LI>Für jedes Feld soll eine Zeichenkette zu definieren sein</LI>
+<LI>Eine Zeile beginnt entweder von <CODE>%Feldname</CODE> oder die
+Zeile wird zum Zeichenkette des letztes Feldes hinzugefügt.</LI>
+<LI>Die Zeichenkette gilt nach ersten Zeichen nach 
+<CODE>%Feldname</CODE>. In dieser Zeile wird zu Zeichenkette kein
+<CODE>newline</CODE> hinzugefügt.</LI>
+<LI>In Zeilen ohne <CODE>%Feldname</CODE> wird ein <CODE>newline</CODE>
+hinzugefügt es sei denn die Zeile endet mit \</LI>
+<LI>Erstes Zeichen in Zeile ohne <CODE>%Feldname</CODE> wird ignoriert.
+Ich habe immer '-' geschrieben</LI>
+</UL>
+
+Das Format ist zugegeben ziemlich seltsam aber man kann alles
+damit erreichen. (Und es war leicht zu programmieren :-) )
+<P>
+<HR>
+<A HREF="matrix-4.html"><IMG SRC="next.gif" ALT="Weiter"></A>
+<A HREF="matrix-2.html"><IMG SRC="prev.gif" ALT="Zurück"></A>
+<A HREF="matrix.html#toc3"><IMG SRC="toc.gif" ALT="Inhalt"></A>
+</BODY>
+</HTML>

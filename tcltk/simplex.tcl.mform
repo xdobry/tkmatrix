@@ -1,0 +1,22 @@
+%head {simplex 
+%headflex
+%headtail
+%rowhead {
+%bruch1  %s
+%bruch2  {%s %s}
+%bruch3  {%s %s %s}
+%double  %lf
+%cellseparator  
+%rowtail }
+-
+%fhead }
+-
+-{
+%fbruch1  {{%s} %i}
+%fbruch2  {{%s %s} %i}
+%fbruch3  {{%s,%s,%s} %i}
+%fdouble  {{%+lf} %i}
+%tail }
+-}
+-
+

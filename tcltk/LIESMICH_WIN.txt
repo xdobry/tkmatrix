@@ -1,0 +1,24 @@
+Hinweise zu Kompilieren von tkmatrix unter Windows
+
+Es ist möglich tkmatrix auch unter WIndows zu kompilieren und nutzen.
+Ich rate jedoch die fertige Kompilierte Vesrion von meiner Hompage zu laden
+(http://www.xdobry.de/tkmatrix/tkmatrix_win.html)
+
+Ich habe den GNU-egcs Kompiler und das Unix-Tool Sammlung von 
+Cygnus Solution benutzt (http://www.cygnus.com). 
+Dies beinhaltet auch den Tk/Tcl Interpreter.
+
+Zusätzlich braucht man auch die Windows Version der gmp Bibliothek 
+(GNU multiple precision arithmetic library). Die gmp.h und libgmp.a
+muß man korrekt in die Surchpfade kopieren.
+
+Die Kompilation sollte erfolgen mit
+
+make tkmatrix.exe
+
+Es entsteht so die statische Vesion des Programms. Damit es auch Funktioniert
+sollte man die Tcl/Tk Bibliotheken in das tkmatrix Verzeichniss kopieren.
+(tcl8.0 , tk8.0) oder in Windows Registry den Suchpfad angeben.
+HKEY_LOCAL_MACHINE Software\Scriptics\Tcl\{Version Nummer}.
+Diese Methode habe ich nicht ausprobiert (siehe die Datei  win/tclWinInit.c
+in Tcl Source)

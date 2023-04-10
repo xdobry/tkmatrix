@@ -1,0 +1,30 @@
+Begin3
+Title:          tkmatrix
+Version:        0.6.4
+Entered-date:   27-JUNE-2001
+Description:    tkmatrix is an education math program to manipulate
+                matrices. Matrices are part of linear algebra.
+                It was developed for german students to learn
+                algorithms and test own calculation. Therefore
+                tkmatrix can give not even a solution but all
+                algorithm steps as a report. It can calculate with
+                float numbers and fractions (rational numbers of
+                multiple precision). Solutions and protocols
+                can be exported to ascii, html and latex files.
+                It have nice Tk GUI. Tkmatrix have an Interface to
+                Octave. It can load and save in octave format and
+                use it as backend.
+                Full documentation is available only in German.
+                (Homepage http://swt.wi-inf.uni-essen.de/~atrzewik)
+Keywords:       math simplex linear algebra gaussian reduction
+Author:         Artur Trzewik (sw0562@uni-essen.de)
+Maintained-by:  the author
+Primary-site:   sunsite.unc.edu /pub/Linux/apps/math/
+                2kB tkmatrix.lsm
+                274kB tkmatrix-0.6.4-0.tar.gz
+Alternate-site:
+Original-site:
+Platforms:      Linux/Unix
+Copying-policy: GPL
+End
+

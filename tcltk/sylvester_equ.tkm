@@ -1,0 +1,47 @@
+#tkmatrix-begin
+#
+#set message "Solve the Sylvester equation\n A X + X B + C = 0\nusing standard LAPACK subroutines.\nA matrix is the input matrix"
+#
+#set variables {
+#	{bm matrix B-matrix {}}
+#	{cm matrix C-matrix {}}
+#}
+#
+#tkmatrix-end
+
+# checking is there in matrix
+
+if (!exist("in") || !exist("bm") || !exist("cm"))
+	error ("matrices are not defined! use tkmatrix for it");
+endif
+
+m = syl(in,bm,cm);
+
+puts (":addprot string computing Sylvester equation A X + X B + C = 0\n");
+puts (":addprot matrix\n");
+disp (in)    
+
+puts (":addprot string Matrix A =\n");
+puts (":addprot matrix\n");
+disp (in)    
+
+puts (":addprot string Matrix B =\n");
+puts (":addprot matrix\n");
+disp (bm)    
+
+puts (":addprot string Matrix C =\n");
+puts (":addprot matrix\n");
+disp (cm)    
+
+puts (":addprot string Solution\n");
+puts (":addprot matrix\n");
+disp (m)    
+
+# Set output matrix
+
+puts (":setsolution\n");
+disp (m)    
+
+# say tkmatrix script is ready
+
+puts (":end\n")

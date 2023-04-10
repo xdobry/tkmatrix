@@ -1,0 +1,332 @@
+\documentclass[12pt,titlepage]{article}
+\usepackage{times,makeidx}
+\usepackage{mathptm}
+\pagestyle{headings}
+%\RequirePackage[hyperindex,pdfmark,backref]{hyperref}
+\makeatother
+\makeindex
+\usepackage{hyperref}
+
+\begin{document}
+\title{ mathematical algorithm and operation in program tkmatrix}
+\author{Artur Trzewik {\tt mail@xdobry.de}}
+\date{v1.0, \today}
+\raggedright
+\maketitle
+\abstract{{\em Warning:\/} I try in this document to explain what tkmatrix is doing (or can do).
+This is not a summary of linear algebra (especially matrix).
+There are enought mathematical sources of linear algebra in internet.
+}
+\tableofcontents
+\section{introducion}
+Program tkmatrix was written in germany.
+It was developed for german students and the stuff is the same that is taught on german universities.
+Mathematics is the same in every country, but by the translation of the program manuals it was very dificult to find corresponding english terms.
+Some method are in ``english-area'' not so popular and seldom described in literature.
+The discription is not always fully mathematical correct. It is make for understanding.
+
+Each section describe one operation/algorithm of tkmatrix
+
+{\em Warning} Please do not use this program for reall problems. It was created for education purposes. The outputs could be not right
+
+\section{gauss reduction}
+Gaussian elimination can be used to solve the system of linear equations.
+It transform the matrix to upper triangular form
+
+Following {\em elementary (row) operation} are used:
+\begin{itemize}
+\item multiply a row by a non-zero real number c, 
+\item swap two rows, 
+\item add c times one row to another one. 
+\end{itemize}
+
+the output matrix has following upper triangula form
+\[
+\begin{array}{ccccc}
+a_{11}  & a_{12}  & a_{13}  & {\ldots}  & a_{1n}  \\ 
+0 & a_{22} & a_{23} & {\ldots}  & a_{2n} \\ 
+: & : & : & : & : \\ 
+0 & 0 & 0 & {\ldots}  & a_{mn} 
+\end{array}
+\]
+gauss reduction used in this program don´t change determinant of matrix.
+
+\section{gauss-jordan reduction}
+Gaussian-Jordan elimination can be used to solve the system of linear equations and is like gauss elemination
+It transform the matrix to Hermite normal form.
+\begin{quote}
+A matrix is in row-echolon or Hermite normal form if the following condition are satisfield:
+\begin{itemize}
+\item The zero rows lie bolow the nonzero rows.
+\item The leading entry of any nonzero row is 1.
+\item The column that contains the leading entry of any row has 0 for all other entries.
+\item If the leading entry of the row is in the $t_{ith}$ column , then $t_1 < t_2 < \dots <t_r$ where r is the number of nonzero rows
+\end{itemize}
+\end{quote}
+the output matrix look like this
+\[
+\begin{array}{ccccc}
+1  & 0  & 0  & {\ldots}  & a_{1n}  \\ 
+0 & 1 & 0 & {\ldots}  & a_{2n} \\ 
+: & : & : & : & : \\ 
+0 & 0 & 1 & {\ldots}  & a_{mn} 
+\end{array}
+\]
+Man can see at once the solution of linear equations on this form.
+
+\section{solution of linear equations}
+
+there is a system of linear equations
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + a_{13}*x_{3} + {\ldots} + a_{1n}*x_{n}  & = & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + a_{23}*x_{3} + {\ldots} + a_{2n}*x_{n}  & = & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + a_{33}*x_{3} + {\ldots} + a_{3n}*x_{n}  & = & b_{3} \\ 
+:  & = & : \\ 
+a_{m1}*x_{1} + a_{m2}*x_{2} + a_{m3}*x_{3} + {\ldots} + a_{mn}*x_{n}  & = & b_{m} 
+\end{array}
+\]
+and it is {\em augmented coefficient matrix} of this system (and input matrix for the program). Normally $m>=n$
+\[
+\begin{array}{cccccc}
+a_{11} & a_{12} & a_{13} {\ldots}  & a_{1n} & b_{1} \\ 
+a_{21} & a_{22} & a_{23} {\ldots}  & a_{2n} & b_{2} \\ 
+\multicolumn{6}{c}\dotfill\\
+a_{m1} & a_{m2} & a_{m3} & {\ldots} a_{mn} & bm 
+\end{array}
+\]
+You can write it as $Ax=b$
+\[
+{\bf A} \quad = \quad 
+\left( \begin{array}{llcl}
+a_{11} & a_{12} & {\ldots}  & a_{1n} \\ 
+a_{21} & a_{22} & {\ldots}  & a_{2n} \\ 
+: & : & : & : \\
+a_{m1} & a_{m2} & {\ldots}  & a_{mn}  
+\end{array}\right), \quad
+{\bf b} \quad = \quad 
+\left( \begin{array}{l}
+b_{1} \\ 
+b_{2} \\ 
+\vdots\\
+b_{m}
+\end{array}\right), \quad
+{\bf x} \quad = \quad 
+\left( \begin{array}{l}
+x_{1} \\ 
+x_{2} \\ 
+\vdots\\
+x_{m} 
+\end{array}\right)
+\]
+Program use guass-reduction to solve this and give one ``solution'' matrix. This cases are possible.
+\begin{itemize}
+\item no solution - a $0 \times 0$ matrix is returned
+\item exactly one solution - one row matrix $m \times 1$ is returned.
+\item many solutions - a $m \times t \quad t<n$ matrix is returned. First row is one solution of the system next rows are basis of the solution space of the homogeneous system
+\end{itemize}
+
+\section{basis of matrix}
+It use gauss-reduction to find the basis of space which is given by row-vectors of the matrix.
+
+\section{kernel of matrix}
+It use gauss-jordan-reduction to find the basis of the solution space of the homogeneous system.
+
+\section{best solution}
+there is a system of linear equations
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + {\ldots} + a_{1n}*x_{n}  & = & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + {\ldots} + a_{2n}*x_{n}  & = & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + {\ldots} + a_{3n}*x_{n}  & = & b_{3} \\ 
+:  & = & : \\ 
+a_{m1}*x_{1} + a_{m2}*x_{2} + {\ldots} + a_{mn}*x_{n}  & = & b_{m} 
+\end{array}
+\]
+where $m>n$ and this has no solution. Program find the best solution with formel.
+\[
+(A^{t} * A) * x = A^{t} * b
+\]
+The best solution u is than for all v
+\[ \mid A*u-b \mid  <  \mid A*v - b \mid \]
+This is exactly the regresion line known from statistic.
+
+\section{determinant}
+The program calculate determinant not rekursively but by using gauss-reduction.
+The determinant is getting by multiple all diagonal elements after gauss-reduction.
+
+\section{inverses}
+
+There is a elementary matrix. n=4
+
+\[ I_{n}= 
+\begin{array}{cccc}
+1 & 0 & 0 & 0 \\ 
+0 & 1 & 0 & 0 \\ 
+0 & 0 & 1 & 0 \\ 
+0 & 0 & 0 & 1 
+\end{array}
+ \]
+A inverse matrix to A $n \times n$ is called $A^{-1}$
+\[
+A^{-1} * A=I_{n}
+\]
+\begin{quote}
+If a sequence of multiplication on the left by elementary matices reduces a matrix A to the identity I, the same left matrix maultiplications in the same order will reduce I to $A^{-1}$.
+\end{quote}
+The programm add an elemantary matrix to input matrix and do gauss-jordan reduction
+
+Thera are also matrices you can not inverse.
+
+\section{transpose}
+The transpose of an $m \times n$ matrix A is the $n \times m$ matrix $A^t$. The row vectors of $A^t$ are column vectors of A.
+
+
+\section{pivot}
+pivot operation is used by Simplex Method. You must give row and column of pivot operation. This element can´t be null. 
+pivot on element$_{ij}$
+\[
+\begin{array}{ccccc}
+b_{11} & b_{12} & b_{13} & {\ldots}  & b_{1n} \\ 
+b_{21} & b_{22} & b_{23} & {\ldots}  & b_{2n} \\ 
+: & : & : & : & : \\ 
+b_{m1} & b_{m2} & b_{m2} & {\ldots}  & b_{mn} 
+\end{array}
+\]
+
+steps are:
+\begin{enumerate}
+\item  multiply i-th column with $\frac{1}{b_{ij}}$. This element become 1.
+\item  for all columns unless j-th row do ; k=1..n
+\[ 
+k_{th} column = k_{th} column - b_{ik} * j_{th} column, \]
+after that all elements (i,k) (with $k\not= j$) are null.
+\end{enumerate}
+
+\section{find corner of simplex}
+It is main part of Simplex Method.
+This do a set of pivot operation. The elements to pivot are choosen unter special criteria.
+
+
+
+\section{Simplex Method}
+
+maximize function and satisfy the set of inequalities (canonical maximum problem)
+
+There as a set of inequalities 
+\[
+\begin{array}{rcl}
+a_{11}*x_{1} + a_{12}*x_{2} + a_{13}*x_{3} + {\ldots} + a_{1n}*x_{n}  & \geq  & b_{1} \\ 
+a_{21}*x_{1} + a_{22}*x_{2} + a_{23}*x_{3} + {\ldots} + a_{2n}*x_{n}  & \geq  & b_{2} \\ 
+a_{31}*x_{1} + a_{32}*x_{2} + a_{33}*x_{3} + {\ldots} + a_{3n}*x_{n}  & \geq  & b_{3} \\ 
+: & : & : \\ 
+a_{m1}*x_{1} + a_{m2}*x_{2} + a_{m3}*x_{3} + {\ldots} + a_{mn}*x_{n}  & \geq  & b_{m} 
+\end{array}
+\]
+and an function
+\[
+G(x_{1}+{\ldots} +x_{n})=G(\vec{x})=g_{0}+g_{1}*x_{1}+g_{2}*x_{2}+{\ldots} +g_{n}*x_{n}=g_{0}+\vec{g}(\vec{x}) 
+\]
+Problem: find the best (optimal) solution. Maximize function and satisfy the set of inequalities
+
+the imput matrix must be build as follow
+\[
+\begin{array}{ccccc|c}
+a_{11} & a_{12} & a_{13} & {\ldots}  & a_{1n} & b_{1} \\ 
+a_{21} & a_{22} & a_{23} & {\ldots}  & a_{2n} & b_{2} \\ 
+: & : & : & : & : & : \\ 
+a_{m1} & a_{m2} & a_{m2} & {\ldots}  & a_{mn} & km \\ 
+g_{1} & g_{2} & g_{3} & {\ldots}  & g_{n} & g_{0}
+\end{array}
+ \]
+The simplex method is rather complex and it will be not explained here. The program code was tested on reall excercises from math books and it worked. It can happen that this method not terminate or crash.
+
+\section{matrix multiplikation}
+
+thare are a A $m \times n$ matrix and B $n \times t$ matrix
+
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1t} \\ 
+: & : & : \\ 
+b_{n1} & {\ldots}  & a_{nt} 
+\end{array}
+\]
+C=A*B is a $m \times t$ Matrix
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1t} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mt} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{th} row A; j\_{th} column B
+\[c_{ij}=a_{i1}*b_{1j}+a_{i2}*b_{2j}+a_{i3}*b_{3j}+{\ldots} +a_{in}b_{nj} \]
+
+\section{matrix addition}
+
+There are  A $m \times n$ matrix and B $m \times n$ matrix
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1n} \\ 
+: & : & : \\ 
+b_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+\]
+
+C=A+B is $m \times n$ matrix
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1n} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mn} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{th} row A,B; j\_{th} column A,B
+\[c_{ij}=a_{ij}+b_{ij}\]
+
+\section{matrix substraktion}
+
+Thera are A $m \times n$ matrix and B $m \times n$ matrix
+\[A=
+\begin{array}{ccc}
+a_{11} & {\ldots}  & a_{1n} \\ 
+: & : & : \\ 
+a_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+B=
+\begin{array}{ccc}
+b_{11} & {\ldots}  & b_{1n} \\ 
+: & : & : \\ 
+b_{m1} & {\ldots}  & a_{mn} 
+\end{array}
+\]
+
+C=A-B is $m \times n$ matrix
+\[C=
+\begin{array}{ccc}
+c_{11} & {\ldots}  & c_{1n} \\ 
+: & : & : \\ 
+c_{m1} & {\ldots}  & c_{mn} 
+\end{array}
+\]
+
+$c_{ij}$- i\_{th} row A,B; j\_{th} column A,B
+\[c_{ij}=a_{ij}-b_{ij}\]
+
+
+\end{document}

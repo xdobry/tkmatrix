@@ -1,0 +1,15 @@
+%head 
+-Vektoren horisontal
+-L(x)=\
+%arrayhead (
+%bruch1 %s
+%bruch2 %s,%s
+%bruch3 %s,%s,%s
+%double %lf
+%separator  ; 
+%index + a%i *
+%arraytail
+-) 	
+%tailmore
+-Vobei ai freiwählbar
+%tail

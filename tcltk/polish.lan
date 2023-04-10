@@ -1,0 +1,168 @@
+openmatrix {Otwórz Matrice}
+newmatrix {Nowa Matryca}
+nullmatrix {Matryca Zerowa}
+einheitsmatrix Einheitmatrix
+randommatrix {Matryca przypadkowa}
+deactivate Deaktywuj
+show Poka¿
+mwtitle {Tkmatrix Centrum Sterowania}
+file Plik
+new Nowa
+open Otwórz
+save Zapisz
+save_as {Zapisz jako}
+import Importuj
+extra_save Exportuj
+save_solution {Wynik Zapisz}
+save_protokol {Protokó³ Zapisz}
+close Zamknij
+end Zakoñcz
+edit_m Edytowaæ
+edit_eunf {Operacje elementarne}
+edit Edycja
+copy Kopiuj
+paste Wklej
+resize {Zmieñ Wymiary}
+transponieren Transponuj
+mark Zaznacz
+col Kolumna
+row Rz±d
+all Wszystkie
+duplicate Podwoiæ
+solution2first {Edytuj wynik}
+open_as_float {Otwórz jako Zmiennoprzecinkowa}
+open_as_widefloat {Otwórz jako szeroka zmiennoprzecinkowa}
+open_puffer {Otwórz Bufor}
+preferences Opcje
+view Przejd¼
+first Ausgangmatrix
+vsolution Wynik
+vprotokol Protokó³
+print_solution {Drukuj Wynik}
+pview_solution {Poka¿ Wydruk Wyniku}
+print_protokol {Drukuj Protokó³}
+pview_protokol {Poka¿ Wydruk Protoko³u}
+algorithmus Algorytmy
+gauss Gauss
+gaussjordan Gauss-Jordan
+solution Rozwi±zanie
+determinante Determinanta
+bild Baza
+kern J±dro
+inverse Inwersja
+naehrung {Najlepsze Rozwi±zanie}
+pivotiere Pivotuj
+simplex Simplex
+eckenfindung {Znajd¿ Wierzcho³ek}
+chpolynom {charakt. Polinom}
+matrixspiel {Gra Macierzy}
+mmul {Mno¿enie Macierzy}
+madd {Dodawanie Macierzy}
+msub {Odejmowanie Macierzy}
+help Pomoc
+wwwlink_autor {Homepage autora}
+info {O programie}
+viewmenu Dzia³ania
+print Wydrukuj
+printpreview {Poka¿ Wydruk}
+closeview Zamknij
+overwrite Zast±p
+newdialogtitle {Utworzenie nowej macierzy}
+newdialogmes {Podaj szeroko¶æ i wysoko¶æ macierzy}
+width Szeroko¶æ
+height Wysoko¶æ
+maxnum {Granica (licznik)}
+maxden {Granica (mianownik)}
+dialogok Gotowy
+dialogcancel Wyj¶cie
+floattype {Macierz z liczb zmiennoprzecinkowych}
+rationaltype {Matryca z u³amkami}
+widefloattype {szerokie liczby zmiennoprzecinkowe}
+opdialogtitle {Wybierz jedn± macierz}
+opdialogmes {Do wybranej macierzy i dla tego typu operacji pasuj± nastêpuj±ce macierze obecne w programie}
+dialogok Gotowy
+dialogcancel Wyj¶cie
+operror {Do podanej operacji nie ma rzadnej macierzy w programie}
+errormsg B³±d
+resizedialogtitle {Zmieñ rozmiar macierzy}
+resizedialogmes {Podaj now± szczeroko¶æ i wysoko¶c macierzy oraz z której strony ma nast±piæ zmiana}
+resizetop {zmieniæ z góry}
+resizeleft {zminiec z lewej}
+pastedialogtitle {Wyznacz wierzcho³ek}
+pastedialogmes {Wybierz o jaki wierzcho³ek macierzy w buforze przed chwi³± zaznaczy³e¶?}
+topleft {lewy górny}
+topright {prawy górny}
+bottomleft {lewy dolny}
+bottomright {prawy dolny}
+pivotdialogtitle {Podaj miejsce macierzy}
+pivotdialogmes {Podaj kolumne i rz±d macierzy w którym ma byæ dokonane pivotowanie?}
+pwidth {Kolumna 0-m}
+pheight {Rz±d 0-n}
+aboutdialogtitle {O programie tkmatrix}
+whatitis {Cel programu}
+version Wersja
+development {Dalszy rozwój}
+licence {Licencja i U¿ywanie}
+aboutautor {O Autorze}
+important {Wa¿ne, B³êdy}
+enddialogtitle {Program Zakoñczyæ}
+enddialogmes {Czy rzeczywi¶cie zakoñczyæ program tkmatrix}
+emptymatrix {Macierz jest pusta}
+infowhatitis {tkmatrix jest programem matematycznym i edukacyjnym. S³u¿y do manipulacji na macierzach, które o ile wiem s± w matematycznym programie w Polsce dopiero na studiach wy¿szych. Program ten napisa³em dla studentów którzy chc± nauczæ siê algorytmów na macierzach albo sprawdziæ swoje w³asne obliczenia. Poniewa¿ program jest przeznaczony do celów edukacyjnych potrafi on podaæ nie tylko wynik koñcowy owych algorytmów ale po koleji wszystkie kroki algorytmu i to w formie plików Latex, html lub ascii. Obliczenia s± dokonywane albo na u³amkach albo na komputerowych liczbach z przecinkiem (float). Program ten opar³em na niemieckich wyk³adach matematyki i jest on dopasowany metod± znanych w niemieckiej literaturze.}
+infoversion {To jest jeszcze wersja Beta tego programu (testowa). J±dro Programu (matematyczna czê¶æ w C++) napisane zosta³o ju¿ przed 3 latami i powinno funkcjonowaæ dobrze. Programowanie wyj±tków zosta³o jeszcze nie zakoñczone tzn. mog± pojawiæ siê tk komunikaty o b³êdach. Nie powinny one ale zakoñczyæ programu.}
+infodevelopment {To nie jest wersja komercyjna nie zariabiam ni± ani grosza; napisa³em to dla dobra ogó³u. Je¶li i Ty chcesz siê udzieliæ lub po prostu spróbowaæ swoich si³ w programowaniu to jeste¶ do tego zaproszony. Tk jest distrybutowany razem z kodem ¼ród³owym. Potrzebujê pomocy w t³umaczenie instrukcji na poski i rozwoju nowych algorytmów.}
+infolicence {Ten program nale¿y do tzw. "freeware". Ka¿dy mo¿e go nieodp³atnie u¿ywaæ i modifikowaæ. Licencja nie mo¿e byæ jednak zmieniona i wszejkie prawa do programu zostaja przy Artur Trzewik. Szczególnie Kod ¯ród³owy nie mo¿e byæ ukrywany. To dotyczy siê tak¿e czê¶ci programu. Program mo¿e byæ rozprowadzany nie komercyjnie. Cena nie mo¿e przykraczaæ kosztów no¶nika i kopiowania. Uwaga! U¿ywasz tego programu na w³asn± odpowiedzialno¶c. Autor nie przejmóje odpowiedzilno¶ci za szkody zpowodowane po¶rednio czy bezpo¶rednio przez ten program.}
+infoaboutautor {Teraz studiujê informatyke z zarz±dzaniem na uniwersytecie Essen w Niemczech (Zag³êbie Ruhry). Z Polski wyemigrowa³em 7 lat temu. Moje rodzinne miasto to Rybnik (dla Warszawiaków to miasto 80km na po³udnie od Katowic a Katowice s± gdzie¶ ko³o Krakowa)}
+infoimportant {Program ten jest stosunkowo nowy. Mo¿e zawieraæ du¿o b³êdów. Informacje o nich proszê kierowaæ pod email: sw0562@uni-essen.de . Program ten nie dzia³a z RedHat 5.0. Rozwi±zanie u¿ywaæ RedHat 5.1, 4.2 albo nowszej dystrybucji.}
+helpfile tkmatrix_pl.html
+cspreftitle B³±ð
+csprefmessage {Aktualne Opcje nie mog³y byæ zapisane w katalogo u¿ytkownika}
+lunch_browser {Netscape nie mog³ byæ zkontaktowany. Czy wystartowaæ browser?}
+nohelpviewer {Przeg³±darka html nie mog³a zostaæ znaleziona. Zmineñ opcje!}
+nowww_winsupport {Patzr pod WWW adresem}
+nosolution {Do tej macierzy nie ma jeszcze wyniku. Zastosuj najpierw jaki¶ algorytm.}
+noprotocol {Do tej macierzy nie ma jeszcze wyniku. Chcesz naprawdê zobaczyæ protokó³?}
+prefdialogtitle Opcje
+afteralgorithm {Po zakoñczeniu algorytmu}
+opensolution {Otworzyæ okno z wynikiem}
+openprotocol {Otworzyæ okno z protoko³em}
+helpbrowser {przegl±darka HTML (zawsze z %s)}
+widefloat_prec {Precyzja szerokich liczb zmiennoprzecinkowych (w Bitach)}
+widefloat_width {Maksymalna Liczba cyfer przed przecinkiem}
+widefloat_reformat {Unikaæ eksponentu (zreformowaæ)}
+widefloat_maxzeros {Maksymalnie zer po przecinku}
+widefloat_showprec {Pokazuj z dok³adno¶ci±}
+netscape_remote {Spróbuj najpierw po³aczyæ siê z za³adowanym Netscape}
+toolbar {Pasek z Skrótami}
+language Jêzyk
+use U¿ywaj
+usesave {Zapisz i U¿ywaj}
+default {Warto¶ci standartowe}
+newlanguage {Od teraz jest u¿ywany jêzyk polski. Stare okienka zostaj± jednak nie zminenione}
+errornolatex {do tej funkcji potrzebujesz system latex na twoim komputerze}
+errornofraction {U³amek w z³ym formacie, napisz na przyk³ad 1,2}
+erroralg {Algorytm nie da³ rezultatu. Z³e wymiary matrycy albo b³±d przy obliczeniach}
+errornooctave {Octave nie mo¿e byæ wystartowana. Pewnie nie ma w systemie}
+octave octave
+endoctaveproc {kill octave proc}
+octavedialogtitle {Octave Interface}
+octave_script {£aduj Octave Skript}
+no_solution_eqn {Uk³ad równañ nie ma rozwi±zania}
+must_be_square {Macierz musi byc kwadratowa (nxn)}
+not_invertible {Macierz nie ma inversy}
+simplex_no_one_solution {Uk³ad nierównosci nie ma rozwi±zania}
+simplex_no_optimum {Funkcja nie ma optimum}
+number_overflow {Overflow Error. Zbyt du¿e liczby!}
+outof_range {Index nie le¿y w macierzy. Uwaga! Numeracja zaczyna siê od 0}
+no_arrgument {Nie wszystkie parametry dla dej operacji zostaly podane}
+cannot_openfile {Nie moge odtworzyæ danej jako matcierzy}
+noprot {nie tworzyæ protokólow}
+onlyfraction {u³amki bez liczby ca³kowitej przy protoko³ach}
+editonlyfraction {u³amki bez liczby ca³kowitej przy protoko³ach}
+editsolution {Edytuj rozwiazanie}
+edit_modis {Zamieñ A*k A(i)+k*A(j) piwotuj piwotuj2}
+modis_label {{{Index 1} {Index 2} -} {Index Faktor -} {{Index 1} {Faktor} {Index 2}} {{Wiersz Y} {Kolumna X} -} {{Wiersz Y} {Kolumna X} -}}
+do_step Wykonaj
+undo Anuluj
+
+polfont -adobe-helvetica-medium-r-normal--12-120-75-75-p-67-iso8859-2

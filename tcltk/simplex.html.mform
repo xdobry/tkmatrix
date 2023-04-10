@@ -1,0 +1,23 @@
+%head
+-<TABLE>
+-<TR>
+%headflex
+%headtail
+%rowhead
+%bruch1 <TD> %s </TD>
+%bruch2 <TD><SUP>%s</SUP>/<SUB>%s<SUB> </TD>
+%bruch3 <TD>%s<SUP>%s</SUP>/<SUB>%s<SUB> </TD>
+%double  <TD> %lf </TD>
+%cellseparator
+%rowtail
+-<TR>
+%fhead
+-</TABLE>
+-G(x)=
+%fbruch1  %s x<SUB>%i</SUB>
+%fbruch2  <SUP>%s</SUP>/<SUB>%s</SUB>x<SUB>%i</SUB>
+%fbruch3  %s<SUP>%s</SUP>/<SUB>%s</SUB>x<SUB>%i</SUB>
+%fdouble  %+lf x<SUB>%i</SUB>
+%tail
+-<BR>
+

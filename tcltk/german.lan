@@ -1,0 +1,200 @@
+openmatrix {Matrix öffnen}
+newmatrix {Neue Matrix}
+nullmatrix {Nullmatrix}
+einheitsmatrix {Einheitsmatrix}
+randommatrix {Zufallsmatrix}
+deactivate {Deaktivieren}
+show {Anzeigen}
+mwtitle {tkmatrix Steuerungszentrum}
+
+file Datei
+new Neu
+open Öffnen
+save Speichern
+save_as {Speichern als}
+import Import
+extra_save {Exportieren}
+save_solution {Ergebnis Speichern}
+save_protokol {Protokoll Speichern}
+close Schließen
+end Beenden
+
+edit_m Editieren
+edit_eunf {elem. Unformungen}
+edit Bearbeiten
+copy Kopieren
+paste Einfügen
+resize {Größe Ändern}
+transponieren Transponieren
+mark Markieren
+col Spalte
+row Zeile
+all Alle
+duplicate Dupplizieren
+solution2first {Ergebnis zum Ausgang}
+open_as_float {Öffnen als Gleitkommazahl}
+open_as_widefloat {Öffnen als Große Gleitkommazahl}
+open_puffer {Puffer Öffnen}
+preferences Einstellungen
+
+view Ansicht
+first Ausgangmatrix
+vsolution Ergebnismatrix
+vprotokol Protokoll/Zwischenschritte
+print_solution {Ergebnis Drucken}
+pview_solution {Ergebnis Druckvorschau}
+print_protokol {Protokoll Drucken}
+pview_protokol {Protokoll Druckvorschau}
+
+algorithmus Algorithmen
+gauss Gauss
+gaussjordan Gauss-Jordan
+solution Lösung
+determinante Determinante
+bild Bild
+kern Kern
+inverse Inverse
+naehrung Nährungslösung
+pivotiere Pivotiere
+simplex Simplex
+eckenfindung Eckenfindung
+chpolynom {charakt. Polynom}
+matrixspiel {Matrixspiel}
+mmul {Matrizen Multiplikation}
+madd {Matrizen Addition}
+msub {Matrizen Substraktion}
+
+help Hilfe
+wwwlink_autor {Autor Homepage}
+info Info
+
+viewmenu Aktionen
+print Drucken
+printpreview Druckvorschau
+closeview Schließen
+
+overwrite Überschreiben
+
+newdialogtitle {Neue Matrix Erstellen}
+newdialogmes {Geben Sie die Breite, Höhe und Typ der Matrix}
+width {Breite (Spaltenzahl)}
+height {Höhe (Zeilenzahl)}
+maxnum {Obergrenze (Zähler)}
+maxden {Obergrenze (Nenner)}
+dialogok Fertig
+dialogcancel Abbruch
+floattype {Fließkommazahlen-Matrix (32Bit)}
+rationaltype {Bruchzahlen-Matrix}
+widefloattype {Große Fließkommazahlen-Matrix}
+
+opdialogtitle {Wählen Sie eine Matrix}
+opdialogmes {Für die Ausgewähte Operation passen folgende Matrizen. Wählen Sie eine und drücken Sie auf Fertig}
+dialogok Fertig
+dialogcancel Abbruch
+operror {Keine passende Matrizen für die Operation gefunden}
+errormsg {Fehler}
+
+resizedialogtitle {Matrixgröße ändern}
+resizedialogmes {Geben Sie die neue Breite und Höhe der Matrix und von welchen Seite die Matrix verändert werden soll. }
+resizetop {von Oben verändern} 
+resizeleft {von Links verändern} 
+
+pastedialogtitle {Ecke bestimmen}
+pastedialogmes {Geben Sie welche Ecke des Puffers Sie meinen?}
+topleft {linke obere}
+topright {rechte obere}
+bottomleft {linke untere}
+bottomright {rechte untere}
+
+pivotdialogtitle {Pivotierungstelle Bestimmen}
+pivotdialogmes {Bestimmen Sie an welcher Stelle soll es pivotiert werden?}
+pwidth {Spalte 0-m}
+pheight {Zeile 0-n}
+
+aboutdialogtitle {Info über tkmatrix}
+whatitis {Ziel des Programms}
+version {Version}
+development {Weiterentwicklung}
+licence {Lizenz und Nutzung}
+aboutautor {Über Autor}
+important {Wichtig Fehler}
+
+enddialogtitle {Programm beenden}
+enddialogmes {Wollen Sie wirklich tkmatrix beenden}
+
+emptymatrix {Matrix ist leer}
+
+infowhatitis {tkmatrix ist ein Programm, das diverse Operationen auf Matrizen ausführen kann. Hierzu gehören Gaussalgorithmus, Jordanalgorithmus, Ausrechnen von Bild und Kern einer Matrix, Inverse, Nährungsverfahren, Determinante und ganze Reihe von Algorithmen zur Optimierung von Ungleichungssystemen. Matrizen göheren zu linearen Algebra und sind im Programm der Mathevorlesungen von Wirtschaftsinformatikern, BWL-er und auch anderen. Im beschränkten Masse auch Mathe LK im Gymnasium}
+
+infoversion {Das ist eine Beta Test Version der Tk Version. Die Mathealgorithmen sollten korrekt sein. Sie waren auch in Windows Version des Programms benutzt.}
+
+infodevelopment {Das ist kein komerzielles Programm. Es wird damit kein Profit gemacht. Die frühere Windows Versionen haben auf eine größe Interesse von vielen Studenten gestoßen. Alle können es nichkommerziel verwenden und weiterentwickeln. Auch wenn Sie kein Programmierer sind aber eine Idee für neue Matrizen-Umformungen haben schicken sie mir die genaue Beschreibung und ich werde die Algorithmen, wenn möglich, einbauen. Das Ziel ist es das beste Linux Programm für Matrizen zu schaffen und zu pflegen. Ich lade zu mitarbeit ein.}
+
+infolicence {Das Programm ist Freeware, frei verfügbar mit Quelltexten. Jeder kann es frei benutzen, verändern und weiterentwickeln. Die Linenzbedingungen dürfen jedoch nicht verändert werden. Insbesondere darf der Quelltext nicht vorbehalten werden. Das bezieht sich auch auf die Teile des Programms. Es darf nicht kommerziell verbreitet werden. Der Preis, der dafür verlangt wird, darf die Materialkosten nicht wesentlich Übersteigen, es darf damit kein Profit gemacht werden. Einzige Ausnahme sind Sammlungen von PD-Software, Freeware und Shareware auf CD-ROM. Es gibt keinerlei Garantie für das Funktionieren des Programms, Sie benutzen es auf eigene Gefahr, der Autor Übernimmt keinerlei Haftung für irgendwelche Schäden, die direkt oder indirekt durch die Benutzung des Programms entstehen.}
+
+infoaboutautor {Zur Zeit studiere ich Wirtschaftsinformatik an der UNI Essen. Ich bastle schon an dem Programm von Anfang des Studiums (8 Semester mit Pausen).} 
+
+infoimportant {Das Programm ist als Linux Tk Version noch relativ frisch und in der Entwicklung. Der mathematische Teil ist schon ein paar Jahre alt. Die Fehlerbehandlung ist nicht zum Ende programmiert. Beim auftreten von Fehlern-Dialogs ohne einer Meldung bitte "more info" Drucken, um über den Fehler zu erfahren. Beim RedHat 5.0 Distribution arbeitet das Programm überhaupt nicht. Lösung auf Version 5.1 oder 5.2 updaten. Beim Red Hat 4.2 gibt es keine Probleme. Die Fehlermeldungen bitte an sw0562@uni-essen.de}
+
+helpfile matrix.html
+
+cspreftitle {Fehler}
+csprefmessage {Die Einstellungen konnten nicht in Datei .tkmatrix in Home-verzeichnis gespeichert werden}
+
+lunch_browser {Netscape konnte nicht benachrichtigt werden. Den Browser nach Einstellungen starten?}
+nohelpviewer {Der externe Html Browser konnte nicht gestartet werden. Ändern Sie die Einstellungen für den Html Browser.}
+nowww_winsupport {Sehen Sie die Internet Adresse:} 
+
+nosolution {Es gibt kein Ergebnis für diese Matrix. Wenden Sie zuerst ein Algorithmus an.}
+
+noprotocol {Es gibt kein Ergebnis für diese Matrix. Wollen Sie trotzdem den Protokoll für diese Matrix anschauen}
+
+prefdialogtitle Einstellungen
+afteralgorithm {Nach einem Algorithmus}
+opensolution {Ergebnisfenster öffnen}
+openprotocol {Protokollfenster öffnen}
+helpbrowser {externes HTML Browser (immer mit %s)}
+widefloat_prec {Gaunaigkeit der Fließkommazahlen in Bits}
+widefloat_width {Maximale Zifferanzahl vor Komma}
+widefloat_reformat {Möglichst ohne Exponent}
+widefloat_maxzeros {Maximal Nullanzahl nach Komma}
+widefloat_showprec {Anzeige Genauigkeit (0=Maximal)}
+netscape_remote {Zuerst geledenen Netscape benachrichtigen}
+toolbar {Werkeugsleiste}
+language {Sprache}
+use Nutzen
+usesave {Speichern und Nutzen}
+default {Standartwerte}
+
+newlanguage {Seit jetzt wird deutsche Sprache benutzt. Allte Fenstern bleiben aber unverändert}
+
+errornolatex {Für Matrizen Drucken und Vorschau brauchen sie ein Latex System}
+errornofraction {Falsche Eingabe für ein Bruch 1,2 oder 1/2/3}
+
+erroralg {Algorithmus lieferte kein Ergebniss. Falsches Format der Matrix oder Fehler bei Berechnungen}
+
+errornooctave {Octave kann nicht gestartet werden. Installieren Sie es zuerst.}
+octave octave
+endoctaveproc {kill octave proc}    
+octavedialogtitle {Octave-Schnittstelle-Zustandsfenster}
+octave_script {Octave Skript Laden}
+
+no_solution_eqn {Dieses lineare Gleichungssystem hat keine Lösung}
+must_be_square {Die Matrix muß quadratisch sein (nxn)}
+not_invertible {Die Matrix ist nicht invertierbar}
+simplex_no_one_solution {Das Ungleichungssystem hat keine Lösung}
+simplex_no_optimum {Das Ungleichungssystem hat kein Optimum bzg. der maximierenden Funktion}
+number_overflow {Überlauffehler bei Berechnungen}
+outof_range {Der angegebene Index liegt außerhalb der Matrix. Vorsicht ! Die Numerierung begint mit 0}
+no_arrgument {Für die Unformung fehlt mindestens ein Arrgument. Vervollständigen Sie die Editierfelder!}
+cannot_openfile {Die Datei kann nicht als Matrix geöfnet werden}
+
+noprot {Generiere kein Protokoll der Berechnungen}
+onlyfraction {Brüche ohne Ganzzahl bei Protokollen}
+editonlyfraction {Brüche ohne Ganzzahl bei Editieren}
+editsolution {Ergebnis editieren}
+
+edit_modis {Tauschen A*k A(i)+k*A(j) Pivotieren Austauschschritt}
+modis_label {{{Index 1} {Index 2} -} {Index Faktor -} {{Index 1} {Faktor} {Index 2}} {Zeile Spalte -} {Zeile Spalte -}}
+do_step {Ausführen}
+undo {Zurück}

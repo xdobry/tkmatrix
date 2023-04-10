@@ -1,0 +1,57 @@
+/***************************************************************************
+
+resources.rc
+for tkmatrix.exe Windows Vesion
+
+*****************************************************************************/
+#define IDI_ICON2	2
+#define BITMAP_1	1
+#define BITMAP_2	2
+#define BITMAP_3	3
+#define BITMAP_4	4
+#define BITMAP_5	5
+#define BITMAP_6	6
+#define BITMAP_7	7
+#define BITMAP_8	8
+#define BITMAP_9	9
+#define BITMAP_10	10
+#define BITMAP_11	11
+#define BITMAP_12	12
+#define BITMAP_13	13
+#define BITMAP_14	14
+#define BITMAP_15	15
+#define BITMAP_16	16
+#define BITMAP_17	17
+#define BITMAP_18	18
+#define BITMAP_19	19
+#define BITMAP_20	20
+#define BITMAP_21 21
+
+
+IDI_ICON2 ICON "tkmatrix.ico"
+
+
+/*
+BITMAP_1 BITMAP "images/artur.gif"
+BITMAP_2 BITMAP "images/cut.gif"
+BITMAP_3 BITMAP "images/cut.gif"
+BITMAP_4 BITMAP "images/info.gif"
+BITMAP_5 BITMAP "images/new.gif"
+BITMAP_6 BITMAP "images/open.gif"
+BITMAP_7 BITMAP "images/paste.gif"
+BITMAP_8 BITMAP "images/print.gif"
+BITMAP_9 BITMAP "images/save.gif"
+BITMAP_10 BITMAP "images/viewerg.gif"
+BITMAP_11 BITMAP "images/viewprot.gif"
+
+BITMAP_12 BITMAP "about.tcl"
+BITMAP_13 BITMAP  "dialogs.tcl"
+BITMAP_14 BITMAP   "editmode.tcl"
+BITMAP_15 BITMAP    "hmenu.tcl"
+BITMAP_16 BITMAP    "octave.tcl"
+BITMAP_17 BITMAP    "preferences.tcl"
+BITMAP_18 BITMAP    "print.tcl"
+BITMAP_19 BITMAP    "tkmatrix.tcl"
+BITMAP_20 BITMAP    "toolbar.tcl"
+BITMAP_21 BITMAP    "viewprot.tcl"
+*/

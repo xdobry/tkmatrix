@@ -1,0 +1,7 @@
+%head det=(
+%bruch1 %s
+%bruch2 <SUP>%s</SUP>/<SUB>%s</SUB>
+%bruch3 %s<SUP>%s</SUP>/<SUB>%s</SUB>
+%double %lf
+%tail
+-)<BR>

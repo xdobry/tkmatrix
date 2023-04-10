@@ -1,0 +1,15 @@
+%head
+-<TABLE>
+-<TR>
+%headflex
+%headtail
+%rowhead
+%bruch1 <TD>%s</TD>
+%bruch2 <TD><SUP>%s</SUP>/<SUB>%s</SUB> </TD>
+%bruch3 <TD>%s<SUP>%s</SUP>/<SUB>%s</SUB> </TD>
+%double <TD>%lf </TD>
+%cellseparator
+%rowtail
+-<TR>
+%tail
+-</TABLE>
