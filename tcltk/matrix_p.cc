@@ -137,7 +137,7 @@ MatrixObject* loadmatrix() {
   if (we) {
     return readMatrix(we);
   }
-  cout<<"Datei: "<<name<<" konnte nicht geï¿½fnet werden"<<endl;
+  cout<<"Datei: "<<name<<" konnte nicht geöffnet werden"<<endl;
   return 0;
 }
 void savematrix(MatrixObject *m) {
@@ -149,7 +149,7 @@ void savematrix(MatrixObject *m) {
     if (wy) {
       writeMatrix(m,wy);
       wy.close();
-    } else cout<<"Datei konnte nicht geï¿½fnet werden\n";
+    } else cout<<"Datei konnte nicht geöffnet werden\n";
   } else cout<<"Es gibt nichts zu speichern\n";
 }
 void printmatrix(MatrixObject *m) {
@@ -200,7 +200,7 @@ void openprotokol(MatrixObject *m) {
 	m->prot.PrintOn(wy,*pformat);
         pformat->closemain(wy);
 	wy.close();
-      } else cout<<"Datei "<<name<<" kï¿½nte nicht geï¿½fnet werden\n";
+      } else cout<<"Datei "<<name<<" könnte nicht geöffnet werden\n";
       break;
     default:
       cout<<"Falsche Eingabe\n";
@@ -270,7 +270,7 @@ void doalgorithmus(MatrixObject *a,MatrixObject *&e,talgorithmus ta) {
 	    addProt(e,MatrixObject::tmatrix);
 	    //  e->prot.operator<<(*a);
 	    e->pivotiere(y,x);
-	  } else cout<<"Zahl auï¿½r Bereich\n";
+	  } else cout<<"Zahl außer Bereich\n";
 	} else if (pzeile<a->mhoehe() && pspalte<a->nbreite()) {
 	    e->prot.operator<<("Ausgagsmatrix zum Pivotieren\n");
 	    addProt(e,MatrixObject::tmatrix);
@@ -296,7 +296,7 @@ void doalgorithmus(MatrixObject *a,MatrixObject *&e,talgorithmus ta) {
 	delete e;
 	e=0;
       }
-      cerr<<"ï¿½erlauffehler; Versuchen Sie die Ruhe zu bewahren! \nProtokoll beinhaltet alle Schritte bis zum Fehlereintritt\n";
+      cerr<<"Überlaufsfehler; Versuchen Sie die Ruhe zu bewahren! \nProtokoll beinhaltet alle Schritte bis zum Fehlereintritt\n";
     }
     if (e->nbreite()==0) {
       cerr<<"Algorithmus lieferte kein Ergebniss wahrscheinlich schlechte Input Matrix\n";
@@ -376,7 +376,7 @@ void parse_param (int argc,char *argv[]) {
     put_error("Bei -s --stdin keine Inputsdateien");
   // Welcher Algorithmus und ob Eingegeben
   if (!opt_param[ealgorithmus])
-    put_error("Algorithums muï¿½mit -a festgestellt werden");
+    put_error("Algorithums muß mit -a festgestellt werden");
 }
 void interaktive() {
   int com=25,x,y;
@@ -475,7 +475,7 @@ void one_algorithmus(MatrixObject *&matrix) {
     ofstream erg(opt_param[eergebniss],ios::out);
     if (erg) writeMatrix(ergebniss,erg);
     else 
-      put_error(string("Die Ergebnissdatei kann nicht geï¿½fnet werden :")+
+      put_error(string("Die Ergebnissdatei kann nicht geöffnet werden :")+
 		string(opt_param[eergebniss]));
   }
   delete ergebniss;
@@ -491,7 +491,7 @@ void one_ifile(const char*& file) {
       delete matrix;
     }
   } else {
-    put_error(string("Kann ") + string(file) + string(" nicht ï¿½fnen"));
+    put_error(string("Kann ") + string(file) + string(" nicht öffnen"));
   }
 }
 int main (int argc,char *argv[]) {
@@ -504,7 +504,7 @@ int main (int argc,char *argv[]) {
       progout.open(opt_param[eoutput],ios::out);
       if (!progout) {
 	put_error(string("Output zu Datei ") +string(opt_param[eoutput]) +
-		  string(" nicht mï¿½lich")); 
+		  string(" nicht möglich")); 
       }
       // TODO !!!
       // cout=progout;
