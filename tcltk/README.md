@@ -3,7 +3,7 @@
 3. Documentation
 4. tkmatrix Homepage, Author and License
 
-== 1. What is tkmatrix? ==
+## 1. What is tkmatrix? ##
 
 tkmatrix is an education mathematical program to manipulate matrices.
 Matrices are part of linear algebra. It was developed for students to learn 
@@ -16,7 +16,7 @@ programmed in C++ as tcl-library and graphical interface in Tk/Tcl.
 The distribution includes the program matrix too. 
 It is pure shellprogram tkmatrix without GUI.
 
-== Prerequisits ==
+## Prerequisits ##
 
 install compiler
 
@@ -30,7 +30,7 @@ install gnu multiple precision library
 
     apt-get install -y libgmp-dev
 
-== 2. Compile and Install ==
+## 2. Compile and Install ##
 
 -compile configuration
 old linux STL Library use string::erase not string::remove. 
@@ -40,7 +40,7 @@ makefile and uncommnet one line
 -to compile change in tkmatrix-0.6 directory and do
    make
 
-== Installation ==
+## Installation ##
 
 You can use the program without full install (when you have no
 root). To run start tkmatrix.tcl. The program expect wish in /usr/lib/wish
@@ -53,7 +53,7 @@ it copy all necessary files in /usr/lib/tkmatrix and make 2
 symbolic links
 in /usr/bin. Documentation in dir docu will be not copied.
 
-== 3 Other Documentation ==
+## 3 Other Documentation ##
 
 Full documentation is available only in german language
 docus/matrix.html
