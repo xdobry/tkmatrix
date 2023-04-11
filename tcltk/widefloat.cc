@@ -8,8 +8,9 @@
 //
 
 #include "widefloat.h"
-//#include <string>
+#include <cstring>
 #include <stdio.h>
+
 void widefloat::set_precision(long int p) {
   mpf_set_default_prec (p);
 }

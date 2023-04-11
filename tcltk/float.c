@@ -238,7 +238,7 @@ static int Tk_FloatCmd(clientData, interp, argc, argv)
     fprintf(stderr,"Tk_FloatCmd 4\n");
 #endif
 
-    interp->result = Tk_PathName(butPtr->tkwin);
+    Tcl_SetObjResult(interp,Tcl_NewStringObj(Tk_PathName(butPtr->tkwin),-1));
     return TCL_OK;
 
 }
@@ -664,9 +664,8 @@ FloatWidgetCmd(clientData, interp, argc, argv)
     int result = TCL_OK;
 
     if (argc < 2) {
-	sprintf(interp->result,
-		"wrong # args: should be \"%.50s option ?arg arg ...?\"",
-		argv[0]);
+	Tcl_SetObjResult(interp,Tcl_ObjPrintf("wrong # args: should be \"%.50s option ?arg arg ...?\"",
+		argv[0]));
 	return TCL_ERROR;
     }
     Tcl_Preserve((ClientData) butPtr);
@@ -683,8 +682,7 @@ FloatWidgetCmd(clientData, interp, argc, argv)
 				     TK_CONFIG_ARGV_ONLY);
 	}
     } else {
-	sprintf(interp->result,
-		"bad option \"%.50s\": must be configure", argv[1]);
+	Tcl_SetObjResult(interp,Tcl_ObjPrintf("bad option \"%.50s\": must be configure", argv[1]));
 	goto error;
     }
     Tcl_Release((ClientData) butPtr);

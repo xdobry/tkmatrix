@@ -87,11 +87,11 @@ typedef struct matrix_ConfigSpec {
     int type;			/* Type of option, such as MATRIX_CONFIG_COLOR;
 				 * see definitions below.  Last option in
 				 * table must have type MATRIX_CONFIG_END. */
-    char *argvName;		/* Switch used to specify option in argv.
+    char const *argvName;		/* Switch used to specify option in argv.
 				 * NULL means this spec is part of a group. */
-    char *dbName;		/* Name for option in option database. */
+    char const *dbName;		/* Name for option in option database. */
   //    char *dbClass;		/* Class for option in database. */
-    char *defValue;		/* Default value for option if not
+    char const *defValue;		/* Default value for option if not
 				 * specified in command line or database. */
     int offset;			/* Where in widget record to store value;
 				 * use matrix_Offset macro to generate values
@@ -158,11 +158,10 @@ private:
 				     const char *argvName);
   int DoConfig (Tcl_Interp *interp,matrix_ConfigSpec *specPtr,
 		const char *value, char *widgRec);
-  char * FormatConfigInfo (Tcl_Interp *interp, 
+  Tcl_Obj* FormatConfigInfo (Tcl_Interp *interp, 
 			   matrix_ConfigSpec *specPtr,char *widgRec);
-  char * FormatConfigValue (Tcl_Interp *interp,matrix_ConfigSpec *specPtr,
-			    char *widgRec, char *buffer,
-			    Tcl_FreeProc **freeProcPtr);
+  Tcl_Obj* FormatConfigValue (Tcl_Interp *interp,matrix_ConfigSpec *specPtr,
+			    char *widgRec);
   int matrix_ConfigureValue(Tcl_Interp *interp,
 			    matrix_ConfigSpec *specs,
 			    char *widgRec,char *argvName);

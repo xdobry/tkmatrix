@@ -1313,7 +1313,7 @@ proc new_matrix {root type} {
 		    if {$mtyp=="-float"} {
 			matrixtcl $newmatrix setelem $y $x [expr rand()]
 		    } else {
-			matrixtcl $newmatrix setelem $y $x  "[expr round(rand()*2*$maxnum)-$maxnum] [expr round(rand()*$maxden+1)]" 
+			matrixtcl $newmatrix setelem $y $x [list [expr round(rand()*2*$maxnum)-$maxnum] [expr round(rand()*$maxden+1)]]
 		    }
 		}    
 	    }

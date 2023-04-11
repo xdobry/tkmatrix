@@ -8,6 +8,7 @@
 #include "protstream.h"
 // #include <std/list> bereits in protstream.h
 #include <algorithm>
+#include <cstring>
 
 using namespace std;
 
@@ -23,13 +24,13 @@ char help_text[]=
 "             pivotiere,naehrung,eckenfindung,simplex,chpolynom,matrixspiel}\n"
 "oder ein nummer z.B. 1 fr gauss\n"
 "Lange Optionsnammen\n"
-"-a, --algorithmus: mu�definiert werden\n"
+"-a, --algorithmus: muß definiert werden\n"
 "-o, --output: wie matrix >Outputdatei\n"
 "-t, --typeoutput : Type des Ausgabe z.B. {ascii,html,latex}\n"
 "-v, --vorlagen: Pfad mit Vorlagen Darteien (*.mform) sonst gesucht da wo das Programm\n"
 "-s, --stdin: Matrix wird aus Standarteingabe gelesen\n"
-"-k, --konvert: Brche werden zu Gleitkommazahlen umgewandelt\n"
-"-b, --bruch: Brche werden ohne den Ganzzahl geschrieben\n"
+"-k, --konvert: Brüche werden zu Gleitkommazahlen umgewandelt\n"
+"-b, --bruch: Brüche werden ohne den Ganzzahl geschrieben\n"
 "-e, --ergebnis: Ergebnis als .mat Datei speichern\n"
 "-p, --protokoll: Protokoll Alle Zwischenschritte ausgeben" 
 "-h, --help: Tja\n"
@@ -40,12 +41,12 @@ char komunikat[]="Matrix geschrieben von Artur Trzewik 07.1996 v 0.4\n"
 " 1 Matrix Laden              11 Bild von Matrix\n"
 " 2 Matrix Sichern            12 Inverse von Matrix\n"
 " 3 Matrix Ausgeben           13 Determinante von Matrix\n"
-" 4 Ergebnis Sichern          14 N�rungsl�ung\n"
+" 4 Ergebnis Sichern          14 Nährungslösung\n"
 " 5 Ergebnis Ausgeben         15 Pivotiere\n"
 " 6 Protokoll Ausgeben        16 Eckenfindung\n"
-" 7 Gau�algorithmus          17 Optiemiere\n"
-" 8 Gau�Jordan-algorithmus   18 charakteristisches Polynom\n"
-" 9 L�ung Ausrechnen         19 Matrixspiel\n"
+" 7 Gauß algorithmus          17 Optiemiere\n"
+" 8 Gauß-Jordan-algorithmus   18 charakteristisches Polynom\n"
+" 9 Lösung Ausrechnen         19 Matrixspiel\n"
 " 10 Kern von Matrix          20 Matrix = Ergebnis\n"
 "                             21 Programm beenden\n"
 " (jede andere Taste dises Text)\n";
@@ -136,7 +137,7 @@ MatrixObject* loadmatrix() {
   if (we) {
     return readMatrix(we);
   }
-  cout<<"Datei: "<<name<<" konnte nicht ge�fnet werden"<<endl;
+  cout<<"Datei: "<<name<<" konnte nicht geï¿½fnet werden"<<endl;
   return 0;
 }
 void savematrix(MatrixObject *m) {
@@ -148,7 +149,7 @@ void savematrix(MatrixObject *m) {
     if (wy) {
       writeMatrix(m,wy);
       wy.close();
-    } else cout<<"Datei konnte nicht ge�fnet werden\n";
+    } else cout<<"Datei konnte nicht geï¿½fnet werden\n";
   } else cout<<"Es gibt nichts zu speichern\n";
 }
 void printmatrix(MatrixObject *m) {
@@ -199,7 +200,7 @@ void openprotokol(MatrixObject *m) {
 	m->prot.PrintOn(wy,*pformat);
         pformat->closemain(wy);
 	wy.close();
-      } else cout<<"Datei "<<name<<" k�nte nicht ge�fnet werden\n";
+      } else cout<<"Datei "<<name<<" kï¿½nte nicht geï¿½fnet werden\n";
       break;
     default:
       cout<<"Falsche Eingabe\n";
@@ -269,7 +270,7 @@ void doalgorithmus(MatrixObject *a,MatrixObject *&e,talgorithmus ta) {
 	    addProt(e,MatrixObject::tmatrix);
 	    //  e->prot.operator<<(*a);
 	    e->pivotiere(y,x);
-	  } else cout<<"Zahl au�r Bereich\n";
+	  } else cout<<"Zahl auï¿½r Bereich\n";
 	} else if (pzeile<a->mhoehe() && pspalte<a->nbreite()) {
 	    e->prot.operator<<("Ausgagsmatrix zum Pivotieren\n");
 	    addProt(e,MatrixObject::tmatrix);
@@ -295,7 +296,7 @@ void doalgorithmus(MatrixObject *a,MatrixObject *&e,talgorithmus ta) {
 	delete e;
 	e=0;
       }
-      cerr<<"�erlauffehler; Versuchen Sie die Ruhe zu bewahren! \nProtokoll beinhaltet alle Schritte bis zum Fehlereintritt\n";
+      cerr<<"ï¿½erlauffehler; Versuchen Sie die Ruhe zu bewahren! \nProtokoll beinhaltet alle Schritte bis zum Fehlereintritt\n";
     }
     if (e->nbreite()==0) {
       cerr<<"Algorithmus lieferte kein Ergebniss wahrscheinlich schlechte Input Matrix\n";
@@ -334,7 +335,7 @@ void parse_param (int argc,char *argv[]) {
 	else {
 	  x++;
 	  opt_param[i]=argv[x];
-	  // Beim -a --algorithmus wird er entschlie�lt und es wird nachgeprft
+	  // Beim -a --algorithmus wird er entschlieï¿½lt und es wird nachgeprft
 	  // ob es sich dabei um pivotieren handelt dann zeilen und spalten Nummer lesen 
 	  if (i==ealgorithmus) {
 	    int t;
@@ -369,13 +370,13 @@ void parse_param (int argc,char *argv[]) {
     cout<<help_text;
     exit(EXIT_SUCCESS);
   }
-  // �erprfung der semantik
+  // ï¿½erprfung der semantik
   if (opt_switch[estdin] && !inputlist.empty())  // input aus stdin und trotzdem 
     // noch inputsdateien
     put_error("Bei -s --stdin keine Inputsdateien");
   // Welcher Algorithmus und ob Eingegeben
   if (!opt_param[ealgorithmus])
-    put_error("Algorithums mu�mit -a festgestellt werden");
+    put_error("Algorithums muï¿½mit -a festgestellt werden");
 }
 void interaktive() {
   int com=25,x,y;
@@ -435,7 +436,7 @@ void konvert_tofloat(MatrixObject *&m) {
     delete old;
   }
 }
-// Ich mu� es definieren sonst sehe #1
+// Ich muï¿½ es definieren sonst sehe #1
 template class polynom<rational>;
 template class polynom<double>;
 
@@ -474,7 +475,7 @@ void one_algorithmus(MatrixObject *&matrix) {
     ofstream erg(opt_param[eergebniss],ios::out);
     if (erg) writeMatrix(ergebniss,erg);
     else 
-      put_error(string("Die Ergebnissdatei kann nicht ge�fnet werden :")+
+      put_error(string("Die Ergebnissdatei kann nicht geï¿½fnet werden :")+
 		string(opt_param[eergebniss]));
   }
   delete ergebniss;
@@ -490,7 +491,7 @@ void one_ifile(const char*& file) {
       delete matrix;
     }
   } else {
-    put_error(string("Kann ") + string(file) + string(" nicht �fnen"));
+    put_error(string("Kann ") + string(file) + string(" nicht ï¿½fnen"));
   }
 }
 int main (int argc,char *argv[]) {
@@ -503,7 +504,7 @@ int main (int argc,char *argv[]) {
       progout.open(opt_param[eoutput],ios::out);
       if (!progout) {
 	put_error(string("Output zu Datei ") +string(opt_param[eoutput]) +
-		  string(" nicht m�lich")); 
+		  string(" nicht mï¿½lich")); 
       }
       // TODO !!!
       // cout=progout;

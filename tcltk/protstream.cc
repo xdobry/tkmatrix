@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdarg>
+#include <cstring>
 
 void myform(ostream &outs,const char* format,...) {
   va_list args;       // argument list
@@ -160,15 +161,16 @@ protstream& protstream::operator << (const char *s)
 {
   // cerr<<"prot string added \""<<s<<"\"\n";
   if (!noprot) {
-    if (strlen(s)!=0) {
-      if (s[strlen(s)-1]=='\n') {
+    int len = strlen(s);
+    if (len!=0) {
+      if (s[len-1]=='\n') {
         // schreibe ohne abschliessenden /n
-        zeile.write(s,strlen(s)-1);
+        zeile.write(s,len-1);
         string szeile(zeile.str());
         mylist.push_back(new ProtTemplate<protstring>(szeile));
         zeile.clear();               // Zeile wieder entfrieren und zum schreiben vorbereiten
         // zeile.rdbuf()->freeze(0);    // Verfahren siehe Seite 517 Objectorientiertes Programieren in C++
-        zeile.seekp(0,ios::beg);
+        zeile.str("");
       } else {
           zeile<<s;
       }

@@ -14,8 +14,8 @@ winobjects = winsupport.o float.o myappinit.o
 # as (tcl.h tk.h) in tcl und tk package as RedHat (location /usr/include)
 # So add an Include Path to this header flies tcl.h tk.h
 # hier the tcl.h and tk.h are in working-dictionary
-TCLTKHEADER = -I$(TCLPATH)/include
-CFLAGS = $(TCLTKHEADER)
+TCLTKHEADER = -I/usr/include/tcl
+CFLAGS = $(TCLTKHEADER) -fpic
 # specially for cygnus linux-utils package
 # to compile Windows Version
 # make tkmatrix.exe
@@ -25,7 +25,7 @@ WINLIBS = -lstdc++ -ltk80 -ltcl80
 #commend next line if you use old STL-Library with string::remove
 #Add -DNO_GMP to compile tkmatrix without gmp library
 #CXXFLAGS = -Dstd_noremove -DNO_GMP
-CXXFLAGS = -Dstd_noremove $(TCLTKHEADER)
+CXXFLAGS = -Dstd_noremove $(TCLTKHEADER) -fpic
 # Set gmp Libs GNU GNU multiple precision arithmetic library
 #comment it out if you don't use it
 MLIBS = -lgmp
@@ -40,9 +40,9 @@ $(outfile) : $(objects) matrix_p.o polynom.h
 	strip $(outfile)
 $(tcllib).so : $(objects) matrixtcl.o matrixtcl_object.o
 	$(CXX) $(objects) matrixtcl.o  matrixtcl_object.o $(MLIBS) \
-	-pipe -shared -L$(TCLPATH)/lib -ltclstub8.4 -o $(tcllib).so
+	-pipe -shared -ltclstub -o $(tcllib).so
 $(floatlib).so : float.o
-	$(CC) float.c -pipe -shared -L$(TCLPATH)/lib -ltclstub8.4 -ltkstub8.4 -o $(floatlib).so $(TCLTKHEADER)
+	$(CC) float.c -pipe -shared -fpic -ltclstub -ltkstub -o $(floatlib).so $(TCLTKHEADER)
 
 # Static Version of tkmatrix 
 #myappinit.o : myappinit.c

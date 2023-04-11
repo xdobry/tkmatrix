@@ -69,8 +69,9 @@ Manager_matrix::~Manager_matrix() {
 void Manager_matrix::add(Tcl_Interp *interp,matrix_tcl *m) {
   Tcl_HashEntry *entryPtr;
   int newflag;
-  sprintf(interp->result,"matrix%d",matrixcount++);
-  entryPtr=Tcl_CreateHashEntry(&matrixTable,interp->result,&newflag);
+  int length;
+  Tcl_SetObjResult(interp,Tcl_ObjPrintf("matrix%d",matrixcount++));
+  entryPtr=Tcl_CreateHashEntry(&matrixTable,Tcl_GetStringFromObj(Tcl_GetObjResult(interp),&length),&newflag);
   Tcl_SetHashValue(entryPtr,m);     
 }
 void Manager_matrix::create(Tcl_Interp *interp,const char *row,const char *col,const char *isfloat) {
@@ -147,10 +148,12 @@ int Manager_matrix::info(Tcl_Interp *interp) {
   // cerr<<"config noprot "<<config.noprot<<" onlyfraction"<<config.onlyfraction<<endl;
   Tcl_HashEntry *entryPtr;
   Tcl_HashSearch search;
+  Tcl_Obj *list = Tcl_NewListObj(0,NULL);
+  Tcl_SetObjResult(interp,list);
   for (entryPtr=Tcl_FirstHashEntry(&matrixTable,&search);
        entryPtr!=NULL;
        entryPtr=Tcl_NextHashEntry(&search)) {
-    Tcl_AppendElement(interp,Tcl_GetHashKey(&matrixTable,entryPtr));
+        Tcl_ListObjAppendElement(interp,list,Tcl_NewStringObj((char *)Tcl_GetHashKey(&matrixTable,entryPtr),-1));
   }
   return TCL_OK;
 }
@@ -285,7 +288,7 @@ int Manager_matrix::handlematrix(Tcl_Interp *interp,int argc,const char *argv[])
 
 int MatrixtclCmd (ClientData manager,Tcl_Interp* interp,int  argc,const char**  argv) {
   if (argc == 1) {
-    Tcl_SetResult(interp, "Usage: matrixtcl ?handle? command ...", TCL_STATIC);
+    Tcl_SetObjResult(interp, Tcl_NewStringObj("Usage: matrixtcl ?handle? command ...",-1));
     return TCL_ERROR;
   }
   Manager_matrix *mgr = (Manager_matrix *)manager;
@@ -430,7 +433,7 @@ int Manager_matrix::matrix_Configure(Tcl_Interp *interp,
 				     matrix_ConfigSpec *specs,
 				     int argc,const char **argv,char *widgRec) {
   matrix_ConfigSpec *specPtr;
-  char *value;  
+  char const *value;  
 
     /*
      * Pass one:  scan through all of the arguments, processing those
@@ -611,8 +614,7 @@ Manager_matrix::DoConfig(Tcl_Interp *interp,matrix_ConfigSpec *specPtr,
       break;
     }
     default: {
-      sprintf(interp->result, "bad config table: unknown type %d",
-	      specPtr->type);
+      Tcl_SetObjResult(interp,Tcl_ObjPrintf("bad config table: unknown type %d",specPtr->type));
       return TCL_ERROR;
     }
     }
@@ -655,17 +657,13 @@ int Manager_matrix::matrix_ConfigureInfo(Tcl_Interp *interp,
 					 matrix_ConfigSpec *specs,
 					 char *widgRec,const char *argvName) {
   matrix_ConfigSpec *specPtr;
-  char *list;
-  char *leader = "{";
 
-  Tcl_SetResult(interp, (char *) NULL, TCL_STATIC);
   if (argvName != NULL) {
     specPtr = FindConfigSpec(interp, specs, argvName);
     if (specPtr == NULL) {
       return TCL_ERROR;
     }
-    interp->result = FormatConfigInfo(interp, specPtr, widgRec);
-    interp->freeProc = TCL_DYNAMIC;
+    Tcl_SetObjResult(interp,FormatConfigInfo(interp, specPtr, widgRec));
     return TCL_OK;
   }
 
@@ -673,7 +671,7 @@ int Manager_matrix::matrix_ConfigureInfo(Tcl_Interp *interp,
    * Loop through all the specs, creating a big list with all
    * their information.
    */
-
+  Tcl_Obj *list = Tcl_NewListObj(0, NULL);
   for (specPtr = specs; specPtr->type != MATRIX_CONFIG_END; specPtr++) {
     if ((argvName != NULL) && (specPtr->argvName != argvName)) {
       continue;
@@ -681,11 +679,9 @@ int Manager_matrix::matrix_ConfigureInfo(Tcl_Interp *interp,
     if (specPtr->argvName == NULL) {
       continue;
     }
-    list = FormatConfigInfo(interp, specPtr, widgRec);
-    Tcl_AppendResult(interp, leader, list, "}", (char *) NULL);
-    ckfree(list);
-    leader = " {";
+    Tcl_ListObjAppendElement(interp,list,FormatConfigInfo(interp, specPtr, widgRec));
   }
+  Tcl_SetObjResult(interp,list);
   return TCL_OK;
 }
 
@@ -707,37 +703,15 @@ int Manager_matrix::matrix_ConfigureInfo(Tcl_Interp *interp,
  *--------------------------------------------------------------
  */
 
-char *
-Manager_matrix::FormatConfigInfo(Tcl_Interp *interp,
+Tcl_Obj* Manager_matrix::FormatConfigInfo(Tcl_Interp *interp,
 				 matrix_ConfigSpec *specPtr,
 				 char *widgRec) {
-  char *argv[6], *result;
-  char buffer[200];
-  Tcl_FreeProc *freeProc = (Tcl_FreeProc *) NULL;
-
-  argv[0] = specPtr->argvName;
-  argv[1] = specPtr->dbName;
-  argv[2] = specPtr->defValue;
-  argv[3] = FormatConfigValue(interp, specPtr, widgRec, buffer,
-			      &freeProc);
-  if (argv[1] == NULL) {
-    argv[1] = "";
-  }
-  if (argv[2] == NULL) {
-    argv[2] = "";
-  }
-  if (argv[3] == NULL) {
-    argv[3] = "";
-  }
-  result = Tcl_Merge(4, argv);
-  if (freeProc != NULL) {
-    if ((freeProc == TCL_DYNAMIC) || (freeProc == (Tcl_FreeProc *) free)) {
-      ckfree(argv[3]);
-    } else {
-      (*freeProc)(argv[3]);
-    }
-  }
-  return result;
+  Tcl_Obj* resList = Tcl_NewListObj(0, NULL);
+  Tcl_ListObjAppendElement(interp, resList, Tcl_NewStringObj(specPtr->argvName,-1));
+  Tcl_ListObjAppendElement(interp, resList, Tcl_NewStringObj(specPtr->dbName,-1));
+  Tcl_ListObjAppendElement(interp, resList, Tcl_NewStringObj(specPtr->defValue,-1));
+  Tcl_ListObjAppendElement(interp, resList, FormatConfigValue(interp, specPtr, widgRec));
+  return resList;
 }
 
 /*
@@ -762,38 +736,26 @@ Manager_matrix::FormatConfigInfo(Tcl_Interp *interp,
  *----------------------------------------------------------------------
  */
 
-char *
-Manager_matrix::FormatConfigValue(Tcl_Interp *interp,
-				  matrix_ConfigSpec *specPtr,char *widgRec,
-				  char *buffer,Tcl_FreeProc **freeProcPtr) {
-  char *ptr, *result;
-  *freeProcPtr = NULL;
+Tcl_Obj* Manager_matrix::FormatConfigValue(Tcl_Interp *interp,
+				  matrix_ConfigSpec *specPtr,char *widgRec) {
+  Tcl_Obj *result;
+  char *ptr;
   ptr = widgRec + specPtr->offset;
-  result = "";
   switch (specPtr->type) {
   case MATRIX_CONFIG_BOOLEAN:
-    if (*((int *) ptr) == 0) {
-      result = "0";
-    } else {
-      result = "1";
-    }
+    result = Tcl_NewBooleanObj(*((int *) ptr) == 0 ? 0 : 1);
     break;
   case MATRIX_CONFIG_INT:
-    sprintf(buffer, "%d", *((int *) ptr));
-    result = buffer;
+    result = Tcl_NewIntObj(*((int *) ptr));
     break;
   case MATRIX_CONFIG_DOUBLE:
-    Tcl_PrintDouble(interp, *((double *) ptr), buffer);
-    result = buffer;
+    result = Tcl_NewDoubleObj(*((double *) ptr));
     break;
   case MATRIX_CONFIG_STRING:
-    result = (*(char **) ptr);
-    if (result == NULL) {
-      result = "";
-    }
+    result = Tcl_NewStringObj((*(char **) ptr),-1);
     break;
   default: 
-    result = "?? unknown type ??";
+    result = Tcl_NewStringObj("?? unknown type ??",-1);
   }
   return result;
 }
@@ -827,8 +789,7 @@ Manager_matrix::matrix_ConfigureValue(Tcl_Interp *interp,
   if (specPtr == NULL) {
     return TCL_ERROR;
   }
-  interp->result = FormatConfigValue(interp, specPtr, widgRec,
-				     interp->result, &interp->freeProc);
+  Tcl_SetObjResult(interp,FormatConfigValue(interp, specPtr, widgRec));
   return TCL_OK;
 }
 

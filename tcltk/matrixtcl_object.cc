@@ -24,7 +24,7 @@ typedef matrix<widefloat> mwidefloat;
 #endif
 
 #define alg_count 15
-char *algorithmen[alg_count]={"none","gauss","jordan","loesung","kern","bild",
+char const *algorithmen[alg_count]={"none","gauss","jordan","loesung","kern","bild",
 			      "inverse","determinante","pivotiere","naehrung",
 			      "eckenfindung","simplex","transponiere",
 			      "chpolynom","matrixspiel"};
@@ -34,11 +34,11 @@ enum talgorithmus {none,gauss,jordan,loesung,kern,bild,inverse,determinante,
 
 
 #define elemunf_count 15
-char *elemunfs[elemunf_count]={"swap","factormul","factoradd","pivot","changestep"};
+char const *elemunfs[elemunf_count]={"swap","factormul","factoradd","pivot","changestep"};
 enum telemunf {eu_swap,factormul,factoradd,pivot,changestep};
 
 #define ptype_count 7
-char *prottypen[7]={"matrix","gleichung","simplex","loesung","determinante",
+char const *prottypen[7]={"matrix","gleichung","simplex","loesung","determinante",
                    "polynom","string"};
 
 matrix_tcl::matrix_tcl(MatrixObject *mo):pmatrix(mo) {
@@ -144,9 +144,9 @@ int matrix_tcl::algorithmus(Tcl_Interp *interp,int argc,const char *argv[]) {
     }
     if (t==alg_count) {
       if(strlen(argv[0])>50)
-	sprintf(puf,"bad algorithmus name line %d",(const char *)interp->errorLine);
+	sprintf(puf,"bad algorithmus name line %d",Tcl_GetErrorLine(interp));
       else
-	sprintf(puf,"bad algorithmus name \"%s\" line %d",argv[0],interp->errorLine);
+	sprintf(puf,"bad algorithmus name \"%s\" line %d",argv[0],Tcl_GetErrorLine(interp));
       Tcl_AddErrorInfo(interp,puf);
       return TCL_ERROR;
     }
@@ -238,9 +238,9 @@ int matrix_tcl::elemunf(Tcl_Interp *interp,int argc,const char *argv[]) {
     }
     if (t==elemunf_count) {
       if(strlen(argv[0])>50)
-	sprintf(puf,"bad elem. Unformung name line %d",(const char *)interp->errorLine);
+	sprintf(puf,"bad elem. Unformung name line %d",Tcl_GetErrorLine(interp));
       else
-	sprintf(puf,"bad elem. Unformung name \"%s\" line %d",argv[0],interp->errorLine);
+	sprintf(puf,"bad elem. Unformung name \"%s\" line %d",argv[0],Tcl_GetErrorLine(interp));
       Tcl_AddErrorInfo(interp,puf);
       return TCL_ERROR;
     }
